@@ -1,0 +1,33 @@
+.placeholder {
+  .text-roman;
+  color: @body-color;
+  line-height: 24px;
+  opacity: 1;
+  text-transform: uppercase;
+}
+
+.form-input {
+  .text-roman;
+  background: @transparent;
+  border: 1px solid lighten(@body-color, 10%);
+  height: 44px;
+  line-height: 26px;
+  min-width: 260px;
+  padding: 10px 16px;
+
+  &::-webkit-input-placeholder {
+    .placeholder;
+  }
+
+  &::-moz-placeholder {
+    .placeholder;
+  }
+
+  &:-ms-input-placeholder {
+    .placeholder;
+  }
+  
+  &:-moz-placeholder {
+    .placeholder;
+  }
+}

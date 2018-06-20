@@ -1,10 +1,5 @@
 .three-column-layout {
   &__item {
-    .transition(.2s);
-    &:hover {
-      background: @hover-yellow;
-    }
-
     &:nth-child(3n - 2) {
      border-left-color: @white; 
     }
@@ -20,7 +15,7 @@
 
   &__content {
     padding: 10px 10px 0 10px;
-    min-height: 124px;
+    min-height: 80px;
   }
 
   &__link {
@@ -51,5 +46,10 @@
 
   &__all {
     padding: 20px;
+  }
+
+  &__image {
+    width: auto;
+    height: 225px;
   }
 }

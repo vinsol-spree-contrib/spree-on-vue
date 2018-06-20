@@ -21,7 +21,8 @@
 
     computed: {
       ...mapGetters({
-        taxons: types.GET_TAXONS
+        taxons: types.GET_TAXONS,
+        products: types.GET_PRODUCTS
       }),
 
       parentTaxons() {
