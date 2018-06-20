@@ -1,0 +1,125 @@
+body {
+  background: @page-background;
+  color: @body-color;
+  font-family: 'Avenir-Black';
+}
+
+a:focus {
+  color: inherit;
+  text-decoration: none !important;
+}
+
+li {
+  list-style: none;
+}
+
+.container {
+  width: 1270px;
+
+  @media(max-width: @breakpointDesktop) {
+    width: @breakpointTablet;
+  }
+
+  @media(max-width: @breakpointTablet) {
+    width: 768px;
+  }
+
+  @media(max-width: @breakpointMobile) {
+    width: 100%;
+  }
+}
+
+.container__inner {
+  background: @white;
+  padding: 0 10px;
+
+  &.pt-10 {
+    padding-top: 10px;
+  }
+
+  &.pb-10 {
+    padding-bottom: 10px;
+  }
+}
+
+.row {
+  &.narrow {
+    margin-left: -10px;
+    margin-right: -10px;
+
+    [class*="col-"] {
+      padding: 10px;
+    }
+  }
+}
+
+.full {
+  width: 100%;
+}
+
+.max-full {
+  max-width: 100%;
+}
+
+.section-divider {
+  height: 11px;
+}
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+.padding-0 {
+  padding: 0 !important;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.link {
+  color: inherit;
+  font-family: 'AvenirLTStd-Roman';
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  line-height: 16px;
+  text-decoration: none;
+
+  &:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.block {
+  display: block;
+}
+
+.no-underline {
+  text-decoration: none !important;
+}
+
+.bg-white {
+  background: @white;
+}
+
+.bg-silver {
+  background: @page-background;
+}
+
+.bg-yellow-light {
+  background: @bg-yellow-light;
+}
