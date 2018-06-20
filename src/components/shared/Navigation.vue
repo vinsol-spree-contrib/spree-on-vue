@@ -1,7 +1,7 @@
 <template>
   <nav class="primary-header__nav">
     <ul class="primary-header__links list-inline text-uppercase text-center margin-0">
-      <li class="primary-header__link" v-for="parentTaxon in parentTaxons" :key="parentTaxon.id">
+      <li class="primary-header__link with-sub-menu" v-for="parentTaxon in parentTaxons" :key="parentTaxon.id">
         <a href="javascript:void(0);" class="link">{{ parentTaxon.name }}</a>
       </li>
     </ul>

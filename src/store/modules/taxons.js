@@ -1,9 +1,5 @@
-import Vue from 'vue';
 import axios from 'axios';
-import VueAxios from 'vue-axios';
 import * as types from '../types';
-
-Vue.use(VueAxios, axios);
 
 const state = {
   taxons: []
