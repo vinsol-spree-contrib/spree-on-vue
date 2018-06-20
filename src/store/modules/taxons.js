@@ -1,13 +1,12 @@
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import { helpers } from '../helpers/helpers';
 import * as types from '../types';
 
 Vue.use(VueAxios, axios);
 
 const state = {
-  taxons: {}
+  taxons: []
 };
 
 const getters = {
@@ -25,7 +24,7 @@ const mutations = {
 const actions = {
   [types.FETCH_TAXONS]: function (context) {
     axios.get('api/ams/taxons').then(function (response) {
-      console.log(response.data);
+      context.commit(types.MUTATE_SET_TAXONS, response.data.taxons);
     });
   }
 };
