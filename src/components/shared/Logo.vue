@@ -1,6 +1,8 @@
 <template>
   <div class="brand absolute">
-    <a href="#"></a>
+    <router-link to="/" tag="a">
+      Spree-Vue
+    </router-link>
   </div>
 </template>
 
@@ -9,4 +11,3 @@
     name: 'logo'
   }
 </script>
-

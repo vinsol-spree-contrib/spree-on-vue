@@ -1,7 +1,9 @@
 <template>
   <main id="app">
     <app-header></app-header>
-    <app-home></app-home>
+    <transition name="slide" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </main>
 </template>
 
@@ -19,6 +21,7 @@ export default {
 </script>
 
 <style>
+  @import url('https://fonts.googleapis.com/css?family=Merienda');
   @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
   @import './assets/css/styles.css';
 </style>

@@ -21,6 +21,7 @@ const actions = {
   [types.FETCH_PRODUCTS]: function(context, payload) {
     axios.get('api/ams/products?per_page=' + payload).then(function (response) {
       context.commit(types.MUTATE_SET_PRODUCTS, response.data);
+      console.log(response.data);
     });
   }
 };

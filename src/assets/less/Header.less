@@ -1,10 +1,8 @@
 .primary-header {
 
   .container {
-    padding-bottom: 53px;
-    padding-top: 53px;
-    padding-bottom: 52.5px;
-    padding-top: 52.5px;
+    padding-bottom: 30px;
+    padding-top: 30px;
   }
 
   &__basket {
@@ -50,10 +48,20 @@
   }
 
   .brand {
-    .translateX(-50%);
-    left: 50%;
-    top: 55px;
+    .translateY(-50%);
+    font-size: 28px;
+    left: 15px;
+    top: 50%;
     z-index: 1;
+
+    a {
+      color: @body-color;
+      font-family: 'Merienda', cursive;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
 
   &__link {

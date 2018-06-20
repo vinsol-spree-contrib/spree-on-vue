@@ -1,10 +1,9 @@
 <template>
-  <!-- Online Shop -->
-  <section class="home">
+  <section class="shop">
     <section class="three-column-layout online-shop">
       <div class="container">
         <div class="container__inner">
-          <h2 class="h2 text-uppercase text-center">Online Shop</h2>
+          <h2 class="h2 text-uppercase text-center">All Products</h2>
           <div class="row narrow three-column-layout__row">
             <div class="col-md-4 col-sm-4 col-xs-12 three-column-layout__item border-l border-t text-center" v-for="product in shopProducts" :key="product.id">
               <a href="#" class="three-column-layout__link no-underline">
@@ -19,36 +18,33 @@
             </div>
           </div>
         </div>
-        <div class="three-column-layout__all border-t text-center bg-white">
-          <router-link to="/shop" tag="a" class="btn btn-action">
-            Shop All Products
-          </router-link>
+      </div>
+    </section>
+    <section class="pagination">
+      <div class="container">
+        <div class="container__inner">
+          <ul class="list-inline text-center">
+            <router-link to="" v-for="page in pages.total_pages" :key="page" tag="li">
+              <a class="link">{{ page }}</a>
+            </router-link>
+          </ul>
         </div>
       </div>
     </section>
     <section class="section-divider"></section>
-    <app-newsletter></app-newsletter>
-    <section class="section-divider"></section>
   </section>
-  <!-- Online Shop -->
 </template>
-
 
 <script>
   import { mapGetters } from 'vuex';
   import * as types from '../../store/types';
   import { helpers } from '../../store/helpers/helpers';
-  import Newsletter from '../shared/Newsletter.vue';
 
   export default {
-    name: 'home',
-
-    components: {
-      appNewsletter: Newsletter
-    },
+    name: 'shop',
 
     mounted() {
-      this.$store.dispatch(types.FETCH_PRODUCTS, 3);
+      this.$store.dispatch(types.FETCH_PRODUCTS, 6);
     },
 
     computed: {
@@ -62,8 +58,11 @@
 
       images() {
         return helpers.arrayToObject(this.products.images || [], "id");
+      },
+
+      pages() {
+        return this.products.meta || 0;
       }
     }
   }
 </script>
-

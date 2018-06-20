@@ -127,3 +127,23 @@ li {
 .bg-yellow-light {
   background: @bg-yellow-light;
 }
+
+.slide-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.slide-enter-active {
+  transition: .5s;
+}
+
+.slide-leave {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slide-leave-active {
+  transition: .3s;
+  opacity: 0;
+  transform: translateY(10px);
+}
