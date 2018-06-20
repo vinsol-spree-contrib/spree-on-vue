@@ -1,0 +1,55 @@
+.three-column-layout {
+  &__item {
+    .transition(.2s);
+    &:hover {
+      background: @hover-yellow;
+    }
+
+    &:nth-child(3n - 2) {
+     border-left-color: @white; 
+    }
+  }
+
+  .container__inner {
+    padding-top: 46px;
+  }
+
+  &__row {
+    padding-top: 21px;
+  }
+
+  &__content {
+    padding: 10px 10px 0 10px;
+    min-height: 124px;
+  }
+
+  &__link {
+    .block;
+    color: inherit;
+
+    &:hover {
+      color: inherit;
+    }
+  }
+
+  &__heading,
+  &__text {
+    .font-heavy;
+    font-size: 15px;
+    letter-spacing: .2px;
+    line-height: 24px;
+  }
+
+  &__heading {
+    padding-top: 15px;
+  }
+
+  &__text {
+    .font-roman;
+    padding-top: 1px;
+  }
+
+  &__all {
+    padding: 20px;
+  }
+}
