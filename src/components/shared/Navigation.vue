@@ -23,7 +23,20 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+  import * as types from '../../store/types';
+
   export default {
-    name: 'navigation'
+    name: 'navigation',
+    
+    mounted() {
+      this.$store.dispatch(types.FETCH_TAXONS);
+    },
+
+    computed: {
+      ...mapGetters({
+        fetchTaxons: types.GET_TAXONS
+      })
+    }
   }
 </script>
