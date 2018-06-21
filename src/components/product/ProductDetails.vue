@@ -1,6 +1,17 @@
 <template>
-  <section class="product-details">
-    
+  <section class="product">
+    <div class="container">
+      <div class="container__inner">
+        <div class="row narrow">
+          <div class="col-md-6">
+
+          </div>
+          <div class="co-md-6">
+            
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -18,8 +29,8 @@
 
     computed: {
       ...mapGetters({
-        product: types.GET_PRODUCT
-      })
+        productDetails: types.GET_PRODUCT
+      }),
     }
   }
 </script>

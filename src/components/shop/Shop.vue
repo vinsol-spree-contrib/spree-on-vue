@@ -6,7 +6,7 @@
           <h2 class="h2 text-uppercase text-center">All Products</h2>
           <div class="row narrow three-column-layout__row">
             <div class="col-md-3 col-sm-4 col-xs-12 three-column-layout__item border-l border-t text-center" v-for="product in shopProducts" :key="product.id">
-              <a href="#" class="three-column-layout__link no-underline">
+              <router-link :to="'products/' + product.slug" tag="a" class="three-column-layout__link no-underline">
                 <figure class="three-column-layout__figure">
                   <img :src="images[product.image_ids[0]].large_url" alt="" class="three-column-layout__image">
                 </figure>
@@ -14,7 +14,7 @@
                   <h3 class="three-column-layout__heading margin-0">{{ product.name }}</h3>
                   <p class="three-column-layout__text margin-0">{{ product.display_price }}</p>
                 </div>
-              </a>
+              </router-link>
             </div>
           </div>
         </div>
