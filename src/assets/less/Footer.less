@@ -1,0 +1,44 @@
+.primary-footer {
+  margin-bottom: 20px;
+
+  &__top {
+    .container__inner {
+      padding-bottom: 39px;
+      padding-top: 39px;
+    }
+  }
+
+  &__address {
+    padding: 24px 0;
+
+    span {
+      display: block;
+    }
+  }
+
+  .address-divider {
+    padding: 9px 0 10px 0;
+
+    &:before {
+      .content(@body-color, auto, 1px, 50%, absolute, auto, auto, 13px);
+      .translateX(-50%);
+    }
+  }
+
+  &__bottom {
+    .container__inner {
+      padding-bottom: 12px;
+      padding-top: 12px;
+    }
+  }
+
+  &__links {
+    .margin-0;
+    .padding-0;
+  }
+
+  &__link {
+    margin: 0 15px;
+    .padding-0;
+  }
+}

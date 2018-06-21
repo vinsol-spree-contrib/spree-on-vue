@@ -4,20 +4,23 @@
     <transition name="slide" mode="out-in">
       <router-view></router-view>
     </transition>
+    <app-footer></app-footer>
   </main>
 </template>
 
 <script>
-import Header from './components/shared/Header.vue';
-import Home from './components/home/Home.vue';
+  import Header from './components/shared/Header.vue';
+  import Home from './components/home/Home.vue';
+  import Footer from './components/shared/Footer.vue';
 
-export default {
-  name: 'app',
-  components: {
-    appHeader: Header,
-    appHome: Home
+  export default {
+    name: 'app',
+    components: {
+      appHeader: Header,
+      appHome: Home,
+      appFooter: Footer
+    }
   }
-}
 </script>
 
 <style>
