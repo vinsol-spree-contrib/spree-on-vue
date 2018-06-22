@@ -2,7 +2,7 @@
   <main id="app">
     <app-header></app-header>
     <transition name="slide" mode="out-in">
-      <router-view></router-view>
+      <router-view class="router-view"></router-view>
     </transition>
     <app-footer></app-footer>
   </main>

@@ -34,6 +34,7 @@ const actions = {
   },
 
   [types.FETCH_PRODUCT]: function (context, payload) {
+    context.commit(types.MUTATE_SET_PRODUCT, null);
     axios.get('api/ams/products/' + payload).then(function (response) {
       context.commit(types.MUTATE_SET_PRODUCT, response.data);
     });

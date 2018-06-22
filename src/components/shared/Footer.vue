@@ -1,5 +1,6 @@
 <template>
   <footer class="primary-footer">
+    <section class="section-divider"></section>
     <section class="primary-footer__bottom">
       <div class="container">
         <div class="container__inner">

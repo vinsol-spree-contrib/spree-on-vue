@@ -28,7 +28,6 @@
     </section>
     <section class="section-divider"></section>
     <app-newsletter></app-newsletter>
-    <section class="section-divider"></section>
   </section>
   <!-- Online Shop -->
 </template>

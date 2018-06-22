@@ -1,4 +1,4 @@
-.btn-action {
+.btn {
   .border-button;
   .border-radius(0);
   .font-roman;
@@ -12,14 +12,26 @@
   padding: 0 14px;
   text-transform: uppercase;
 
-  &:hover {
-    background: @body-color;
+  &-action {  
+    &:hover {
+      background: @body-color;
+      color: @white;
+    }
+  }
+
+  &-black {
+    background: @black;
     color: @white;
   }
 
-  &.btn-black {
-    background: @black;
-    color: @white;
+  &-red {
     .no-border;
+    background: @purchase-orange;
+    color: @white;
+
+    &:hover, &:focus {
+      background: darken(@purchase-orange, 10%);
+      color: @white;
+    }
   }
 }

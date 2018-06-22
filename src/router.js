@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-
+import store from './store/store';
+import * as types from './store/types';
 import Home from './components/home/Home.vue';
 import Shop from './components/shop/Shop.vue';
 import ProductDetails from './components/product/ProductDetails.vue';

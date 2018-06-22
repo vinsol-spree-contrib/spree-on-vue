@@ -31,7 +31,6 @@
         </div>
       </div>
     </section>
-    <section class="section-divider"></section>
   </section>
 </template>
 
