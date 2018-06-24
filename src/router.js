@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import store from './store/store';
-import * as types from './store/types';
 import Home from './components/home/Home.vue';
 import Shop from './components/shop/Shop.vue';
 import ProductDetails from './components/product/ProductDetails.vue';
+import Entry from './components/user/Entry.vue';
+import Profile from './components/user/Profile.vue';
+import Orders from './components/user/Orders.vue';
+import Order from './components/user/Order.vue';
 
 Vue.use(VueRouter);
 
@@ -22,7 +24,40 @@ const routes = [
   {
     path: '/products/:slug',
     component: ProductDetails
-  }
+  },
+
+  {
+    path: '/entry',
+    component: Entry,
+    beforeEnter(to, from, next) {
+      !localStorage.getItem('userToken') ? next() : next('/');
+    }
+  },
+
+  {
+    path: '/profile',
+    component: Profile,
+    beforeEnter(to, from, next) {
+      localStorage.getItem('userToken') ? next() : next('/');
+    }
+  },
+
+  {
+    path: '/orders',
+    component: Orders,
+    beforeEnter(to, from, next) {
+      localStorage.getItem('userToken') ? next() : next('/');
+    }
+  },
+
+  {
+    path: '/orders/:id',
+    component: Order,
+    beforeEnter(to, from, next) {
+      localStorage.getItem('userToken') ? next() : next('/');
+    }
+  },
+
 ];
 
 export default new VueRouter( {routes} );

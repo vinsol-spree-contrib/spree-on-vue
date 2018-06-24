@@ -6,9 +6,9 @@
   color: inherit;
   display: inline-block;
   font-size: 12px;
-  height: 44px;
+  height: 36px;
   letter-spacing: 1.4px;
-  line-height: 44px;
+  line-height: 36px;
   padding: 0 14px;
   text-transform: uppercase;
 
@@ -24,7 +24,20 @@
     color: @white;
   }
 
+  &-full {
+    background: @body-color;
+    color: @white;
+
+    &:hover, &:focus {
+      background: @white;
+      color: @body-color;
+    }
+  }
+
   &-red {
+    height: 45px;
+    line-height: 48px;
+    margin-top: 20px;
     .no-border;
     background: @purchase-orange;
     color: @white;

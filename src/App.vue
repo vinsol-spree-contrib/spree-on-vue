@@ -4,7 +4,6 @@
     <transition name="slide" mode="out-in">
       <router-view class="router-view"></router-view>
     </transition>
-    <app-footer></app-footer>
   </main>
 </template>
 
@@ -19,7 +18,7 @@
       appHeader: Header,
       appHome: Home,
       appFooter: Footer
-    }
+    },
   }
 </script>
 

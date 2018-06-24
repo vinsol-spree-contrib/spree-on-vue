@@ -24,6 +24,7 @@ const mutations = {
   [types.MUTATE_SET_PRODUCT]: function (state, payload) {
     state.product = payload;
   }
+
 };
 
 const actions = {

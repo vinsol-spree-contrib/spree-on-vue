@@ -1,27 +1,33 @@
 <template>
   <section class="product">
     <div class="container">
-      <div class="container__inner">
+      <div class="container__inner" v-if="currentVariant">
         <div class="row narrow">
           <div class="col-md-6 product__image-container text-center">
-            <!-- <img src="../../assets/images/product-img.jpg" alt="" class="product__image"> -->
+            <div class="product-image" v-for="(image, index) in currentVariant.image_ids" :key="image" v-if="index === 0">
+              <img :src="images[image].product_url" alt="">
+            </div>
+            <div class="variants-list">
+              <div class="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)">
+                <img :src="images[variant.image_ids[0]].small_url" alt="">
+              </div>
+            </div>
           </div>
-          <div class="col-md-6 text-center" v-if="currentVariant">
+          <div class="col-md-6 text-center">
             <aside class="product__details">
               <h2 class="h2 product__name text-uppercase">{{ currentVariant.name }}</h2>
               <p class="product__price">{{ currentVariant.display_price }}</p>
-              <!-- <p class="product__weight">300g</p> -->
               <p class="product__description">{{ currentVariant.description }}</p>
-              <div class="product__add text-center">
-                <a href="javascript:void(0);" class="btn btn-red">Add to basket</a>
-              </div>
               <div class="product__quantity">
-                <a href="javascript:void(0);" class="quantity-btn quantity-btn-minus"></a>
-                <input type="text" class="quantity-input text-center" v-model="quantity">
-                <a href="javascript:void(0);" class="quantity-btn quantity-btn-plus"></a>
+                <a href="javascript:void(0);" class="quantity-btn quantity-btn-minus" @click="decrement"></a>
+                <input type="quantity" class="quantity-input text-center" v-model="quantity">
+                <a href="javascript:void(0);" class="quantity-btn quantity-btn-plus" @click="quantity++"></a>
               </div>
-              <div class="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)">
-                <h2>{{ variant.sku }}</h2>
+              <div class="product__add text-center">
+                <a href="javascript:void(0);" class="btn btn-red" @click="onAddToCart">Add to basket</a>
+              </div>
+              <div v-if="cartErrors" class="error-text">
+                <strong>{{cartErrors.split(':')[1]}}</strong>
               </div>
             </aside>
           </div>
@@ -41,7 +47,7 @@
 
     data() {
       return {
-        quantity: 1,
+        quantity: "1",
         selectedVariant: null
       }
     },
@@ -52,11 +58,16 @@
 
     computed: {
       ...mapGetters({
-        productInformation: types.GET_PRODUCT
+        productInformation: types.GET_PRODUCT,
+        cartErrors: 'getCartErrors'
       }),
 
       variants() {
         return this.productInformation && this.productInformation.variants ? this.productInformation.variants : [];
+      },
+
+      images() {
+        return this.productInformation && this.productInformation.images ? helpers.arrayToObject(this.productInformation.images, "id") : [];
       },
 
       currentVariant() {
@@ -69,13 +80,42 @@
         } else {
           return null;
         }
-      },
+      }
     },
 
     methods: {
       changeVariant(variant) {
         this.selectedVariant = variant;
+      },
+
+      onAddToCart() {
+        const formData = {
+          quantity: Number(this.quantity),
+          variant_id: Number(this.currentVariant.id)
+        };
+
+        this.$store.dispatch('addToCart', formData);
+        this.$store.dispatch('fetchUserCurrentOrders');
+      },
+
+      decrement() {
+        if(this.quantity < 1) {
+          this.quantity = 1;
+        }
+        this.quantity -= 1;
       }
     }
   }
 </script>
+
+<style scoped>
+  .loader {
+    background: rgba(255,255,255,0.7);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+  }
+</style>
