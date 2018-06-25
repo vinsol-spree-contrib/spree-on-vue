@@ -1,10 +1,10 @@
 <template>
-  <section class="container mx-auto p-8">
-    <h2 class="text-md text-grey-darkest text-center">
+  <section class="container mx-auto text-center welcome">
+    <h2 class="h2">
       Welcome {{ user.email }}
     </h2>
     <div class="text-center my-8">
-      <router-link tag="button" to="/orders" class="w-1/6 h-12 btn-lg bg-grey-darkest hover:bg-grey-darker text-white font-bold py-2 px-4 rounded" @click="onViewOrders">View Orders</router-link>
+      <router-link tag="button" to="/orders" class="btn btn-action" @click="onViewOrders">View Orders</router-link>
     </div>
   </section>
 </template>

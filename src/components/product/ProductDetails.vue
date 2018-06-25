@@ -1,11 +1,12 @@
 <template>
   <section class="product">
     <div class="container">
-      <div class="container__inner" v-if="currentVariant">
+      <div class="container__inner" v-if="!!currentVariant">
         <div class="row narrow">
           <div class="col-md-6 product__image-container text-center">
-            <div class="product-image" v-for="(image, index) in currentVariant.image_ids" :key="image" v-if="index === 0">
-              <img :src="images[image].product_url" alt="">
+            <div class="product-image">
+              <img :src="productImage" alt="">
+              <!-- <img src="../../assets/images/product-img.jpg" alt="" v-if="!images[image]"> -->
             </div>
             <div class="variants-list">
               <div class="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)">
@@ -19,7 +20,7 @@
               <p class="product__price">{{ currentVariant.display_price }}</p>
               <p class="product__description">{{ currentVariant.description }}</p>
               <div class="product__quantity">
-                <a href="javascript:void(0);" class="quantity-btn quantity-btn-minus" @click="decrement"></a>
+                <button class="quantity-btn quantity-btn-minus" :disabled="quantity < 2" @click="quantity--"></button>
                 <input type="quantity" class="quantity-input text-center" v-model="quantity">
                 <a href="javascript:void(0);" class="quantity-btn quantity-btn-plus" @click="quantity++"></a>
               </div>
@@ -52,8 +53,14 @@
       }
     },
 
+    watch: {
+      '$route.params.slug': function() {
+        this.$store.dispatch(types.FETCH_PRODUCT, this.$route.params.slug);
+      }
+    },
+
     created() {
-      this.$store.dispatch(types.FETCH_PRODUCT, this.$route.params.slug)
+      this.$store.dispatch(types.FETCH_PRODUCT, this.$route.params.slug);
     },
 
     computed: {
@@ -62,12 +69,21 @@
         cartErrors: 'getCartErrors'
       }),
 
+      productImage() {
+        if(this.currentVariant.image_ids && this.currentVariant.image_ids[0]) {
+          return this.images[this.currentVariant.image_ids[0]] && this.images[this.currentVariant.image_ids[0]].product_url;
+        } else {
+          return ''
+        }
+      },
+
       variants() {
         return this.productInformation && this.productInformation.variants ? this.productInformation.variants : [];
       },
 
       images() {
-        return this.productInformation && this.productInformation.images ? helpers.arrayToObject(this.productInformation.images, "id") : [];
+        return this.productInformation && this.productInformation.images ? 
+        helpers.arrayToObject( (this.productInformation.images || []), "id") : {};
       },
 
       currentVariant() {
@@ -75,8 +91,7 @@
           var masterVariant = this.variants.filter(function (variant) {
             return variant.is_master;
           });
-          this.selectedVariant = this.selectedVariant || masterVariant[0];
-          return this.selectedVariant;
+          return this.selectedVariant || masterVariant[0];
         } else {
           return null;
         }
@@ -90,19 +105,11 @@
 
       onAddToCart() {
         const formData = {
-          quantity: Number(this.quantity),
-          variant_id: Number(this.currentVariant.id)
+          quantity: this.quantity,
+          variant_id: this.currentVariant.id
         };
 
         this.$store.dispatch('addToCart', formData);
-        this.$store.dispatch('fetchUserCurrentOrders');
-      },
-
-      decrement() {
-        if(this.quantity < 1) {
-          this.quantity = 1;
-        }
-        this.quantity -= 1;
       }
     }
   }

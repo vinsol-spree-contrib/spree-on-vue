@@ -19,6 +19,10 @@
       appHome: Home,
       appFooter: Footer
     },
+
+    created() {
+      this.$store.dispatch('tryAutoLogin');
+    }
   }
 </script>
 

@@ -241,3 +241,150 @@ li {
     padding: 15px 0 0 0;
   }
 }
+
+.primary-header__user {
+  &:hover {
+    .user-options {
+      visibility: visible;
+      opacity: 1;
+    }    
+  }
+}
+
+.user-options {
+  .transition(.3s);
+  visibility: hidden;
+  opacity: 0;
+  .padding-0;
+  .margin-0;
+  width: 100px;
+  left: -62px;
+  top: 38px;
+  z-index: 1;
+  text-align: center;
+
+  li {
+    + li {
+      border-top: 1px solid #fff;
+    }
+  }
+
+  a {
+    cursor: pointer;
+    text-align: right;
+    display: block;
+    padding: 8px 10px;
+    background: @body-color;
+    color: @white;
+
+    &:hover {
+      text-decoration: none;
+      background: lighten(@body-color, 10%);
+    }
+  }
+}
+
+.welcome {
+  padding: 50px;
+
+  .btn {
+    margin-top: 20px;
+  }
+}
+
+.table {
+  a {
+    color: @body-color;
+    .font-heavy;
+  }
+}
+
+.page-heading {
+  text-align: center;
+  margin: 20px 0 10px 0 !important;
+}
+
+.primary-header__basket {
+  &:hover {
+    .mini-cart {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}
+
+.mini-cart {
+  .transition(.2s);
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  width: 300px;
+  max-height: 300px;
+  left: -262px;
+  top: 38px;
+  background: @white;
+  z-index: 2;
+  box-shadow: 0 0 5px #ccc;
+  border-radius: 5px;
+
+  .sub-total {
+    font-size: 16px;
+    text-transform: uppercase;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 10px;
+  }
+
+  .btn-action {
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    background: @body-color;
+    color: @white;
+
+    &:hover {
+      background: lighten(@body-color, 10%);
+    }
+  }
+
+  .mini-cart-item-list {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100% - 90px);
+  }
+}
+
+.minicart-item {
+  padding: 10px;
+
+  .minicart-img {
+    width: 60px;
+    text-align: center;
+    margin-right: 10px;
+  }
+
+  .variant-link {
+    cursor: pointer;
+  }
+
+  .minicart-details {
+    width: calc(100% - 70px);
+  }
+
+  img {
+    width: 40px;
+  }
+
+  .h2 {
+    padding: 0;
+    line-height: normal;
+    font-size: 14px;
+    letter-spacing: 0;
+  }
+}
+
+.empty-cart-message {
+  margin: 0;
+  text-align: center;
+  padding: 10px;
+}

@@ -87,22 +87,24 @@ const actions = {
     });
   },
 
-  createNewOrder(context) {
+  createNewOrderAndAddItem(context, formData) {
     axios.post('/api/ams/orders', { order: { order_token: "" } }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
+      context.dispatch('addItemToCart', formData);
     })
   },
 
   addItemToCart(context, formData) {
     axios.post('api/ams/line_items', {
-      
       order_number: context.getters.getCartItems.order.id,
       line_item: {
         quantity: formData.quantity,
         variant_id: formData.variant_id
       }
     }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+      context.commit("setCartErrors", "");
       context.commit('setCartItems', response.data);
+      context.dispatch('fetchUserCurrentOrders');
     }).catch(function(error) {
       context.commit('setCartErrors', error.response.data.exception);
     })
@@ -112,10 +114,13 @@ const actions = {
     if (context.getters.getCartItems.order) {
       context.dispatch('addItemToCart', formData);
     } else {
-      context.dispatch('createNewOrder').then(function () {
-        context.dispatch('addItemToCart', formData);
-      });
+      context.dispatch('createNewOrderAndAddItem', formData);
     }
+  },
+
+  emptyCurrentOrder(context, orderId) {
+    axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+    });
   }
 };
 

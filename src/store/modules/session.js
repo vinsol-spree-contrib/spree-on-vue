@@ -137,8 +137,8 @@ const actions = {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userId');
     localStorage.removeItem('expirationTime');
-    routes.replace('/login');
-    context.rootState.users.cartItems = null;
+    routes.replace('/entry');
+    context.rootState.user.cartItems = {};
   }
 };
 

@@ -38,6 +38,8 @@ const actions = {
     context.commit(types.MUTATE_SET_PRODUCT, null);
     axios.get('api/ams/products/' + payload).then(function (response) {
       context.commit(types.MUTATE_SET_PRODUCT, response.data);
+      debugger
+      context.commit("setCartErrors", "", {root: true});
     });
   }
 };
