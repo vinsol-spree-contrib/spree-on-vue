@@ -58,12 +58,17 @@
 
     methods: {
       onSearch: function() {
-        if(this.searchTerm.length > 2) {
-          this.$store.dispatch(types.SEARCH, this.searchTerm);
-          this.isVisible = true;
-        } else {
-          this.products = [];
-          this.isVisible = false;
+        var _this = this;
+        document.body.onkeyup = function (event) {
+          if (event.keyCode == 32) {
+            return
+          } else if (_this.searchTerm.length > 2 && event.keyCode != 32) {
+              _this.$store.dispatch(types.SEARCH, _this.searchTerm);
+              _this.isVisible = true;
+          } else {
+            _this.products = [];
+            _this.isVisible = false;
+          }
         }
       },
 
@@ -80,6 +85,7 @@
   .search-section .search-icon { right: 10px; top: 50%; transform: translateY(-50%); }
   .search-section .form-input { height: 37px; transition: .25s; width: 250px; min-width: initial; padding-right: 30px; background: #fff; }
   .search-results { width: 100%; background: #fff; top: 38px; border: 1px solid #4D3636; max-height: 250px; overflow-y: auto; overflow-x: hidden; padding-left: 0; margin: 0; }
+  .search-results:empty { display: none; }
   .search-results a { display: block; width: 100%; display: flex; padding: 10px; align-items: center; }
   .search-results li + li { border-top: solid 1px #E8EBE8; }
   .search-item figure { width: 40px; text-align: center; }
