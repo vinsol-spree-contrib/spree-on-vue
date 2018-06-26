@@ -1,8 +1,8 @@
 <template>
   <section class="container">
     <div class="container__inner">
-      <div>
-        {{getSingleOrder}}
+      <div class="h2">
+        In Progress
       </div>
     </div>
   </section>

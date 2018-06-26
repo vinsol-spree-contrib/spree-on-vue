@@ -3,7 +3,8 @@ import * as types from '../types';
 
 const state = {
   products: {},
-  product: {}
+  product: {},
+  searchResults: {}
 };
 
 const getters = {
@@ -13,6 +14,10 @@ const getters = {
 
   [types.GET_PRODUCT]: function (state) {
     return state.product;
+  },
+
+  [types.GET_SEARCH_RESULTS]: function (state) {
+    return state.searchResults;
   }
 };
 
@@ -23,8 +28,11 @@ const mutations = {
 
   [types.MUTATE_SET_PRODUCT]: function (state, payload) {
     state.product = payload;
-  }
+  },
 
+  [types.MUTATE_SEARCH_RESULTS]: function (state, payload) {
+    state.searchResults = payload;
+  }
 };
 
 const actions = {
@@ -38,8 +46,12 @@ const actions = {
     context.commit(types.MUTATE_SET_PRODUCT, null);
     axios.get('api/ams/products/' + payload).then(function (response) {
       context.commit(types.MUTATE_SET_PRODUCT, response.data);
-      debugger
-      context.commit("setCartErrors", "", {root: true});
+    });
+  },
+
+  [types.SEARCH]: function(context, payload) {
+    axios.get('api/ams/products?q[name_cont]=' + payload).then(function (response) {
+      context.commit(types.MUTATE_SEARCH_RESULTS, response.data);
     });
   }
 };

@@ -5,6 +5,7 @@
       <app-navigation></app-navigation>
       <app-cart></app-cart>
       <app-user></app-user>
+      <app-search></app-search>
     </div>
   </header>
 </template>
@@ -14,6 +15,7 @@
   import Navigation from './Navigation.vue';
   import MiniCart from './MiniCart.vue';
   import UserOptions from './UserOptions.vue';
+  import Search from './Search.vue';
 
   export default {
     name: 'app-header',
@@ -21,7 +23,8 @@
       appLogo: Logo,
       appNavigation: Navigation,
       appCart: MiniCart,
-      appUser: UserOptions
+      appUser: UserOptions,
+      appSearch: Search
     },
 
     mounted() {

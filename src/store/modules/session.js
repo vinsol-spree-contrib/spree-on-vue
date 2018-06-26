@@ -116,7 +116,7 @@ const actions = {
   tryAutoLogin(context) {
     const userId = localStorage.getItem('userId');
     const userToken = localStorage.getItem('userToken');
-    const userProfileId = localStorage.getItem('userProfileId');
+    
     if (!userToken) {
       return;
     }

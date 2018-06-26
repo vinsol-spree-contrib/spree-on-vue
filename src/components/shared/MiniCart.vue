@@ -4,7 +4,7 @@
       <img src="../../assets/images/basket.svg" alt="" class="absolute">
     </a>
     <aside class="mini-cart">
-      <div v-if="cartItems.order">
+      <div v-if="cartItems.order && cartItems.order.item_count > 0">
         <div class="sub-total text-center border-t">Subtotal: <strong>${{ order.total }}</strong></div>
         <div class="mini-cart-item-list">
           <div v-for="item in cartItems.line_items" :key="item.id" class="border-t clearfix minicart-item">
@@ -23,9 +23,9 @@
           View Cart
         </router-link>
       </div>
-      
+
       <div v-else>
-        <p class="empty-cart-message">Login to view your cart</p>
+        <p class="empty-cart-message">Your Cart is empty</p>
       </div>
     </aside>
   </div>
