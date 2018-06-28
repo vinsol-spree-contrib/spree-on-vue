@@ -23,9 +23,9 @@
     <section class="pagination">
       <div class="container">
         <div class="container__inner">
-          <ul class="list-inline text-center">
-            <router-link to="" v-for="page in pages.total_pages" :key="page" tag="li">
-              <a class="link">{{ page }}</a>
+          <ul class="list-inline text-center" v-if="pages">
+            <router-link :to="{ path: '/shop', query: {page: page} }" v-for="page in pages.total_pages" :key="page" @click="setCurrentPage(page)" tag="li">
+              <a class="link" >{{ page }}</a>
             </router-link>
           </ul>
         </div>
@@ -43,7 +43,20 @@
     name: 'shop',
 
     mounted() {
-      this.$store.dispatch(types.FETCH_PRODUCTS, 8);
+      this.$store.dispatch(types.FETCH_PRODUCTS, {
+        'page': this.$route.query.page,
+        'per_page': 4
+      });
+      this.$route.query.page = this.$route.query.page || 1;
+    },
+
+    watch: {
+      '$route.query.page': function() {
+        this.$store.dispatch(types.FETCH_PRODUCTS, {
+          'page': this.$route.query.page,
+          'per_page': 4
+        });
+      }
     },
 
     computed: {
@@ -61,6 +74,12 @@
 
       pages() {
         return this.products.meta || 0;
+      }
+    },
+
+    methods: {
+      setCurrentPage: function (page) {
+        this.$route.query.page = page;
       }
     }
   }

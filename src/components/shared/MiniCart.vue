@@ -2,6 +2,7 @@
   <div class="primary-header__basket absolute bg-yellow-light">
     <a href="javascript:void(0);" class="absolute primary-header__basket-link">
       <img src="../../assets/images/basket.svg" alt="" class="absolute">
+      <span class="absolute basket-quantity text-center" v-if="cartItems.order">{{ lineItemCount }}</span>
     </a>
     <aside class="mini-cart">
       <div v-if="cartItems.order && cartItems.order.item_count > 0">

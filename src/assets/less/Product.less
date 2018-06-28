@@ -46,6 +46,11 @@
       }
     }
 
+    &-minus:disabled {
+      pointer-events: none;
+      opacity: .5;
+    }
+
     &-plus {
       &:after {
         .content(@body-color, auto, 12px, 50%, absolute, auto, 50%, 1px);

@@ -48,7 +48,10 @@
     },
 
     mounted() {
-      this.$store.dispatch(types.FETCH_PRODUCTS, 3);
+      this.$store.dispatch(types.FETCH_PRODUCTS, {
+        'page': 1,
+        'per_page': 3
+      });
     },
 
     computed: {

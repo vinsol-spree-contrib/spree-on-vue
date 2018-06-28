@@ -36,8 +36,8 @@ const mutations = {
 };
 
 const actions = {
-  [types.FETCH_PRODUCTS]: function (context, payload) {
-    axios.get('api/ams/products?per_page=' + payload).then(function (response) {
+  [types.FETCH_PRODUCTS]: function (context, { 'page': page, 'per_page': perPage }) {
+    axios.get('api/ams/products?page=' + page + '&per_page=' + perPage).then(function (response) {
       context.commit(types.MUTATE_SET_PRODUCTS, response.data);
     });
   },
