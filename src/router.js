@@ -7,6 +7,8 @@ import Entry from './components/user/Entry.vue';
 import Profile from './components/user/Profile.vue';
 import Orders from './components/user/Orders.vue';
 import Order from './components/user/Order.vue';
+import Cart from './components/cart/Cart.vue';
+import Address from './components/order/Address.vue';
 
 Vue.use(VueRouter);
 
@@ -57,6 +59,16 @@ const routes = [
       localStorage.getItem('userToken') ? next() : next('/');
     }
   },
+
+  {
+    path: '/cart',
+    component: Cart
+  },
+
+  {
+    path: '/address',
+    component: Address
+  }
 
 ];
 

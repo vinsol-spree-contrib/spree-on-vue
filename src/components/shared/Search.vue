@@ -1,5 +1,5 @@
 <template>
-  <section class="absolute search-section">
+  <section class="absolute search-section" v-if="!isLoginView">
     <input type="text" v-model="searchTerm" @input="onSearch" class="form-input search-input" placeholder="Search">
     <img src="../../assets/images/search.svg" alt="" class="absolute search-icon">
     <ul class="absolute search-results" v-if="isVisible">
@@ -49,6 +49,10 @@
         set: function (emptyValue) {
           this.searchResults.products = emptyValue;
         }
+      },
+
+      isLoginView() {
+        return this.$route.path == "/entry";
       },
 
       images() {

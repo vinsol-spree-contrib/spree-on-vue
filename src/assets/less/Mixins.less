@@ -6,6 +6,14 @@
   transition: @time;
 }
 
+.transitionWithProperty(@property, @time) {
+  -moz-transition: @property @time;
+  -ms-transition: @property @time;
+  -o-transition: @property @time;
+  -webkit-transition: @property @time;
+  transition: @property @time;
+}
+
 .border-radius(@radius) {
   -moz-border-radius: @radius;
   -ms-border-radius: @radius;
@@ -25,6 +33,14 @@
   top: @top;
   width: @width;
   z-index: 1;
+}
+
+.rotate(@degrees) {
+  -moz-transform: rotate(@degrees);
+  -ms-transform: rotate(@degrees);
+  -o-transform: rotate(@degrees);
+  -webkit-transform: rotate(@degrees);
+  transform: rotate(@degrees);
 }
 
 .translateX(@unit) {
@@ -51,11 +67,27 @@
   transform: translateX(@unitX) translateY(@unitY);
 }
 
+.rotateTransformXY(@degrees, @unitX, @unitY) {
+  -moz-transform: rotate(@degrees) translateX(@unitX) translateY(@unitY);
+  -ms-transform: rotate(@degrees) translateX(@unitX) translateY(@unitY);
+  -o-transform: rotate(@degrees) translateX(@unitX) translateY(@unitY);
+  -webkit-transform: rotate(@degrees) translateX(@unitX) translateY(@unitY);
+  transform: rotate(@degrees) translateX(@unitX) translateY(@unitY);
+}
+
 .text-uppercase {
   text-transform: uppercase;
 }
 
-.font(@size: 14px, @spacing: .4px, @height: 24px, ) {
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.font(@size: 14px, @spacing: .4px, @height: 24px) {
   font-size: @size;
   letter-spacing: @spacing;
   line-height: @height;
@@ -69,4 +101,23 @@
 .v-align(@position) {
   display: inline-block;
   vertical-align: @position;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.absolute-center {
+  .absolute;
+  .translateXY(-50%, -50%);
+  left: 50%;
+  top: 50%;
+}
+
+.bg-white {
+  background: @white;
+}
+
+.inline-block {
+  display: inline-block;
 }

@@ -107,7 +107,7 @@ const actions = {
       context.dispatch('setLogoutTimer', state.activeSessionTime);
       context.commit('clearAuthErrors');
       context.dispatch('fetchUserCurrentOrders', { root: true });
-      routes.replace('/profile');
+      routes.replace('/');
     }).catch(function (error) {
       context.commit('setLoginErrors', error.response.data.errors);
     });
@@ -125,11 +125,11 @@ const actions = {
     const now = new Date();
     if (now >= expirationTime) {
       return;
+    } else {
+      context.commit('authUserId', userId);
+      context.commit('authUserToken', userToken);
+      context.commit('setSessionTime', expirationTime);
     }
-
-    context.commit('authUserId', userId);
-    context.commit('authUserToken', userToken);
-    context.commit('setSessionTime', expirationTime);
   },
 
   logout(context) {
@@ -137,8 +137,8 @@ const actions = {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userId');
     localStorage.removeItem('expirationTime');
+    context.dispatch('fetchUserCurrentOrders');
     routes.replace('/entry');
-    context.rootState.user.cartItems = {};
   }
 };
 

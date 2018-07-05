@@ -103,23 +103,49 @@ const actions = {
       }
     }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit("setCartErrors", "");
-      context.commit('setCartItems', response.data);
       context.dispatch('fetchUserCurrentOrders');
+      
     }).catch(function(error) {
       context.commit('setCartErrors', error.response.data.exception);
+      context.dispatch('showMessage', {
+        message: error.response.data.exception,
+        type: 'error'
+      })
     })
   },
 
   addToCart(context, formData) {
     if (context.getters.getCartItems.order) {
       context.dispatch('addItemToCart', formData);
+      context.dispatch('showMessage', {
+        message: 'Item Added to cart',
+        type: 'success'
+      });
     } else {
       context.dispatch('createNewOrderAndAddItem', formData);
+      context.dispatch('showMessage', {
+        message: 'Item Added to cart',
+        type: 'success'
+      });
     }
   },
 
   emptyCurrentOrder(context, orderId) {
-    axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+      axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+        context.dispatch('fetchUserCurrentOrders');
+    });
+  },
+
+  proceedToAddressState(context, orderId) {
+    axios.put('/api/ams/checkouts/' + orderId + '/next', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+      console.log(response.data);
+      context.dispatch('fetchUserCurrentOrders');
+    })
+  },
+
+  deleteLineItem(context, { 'number': number, 'lineItemId': lineItemId }) {
+    axios.delete('/api/v1/orders/' + number + '/line_items/' + lineItemId, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+      context.dispatch('fetchUserCurrentOrders');
     });
   }
 };

@@ -9,6 +9,29 @@ import session from './modules/session';
 import user from './modules/user';
 
 const store = new Vuex.Store({
+
+  state: {
+    alertMessage: ''
+  },
+
+  getters: {
+    getAlertMessage: function(state) {
+      return state.alertMessage;
+    }
+  },
+
+  mutations: {
+    setAlertMessage: function(state, payload) {
+      state.alertMessage = payload;
+    }
+  },
+
+  actions: {
+    showMessage: function (context, { 'message': message, 'type': type } ) {
+      context.commit('setAlertMessage', { message, type });
+    }
+  },
+
   modules: {
     taxons,
     products,

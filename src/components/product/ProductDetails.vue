@@ -6,10 +6,9 @@
           <div class="col-md-6 product__image-container text-center">
             <div class="product-image">
               <img :src="productImage" alt="">
-              <!-- <img src="../../assets/images/product-img.jpg" alt="" v-if="!images[image]"> -->
             </div>
             <div class="variants-list">
-              <div class="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)">
+              <div class="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)" :title="variant.options_text">
                 <img :src="images[variant.image_ids[0]].small_url" alt="">
               </div>
             </div>
@@ -19,6 +18,13 @@
               <h2 class="h2 product__name text-uppercase">{{ currentVariant.name }}</h2>
               <p class="product__price">{{ currentVariant.display_price }}</p>
               <p class="product__description">{{ currentVariant.description }}</p>
+              <ul style="padding: 0;" class="row">
+                <li v-for="property in properties" :key="property.id" class="col-md-6">
+                  <div>
+                    <strong class="font-heavy">{{ property.presentation }}:</strong> {{ property.value }}
+                  </div>
+                </li>
+              </ul>
               <div class="product__quantity">
                 <button class="quantity-btn quantity-btn-minus" :disabled="quantity < 2" @click="quantity--"></button>
                 <input type="quantity" class="quantity-input text-center" v-model="quantity">
@@ -27,8 +33,11 @@
               <div class="product__add text-center">
                 <a href="javascript:void(0);" class="btn btn-red" @click="onAddToCart">Add to basket</a>
               </div>
-              <div v-if="cartErrors" class="error-text">
-                <strong>{{cartErrors.split(':')[1]}}</strong>
+              <div class="alert" v-if="!cartErrors" :class= "{ 'alert-success' : alertMessage.type === 'success' }" >
+                {{alertMessage.message}}
+              </div>
+              <div class="alert" v-if="cartErrors && alertMessage.type === 'error'" :class= "{ 'alert-danger' : alertMessage.type === 'error' }">
+                <strong>{{cartErrors}}</strong>
               </div>
             </aside>
           </div>
@@ -66,7 +75,8 @@
     computed: {
       ...mapGetters({
         productInformation: types.GET_PRODUCT,
-        cartErrors: 'getCartErrors'
+        cartErrors: 'getCartErrors',
+        alertMessage: 'getAlertMessage'
       }),
 
       productImage() {
@@ -84,6 +94,10 @@
       images() {
         return this.productInformation && this.productInformation.images ? 
         helpers.arrayToObject( (this.productInformation.images || []), "id") : {};
+      },
+
+      properties() {
+        return this.productInformation && this.productInformation.product_properties ? this.productInformation.product_properties : [];
       },
 
       currentVariant() {
@@ -111,6 +125,14 @@
 
         this.$store.dispatch('addToCart', formData);
       }
+    },
+
+    beforeRouteLeave (to, from, next) {
+      this.$store.dispatch('showMessage', {
+        message: '',
+        type: ''
+      });
+      next();
     }
   }
 </script>

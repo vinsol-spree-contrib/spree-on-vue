@@ -24,7 +24,7 @@
       <div class="container">
         <div class="container__inner">
           <ul class="list-inline text-center" v-if="pages">
-            <router-link :to="{ path: '/shop', query: {page: page} }" v-for="page in pages.total_pages" :key="page" @click="setCurrentPage(page)" tag="li">
+            <router-link :to="{ path: '/shop', query: { page: page } }" v-for="page in pages.total_pages" :key="page" @click="setCurrentPage(page)" tag="li">
               <a class="link" >{{ page }}</a>
             </router-link>
           </ul>
@@ -43,19 +43,13 @@
     name: 'shop',
 
     mounted() {
-      this.$store.dispatch(types.FETCH_PRODUCTS, {
-        'page': this.$route.query.page,
-        'per_page': 4
-      });
-      this.$route.query.page = this.$route.query.page || 1;
+      this.fetchProducts();
+      this.$route.query["page"] = this.currentPage;
     },
 
     watch: {
       '$route.query.page': function() {
-        this.$store.dispatch(types.FETCH_PRODUCTS, {
-          'page': this.$route.query.page,
-          'per_page': 4
-        });
+        this.fetchProducts();
       }
     },
 
@@ -63,6 +57,10 @@
       ...mapGetters({
         products: types.GET_PRODUCTS
       }),
+
+      currentPage() {
+        return Number(this.$route.query.page) || 1;
+      },
 
       shopProducts() {
         return this.products.products || [];
@@ -80,6 +78,13 @@
     methods: {
       setCurrentPage: function (page) {
         this.$route.query.page = page;
+      },
+
+      fetchProducts: function (event) {
+        this.$store.dispatch(types.FETCH_PRODUCTS, {
+          'page': this.$route.query.page,
+          'per_page': 4
+        });
       }
     }
   }
