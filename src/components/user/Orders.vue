@@ -1,6 +1,6 @@
 <template>
   <section class="orders-page">
-    <div class="container">
+    <div class="container" v-if="orders.length > 0">
       <h2 class="h2 page-heading text-uppercase">My Orders</h2>
       <div class="container__inner">
         <table class="table">
@@ -30,6 +30,9 @@
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="container" v-else>
+      <h2 class="h2 text-center text-uppercase">No orders found!</h2>
     </div>
   </section>
 </template>

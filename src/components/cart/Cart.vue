@@ -40,7 +40,7 @@
                 </div>
                 <div class="basket-item__price">
                   <h4 class="h4">Price</h4>
-                  <p class="price">{{ variants[item.variant_id].display_price }}</p>
+                  <p class="price">{{ item.display_amount }}</p>
                 </div>
               </li>
             </ul>

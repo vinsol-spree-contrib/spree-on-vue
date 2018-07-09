@@ -9,6 +9,7 @@ import Orders from './components/user/Orders.vue';
 import Order from './components/user/Order.vue';
 import Cart from './components/cart/Cart.vue';
 import Address from './components/order/Address.vue';
+import TaxonProducts from './components/product/TaxonProducts.vue';
 
 Vue.use(VueRouter);
 
@@ -68,6 +69,11 @@ const routes = [
   {
     path: '/address',
     component: Address
+  },
+
+  {
+    path: '/categories/:name/:id',
+    component: TaxonProducts
   }
 
 ];

@@ -1,9 +1,9 @@
 <template>
   <nav class="primary-header__nav">
     <ul class="primary-header__links list-inline text-uppercase text-center margin-0">
-      <li class="primary-header__link with-sub-menu" v-for="parentTaxon in parentTaxons" :key="parentTaxon.id">
-        <a href="javascript:void(0);" class="link">{{ parentTaxon.name }}</a>
-      </li>
+      <router-link :to="'/categories/' + taxon.name + '/' + taxon.id" class="primary-header__link with-sub-menu" v-for="taxon in allTaxons" :key="taxon.id" @click.native="showTaxonProducts(taxon.id)" tag="li">
+        <a class="link">{{ taxon.name }}</a>
+      </router-link>
     </ul>
   </nav>
 </template>
@@ -21,15 +21,26 @@
 
     computed: {
       ...mapGetters({
-        taxons: types.GET_TAXONS,
-        products: types.GET_PRODUCTS
+        taxons: types.GET_TAXONS
       }),
 
-      parentTaxons() {
+      allTaxons() {
         return this.taxons.filter(function (taxon) {
-          return taxon.parent_id === null;
+          return taxon.parent_id !== null;
         });
       }
     },
+
+    methods: {
+      showTaxonProducts(id) {
+        this.$store.dispatch(types.TAXON_PRODUCTS, id);
+      }
+    }
   }
 </script>
+
+<style scoped>
+  .router-link-exact-active.router-link-active {
+    background: #fff;
+  }
+</style>

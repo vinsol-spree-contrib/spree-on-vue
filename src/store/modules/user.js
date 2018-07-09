@@ -143,11 +143,19 @@ const actions = {
     })
   },
 
+  proceedToDeliveryState(context, { 'number': orderNumber, 'addressData': addressData}) {
+    axios.put('/api/ams/checkouts/' + orderNumber, { addressData }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken')  } }).then(function(response) {
+      console.log(response);
+    }).catch(function(error) {
+      console.log(error.errors);
+    });
+  },
+
   deleteLineItem(context, { 'number': number, 'lineItemId': lineItemId }) {
     axios.delete('/api/v1/orders/' + number + '/line_items/' + lineItemId, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
       context.dispatch('fetchUserCurrentOrders');
     });
-  }
+  },
 };
 
 export default {

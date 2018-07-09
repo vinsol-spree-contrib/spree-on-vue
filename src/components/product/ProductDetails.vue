@@ -136,15 +136,3 @@
     }
   }
 </script>
-
-<style scoped>
-  .loader {
-    background: rgba(255,255,255,0.7);
-    height: 100%;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 10;
-  }
-</style>
