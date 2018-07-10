@@ -1,12 +1,12 @@
 <template>
   <section class="ccart-page">
-    <h1 class="text-center text-uppercase font-black">Order State - [{{order.state}}] [{{order.id}}]</h1>
+    <!-- <h1 class="text-center text-uppercase font-black">Order State - [{{order.state}}] [{{order.id}}]</h1> -->
     <!-- Page heading -->
       <div v-if="cartItems.order && cartItems.order.item_count > 0">
         <section class="page-heading">
           <div class="container">
             <div class="container__inner text-center">
-              <h2 class="h2 page-heading__text">Your basket</h2>
+              <h2 class="h2 page-heading__text text-uppercase">Your basket</h2>
             </div>
           </div>
         </section>
@@ -36,6 +36,12 @@
                     <button class="quantity-btn quantity-btn-minus" :disabled="item.quantity < 2" @click="changeQuantity(-1, variants[item.variant_id].id)"></button>
                     <input type="quantity" class="quantity-input text-center" :value="item.quantity" disabled>
                     <a href="javascript:void(0);" class="quantity-btn quantity-btn-plus" @click="changeQuantity(1, variants[item.variant_id].id)"></a>
+                    <!-- <div class="alert" v-if="!getCartErrors" :class= "{ 'alert-success' : alertMessage.type === 'success' }" >
+                      {{alertMessage.message}}
+                    </div>
+                    <div class="alert" v-if="getCartErrors && alertMessage.type === 'error'" :class= "{ 'alert-danger' : alertMessage.type === 'error' }">
+                      <strong>{{cartErrors}}</strong>
+                    </div> -->
                   </div>
                 </div>
                 <div class="basket-item__price">
@@ -48,7 +54,7 @@
               <div class="basket__details__inner">
                 <div class="basket__total clearfix">
                   <div class="basket__subtotal">
-                    <p>Subtotal</p>
+                    <p>Total</p>
                     <button class="btn btn-red" @click="emptyBasket">Empty Basket</button>
                   </div>
                   <div class="basket__checkout">
@@ -82,7 +88,7 @@
     name: 'cart',
 
     computed: {
-      ...mapGetters(['getCartItems', 'isAuthenticated']),
+      ...mapGetters(['getCartItems', 'isAuthenticated', 'getCartErrors', 'getAlertMessage']),
 
       cartItems() {
         return this.getCartItems || {};
@@ -130,3 +136,13 @@
     }
   }
 </script>
+
+<style scoped>
+  .page-heading {
+    margin-bottom: 1px !important;
+  }
+
+  .page-heading .container__inner {
+    padding: 20px;
+  }
+</style>

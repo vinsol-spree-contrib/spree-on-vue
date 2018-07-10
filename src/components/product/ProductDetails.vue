@@ -8,8 +8,8 @@
               <img :src="productImage" alt="">
             </div>
             <div class="variants-list">
-              <div class="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)" :title="variant.options_text">
-                <img :src="images[variant.image_ids[0]].small_url" alt="">
+              <div class="variants" v-if="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)" :title="variant.options_text">
+                <img :src="images[variant.image_ids[0]].mini_url" alt="">
               </div>
             </div>
           </div>

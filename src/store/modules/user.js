@@ -7,7 +7,10 @@ const state = {
   cartItems: {
     line_items: []
   },
-  cartErrors: ""
+  cartErrors: "",
+  addressErrors: "",
+  countries: "",
+  states: "",
 };
 
 const getters = {
@@ -29,6 +32,18 @@ const getters = {
 
   getCartErrors(state) {
     return state.cartErrors;
+  },
+
+  getAddressErrors(state) {
+    return state.addressErrors;
+  },
+
+  getCountries(state) {
+    return state.countries;
+  },
+
+  getStates(state) {
+    return state.states;
   }
 };
 
@@ -51,6 +66,18 @@ const mutations = {
 
   setCartErrors(state, error) {
     state.cartErrors = error;
+  },
+
+  setAddressErrors(state, error) {
+    state.addressErrors = error;
+  },
+
+  setCountries(state, countries) {
+    state.countries = countries;
+  },
+
+  setStates(state, states) {
+    state.states = states;
   }
 };
 
@@ -118,13 +145,13 @@ const actions = {
     if (context.getters.getCartItems.order) {
       context.dispatch('addItemToCart', formData);
       context.dispatch('showMessage', {
-        message: 'Item Added to cart',
+        message: 'Item Added to basket',
         type: 'success'
       });
     } else {
       context.dispatch('createNewOrderAndAddItem', formData);
       context.dispatch('showMessage', {
-        message: 'Item Added to cart',
+        message: 'Item Added to basket',
         type: 'success'
       });
     }
@@ -144,10 +171,11 @@ const actions = {
   },
 
   proceedToDeliveryState(context, { 'number': orderNumber, 'addressData': addressData}) {
-    axios.put('/api/ams/checkouts/' + orderNumber, { addressData }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken')  } }).then(function(response) {
+    axios.put('/api/ams/checkouts/' + orderNumber, addressData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken')  } }).then(function(response) {
       console.log(response);
     }).catch(function(error) {
-      console.log(error.errors);
+      context.commit('setAddressErrors', error.response.data.errors);
+      console.log(error.response.data.errors);
     });
   },
 
@@ -156,6 +184,18 @@ const actions = {
       context.dispatch('fetchUserCurrentOrders');
     });
   },
+
+  fetchCountries(context) {
+    axios.get('/api/ams/countries').then(function (response) {
+      context.commit('setCountries', response.data);
+    });
+  },
+
+  fetchStates(context, countryId) {
+    axios.get('/api/v1/countries/' + countryId + '/states').then(function(response) {
+      context.commit('setStates', response.data);
+    });
+  }
 };
 
 export default {

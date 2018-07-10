@@ -6,13 +6,16 @@
           <h2 class="h2 text-uppercase text-center">Online Shop</h2>
           <div class="row narrow three-column-layout__row" v-if="products.length > 0">
             <div class="col-md-4 col-sm-4 col-xs-12 three-column-layout__item border-r border-y text-center" v-for="product in products" :key="product.id">
-              <figure class="three-column-layout__figure">
+              <router-link :to="'/products/' + product.slug" tag="a" class="three-column-layout__link no-underline">
+                <figure class="three-column-layout__figure">
                   <img :src="'http://localhost:3000/' + product.master.images[0].product_url" alt="" class="three-column-layout__image">
                 </figure>
               <div class="three-column-layout__content">
                 <h3 class="three-column-layout__heading margin-0">{{ product.name }}</h3>
                 <p class="three-column-layout__text margin-0">{{ product.display_price }}</p>
               </div>
+              </router-link>
+              
             </div>
           </div>
           <div v-else class="loader">
@@ -152,5 +155,9 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.three-column-layout__item {
+  margin-top: -1px;
 }
 </style>

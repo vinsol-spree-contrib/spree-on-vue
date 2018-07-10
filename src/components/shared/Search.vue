@@ -87,8 +87,8 @@
 <style scoped>
   .search-section { right: 105px; z-index: 1; top: 29px; }
   .search-section .search-icon { right: 10px; top: 50%; transform: translateY(-50%); }
-  .search-section .form-input { height: 37px; transition: .25s; width: 250px; min-width: initial; padding-right: 30px; background: #fff; }
-  .search-results { width: 100%; background: #fff; top: 38px; border: 1px solid #4D3636; max-height: 250px; overflow-y: auto; overflow-x: hidden; padding-left: 0; margin: 0; }
+  .search-section .form-input { height: 37px; transition: .25s; width: 225px; min-width: initial; padding-right: 30px; background: #fff; }
+  .search-results { width: 100%; background: #fff; top: 38px; border: 1px solid #4D3636; max-height: 200px; overflow-y: auto; overflow-x: hidden; padding-left: 0; margin: 0; }
   .search-results:empty { display: none; }
   .search-results a { display: block; width: 100%; display: flex; padding: 10px; align-items: center; }
   .search-results li + li { border-top: solid 1px #E8EBE8; }
