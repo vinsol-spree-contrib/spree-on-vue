@@ -59,7 +59,7 @@
   }
 </script>
 
-<style scoped>
+<style>
   .loader {
     height: calc(100vh - 225px);
     background: #fff;

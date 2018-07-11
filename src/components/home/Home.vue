@@ -2,7 +2,7 @@
   <!-- Online Shop -->
   <section class="home">
     <section class="three-column-layout online-shop">
-      <div class="container">
+      <div class="container" v-if="shopProducts.length > 0">
         <div class="container__inner">
           <h2 class="h2 text-uppercase text-center">Online Shop</h2>
           <div class="row narrow three-column-layout__row">
@@ -23,6 +23,18 @@
           <router-link to="/shop" tag="a" class="btn btn-action">
             Shop All Products
           </router-link>
+        </div>
+      </div>
+      <div v-else class="loader">
+        <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
         </div>
       </div>
     </section>

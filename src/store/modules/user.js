@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import axios from 'axios';
 
 const state = {
@@ -131,6 +132,12 @@ const actions = {
     }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit("setCartErrors", "");
       context.dispatch('fetchUserCurrentOrders');
+      Vue.toasted.show('Added to basket', {
+        position: 'bottom-right',
+        type: 'success',
+        duration: 3000,
+        theme: 'outline'
+      });
       
     }).catch(function(error) {
       context.commit('setCartErrors', error.response.data.exception);
@@ -144,22 +151,19 @@ const actions = {
   addToCart(context, formData) {
     if (context.getters.getCartItems.order) {
       context.dispatch('addItemToCart', formData);
-      context.dispatch('showMessage', {
-        message: 'Item Added to basket',
-        type: 'success'
-      });
     } else {
       context.dispatch('createNewOrderAndAddItem', formData);
-      context.dispatch('showMessage', {
-        message: 'Item Added to basket',
-        type: 'success'
-      });
     }
   },
 
   emptyCurrentOrder(context, orderId) {
       axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
         context.dispatch('fetchUserCurrentOrders');
+        Vue.toasted.show('Cart is empty', {
+          position: 'bottom-right',
+          type: 'success',
+          duration: 3000
+        });
     });
   },
 
@@ -180,9 +184,13 @@ const actions = {
   },
 
   deleteLineItem(context, { 'number': number, 'lineItemId': lineItemId }) {
-    axios.delete('/api/v1/orders/' + number + '/line_items/' + lineItemId, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
-      context.dispatch('fetchUserCurrentOrders');
-    });
+    return new Promise(function (resolve, reject) {
+      axios.delete('/api/v1/orders/' + number + '/line_items/' + lineItemId, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+        context.dispatch('fetchUserCurrentOrders').then(function () {
+          resolve();
+        });
+      });      
+    })
   },
 
   fetchCountries(context) {

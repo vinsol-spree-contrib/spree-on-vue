@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import axios from 'axios';
 import routes from '../../router.js';
 
@@ -108,6 +109,11 @@ const actions = {
       context.commit('clearAuthErrors');
       context.dispatch('fetchUserCurrentOrders', { root: true });
       routes.replace('/');
+      Vue.toasted.show('Logged in', {
+        position: 'bottom-right',
+        type: 'success',
+        duration: 3000
+      });
     }).catch(function (error) {
       context.commit('setLoginErrors', error.response.data.errors);
     });

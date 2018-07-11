@@ -34,14 +34,8 @@
                   <h4 class="h4">Quantity</h4>
                   <div class="product-quantity">
                     <button class="quantity-btn quantity-btn-minus" :disabled="item.quantity < 2" @click="changeQuantity(-1, variants[item.variant_id].id)"></button>
-                    <input type="quantity" class="quantity-input text-center" :value="item.quantity" disabled>
+                    <input type="quantity" class="quantity-input text-center" :value="item.quantity" @blur="changeQuantity(($event.target.value - item.quantity), variants[item.variant_id].id)">
                     <a href="javascript:void(0);" class="quantity-btn quantity-btn-plus" @click="changeQuantity(1, variants[item.variant_id].id)"></a>
-                    <!-- <div class="alert" v-if="!getCartErrors" :class= "{ 'alert-success' : alertMessage.type === 'success' }" >
-                      {{alertMessage.message}}
-                    </div>
-                    <div class="alert" v-if="getCartErrors && alertMessage.type === 'error'" :class= "{ 'alert-danger' : alertMessage.type === 'error' }">
-                      <strong>{{cartErrors}}</strong>
-                    </div> -->
                   </div>
                 </div>
                 <div class="basket-item__price">
@@ -129,9 +123,14 @@
       goToAddress(orderId) {
         this.$store.dispatch('proceedToAddressState', orderId);
       },
-
+      
       deleteItem(orderNumber, lineItemId) {
-        this.$store.dispatch('deleteLineItem', { 'number': orderNumber, 'lineItemId': lineItemId });
+        var _this = this;
+        this.$store.dispatch('deleteLineItem', { 'number': orderNumber, 'lineItemId': lineItemId }).then(function () {
+          _this.$toasted.global.app_success({
+            message: 'Item deleted from cart.'
+          });            
+        });
       }
     }
   }
