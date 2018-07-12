@@ -5,7 +5,6 @@ import Shop from './components/shop/Shop.vue';
 import ProductDetails from './components/product/ProductDetails.vue';
 import Entry from './components/user/Entry.vue';
 import Profile from './components/user/Profile.vue';
-import Orders from './components/user/Orders.vue';
 import Order from './components/user/Order.vue';
 import Cart from './components/cart/Cart.vue';
 import Address from './components/order/Address.vue';
@@ -40,14 +39,6 @@ const routes = [
   {
     path: '/profile',
     component: Profile,
-    beforeEnter(to, from, next) {
-      localStorage.getItem('userToken') ? next() : next('/');
-    }
-  },
-
-  {
-    path: '/orders',
-    component: Orders,
     beforeEnter(to, from, next) {
       localStorage.getItem('userToken') ? next() : next('/');
     }

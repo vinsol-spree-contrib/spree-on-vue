@@ -1,15 +1,14 @@
 <template>
-  <header>
-    <!-- <div class="container relative">
+  <header class="primary-header">
+    <section class="header-top">
       <app-logo></app-logo>
-      
+      <section class="menu-btn">
+        <i class="el-icon-menu"></i>
+      </section>
       <app-cart></app-cart>
       <app-user></app-user>
-      <app-search></app-search>
-    </div> -->
-
-  <!-- <app-navigation></app-navigation> -->
-</header>
+    </section>
+  </header>
 </template>
 
 <script>
@@ -34,3 +33,11 @@
     },
   }
 </script>
+
+<style>
+  .primary-header { min-height: 75px; position: relative; background: #f5f5f5; }
+  .menu-btn { position: absolute; left: 50px; top: 50%; transform: translateY(-50%); font-size: 26px; }
+  .menu-btn i { color: #409eff; }
+  .header-top { height: 75px; }
+  .el-message { top: 100px !important; }
+</style>

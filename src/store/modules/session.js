@@ -116,8 +116,9 @@ const actions = {
       context.dispatch('fetchUserCurrentOrders', { root: true });
       routes.replace('/');
       Message({
-        showClose: true,
+        duration: 3000,
         message: 'Logged in successfully.',
+        showClose: true,
         type: 'success'
       });
     }).catch(function (error) {

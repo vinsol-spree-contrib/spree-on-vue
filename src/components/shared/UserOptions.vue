@@ -1,13 +1,22 @@
 <template>
-  <div class="primary-header__user absolute bg-yellow-light">
-    <router-link to="/entry" class="absolute primary-header__user-link">
-      <img src="../../assets/images/user.svg" alt="" class="absolute">
-    </router-link>
-    <ul class="absolute user-options" v-if="isAuthenticated">
-      <li><router-link to="/profile" tag="a">Profile</router-link></li>
-      <li><a @click="onLogout">Logout</a></li>
-    </ul>
-  </div>
+  <el-dropdown trigger="click" class="user-options">
+    <a href="javascript:void(0);" class="el-dropdown-link">
+      <img src="../../assets/images/user.svg" alt="">
+    </a>
+    <el-dropdown-menu slot="dropdown" v-if="isAuthenticated">
+      <el-dropdown-item>
+        <router-link to="/profile" tag="li">Profile</router-link>
+      </el-dropdown-item>
+      <el-dropdown-item>
+        <a @click="onLogout">Logout</a>
+      </el-dropdown-item>
+    </el-dropdown-menu>
+    <el-dropdown-menu slot="dropdown" v-else>
+      <el-dropdown-item>
+        <router-link to="/entry" tag="li">Login/Sign up</router-link>
+      </el-dropdown-item>
+    </el-dropdown-menu>
+  </el-dropdown>
 </template>
 
 <script>
@@ -31,3 +40,7 @@
     }
   }
 </script>
+
+<style>
+  .user-options { position: absolute !important; right: 50px; top: 50%; transform: translateY(-50%); z-index: 2; }
+</style>

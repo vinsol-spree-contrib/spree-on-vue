@@ -1,9 +1,9 @@
 <template>
-  <div class="primary-header__basket absolute bg-yellow-light">
-    <a href="javascript:void(0);" class="absolute primary-header__basket-link">
-      <img src="../../assets/images/basket.svg" alt="" class="absolute">
-      <span class="absolute basket-quantity text-center" v-if="cartItems.order">{{ lineItemCount }}</span>
-    </a>
+  <div class="basket">
+    <router-link to="/cart">
+      <i class="el-icon-goods"></i>
+      <!-- <span class="absolute basket-quantity text-center" v-if="cartItems.order">{{ lineItemCount }}</span> -->
+    </router-link>
     <aside class="mini-cart">
       <div v-if="cartItems.order && cartItems.order.item_count > 0">
         <div class="sub-total text-center border-t">Subtotal: <strong>${{ order.total }}</strong></div>
@@ -25,9 +25,9 @@
         </router-link>
       </div>
 
-      <div v-else>
+      <!-- <div v-else>
         <p class="empty-cart-message">Your Cart is empty</p>
-      </div>
+      </div> -->
     </aside>
   </div>
 </template>
@@ -70,3 +70,9 @@
     }
   }
 </script>
+
+<style>
+  .basket { position: absolute; right: 100px; top: 50%; transform: translateY(-50%); font-size: 26px; }
+  .basket i { color: #409eff; }
+</style>
+

@@ -1,12 +1,12 @@
 <template>
   <!-- Online Shop -->
   <section class="home">
-    <section class="three-column-layout online-shop">
+    <!-- <section class="three-column-layout online-shop">
       <div class="container" v-if="shopProducts.length > 0">
         <div class="container__inner">
           <h2 class="h2 text-uppercase text-center">Online Shop</h2>
           <el-row :gutter="30" type="flex" class="row-bg" justify="center">
-            <el-col :span="8" v-for="product in shopProducts" :key="product.id">
+            <el-col :span="6" v-for="product in shopProducts" :key="product.id">
               <el-card>
                 <router-link :to="'products/' + product.slug" tag="a" class="three-column-layout__link no-underline">
                   <figure class="three-column-layout__figure">
@@ -27,7 +27,7 @@
           </router-link>
         </div>
       </div>
-    </section>
+    </section> -->
     
   </section>
   <!-- Online Shop -->
@@ -38,19 +38,18 @@
   import { mapGetters } from 'vuex';
   import * as types from '../../store/types';
   import { helpers } from '../../store/helpers/helpers';
-  import Newsletter from '../shared/Newsletter.vue';
 
   export default {
     name: 'home',
 
     components: {
-      appNewsletter: Newsletter
+    
     },
 
     mounted() {
       this.$store.dispatch(types.FETCH_PRODUCTS, {
         'page': 1,
-        'per_page': 3
+        'per_page': 4
       });
     },
 
