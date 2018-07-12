@@ -1,9 +1,9 @@
 <template>
   <main id="app">
     <app-header></app-header>
-    <transition name="slide" mode="out-in">
+    <el-col :span="18" :offset="3">
       <router-view class="router-view"></router-view>
-    </transition>
+    </el-col>
   </main>
 </template>
 
@@ -27,7 +27,8 @@
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css?family=Merienda');
-  @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
   @import './assets/css/styles.css';
+  body { margin: 0; font-family:'AvenirLTStd-Roman'; }
+  body .el-main { padding: 0; }
+  
 </style>

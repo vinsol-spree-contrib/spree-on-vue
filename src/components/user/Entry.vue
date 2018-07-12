@@ -1,65 +1,59 @@
 <template>
   <section class="user-entry">
-    <div class="container">
-      <div class="user-entry-forms">
+    <el-row>
 
-        <aside class="user-login-form">
-          <h2 class="h2 text-uppercase text-center">Login</h2>
-          <div v-if="isAuth" class="error-text">
-            <strong>Invalid email or password</strong>
+      <el-col :span="6" :offset="2">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <h3>Sign Up</h3>
           </div>
-          <form @submit.prevent="onLogin">
-            <div class="form-group">
-              <label class="block">Email</label>
-              <app-input class="form-input" type="text" v-model="email"></app-input>
-            </div>
-            <div class="form-group">
-              <label class="block">Password</label>
-              <app-input class="form-input" type="password" v-model="password"></app-input>
-            </div>
-            <div class="form-group margin-0">
-              <button class="btn btn-action btn-full">
-                Login
-              </button>
-            </div>
-          </form>
-        </aside>
-
-        <h1 class="h2 or-text">OR</h1>
-
-        <aside class="user-signup-form">
-          <form @submit.prevent="onSignup">
-            <h2 class="h2 text-uppercase text-center">Signup</h2>
-            <div class="form-group">
-              <label class="block">Email</label>
-              <app-input class="form-input" type="text" v-model="signupEmail"></app-input>
+          <el-form ref="form">
+            <el-form-item>
+              <el-input placeholder="Enter your email" v-model="signupEmail" clearable></el-input>
               <div v-if="getErrors.email" class="error-text">
-                <strong class="text-sm">Email {{ getErrors.email[0] }}</strong>
+                Email {{ getErrors.email[0] }}
               </div>
-            </div>
-            <div class="form-group">
-              <label class="block">Password</label>
-              <app-input class="form-input" type="password" v-model="signupPassword"></app-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input placeholder="Enter your password" v-model="signupPassword" type="password" clearable></el-input>
               <div v-if="getErrors.password" class="error-text">
-                <strong class="text-sm">Password {{ getErrors.password[0] }}</strong>
+                Password {{ getErrors.password[0] }}
               </div>
-            </div>
-            <div class="form-group">
-              <label class="block">Password Confirmation</label>
-              <app-input class="form-input" type="password" v-model="signupPassword_confirmation"></app-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input placeholder="Password Confirmation" v-model="signupPassword_confirmation" type="password" clearable></el-input>
               <div v-if="getErrors.password_confirmation" class="error-text">
-                <strong class="text-sm">It {{ getErrors.password_confirmation[0] }}</strong>
+                It {{ getErrors.password_confirmation[0] }}
               </div>
-            </div>
-            <div class="form-group margin-0">
-              <button class="btn btn-action btn-full">
-                Sign up
-              </button>
-            </div>
-          </form>
-        </aside>
-      </div>
-    </div>
+            </el-form-item>
+            <el-button type="primary" @click="onSignup">Sign Up</el-button>
+          </el-form>
+        </el-card>
+      </el-col>
+
+      <el-col :span="6" :offset="2">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <h3>Login</h3>
+          </div>
+          <div v-if="isAuth" class="error-text">
+            Invalid email or password
+          </div>
+          <el-form ref="form">
+            <el-form-item>
+              <el-input placeholder="Enter your email" v-model="email" clearable></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input placeholder="Enter your password" v-model="password" type="password" clearable></el-input>
+            </el-form-item>
+            <el-button type="primary" @click="onLogin">
+              Login
+            </el-button>
+          </el-form>
+        </el-card>
+      </el-col>
+    </el-row>
+
   </section>
 </template>
 
@@ -109,3 +103,8 @@
     }
   }
 </script>
+
+<style>
+  .user-entry { padding: 20px 0; position: absolute; top: 50%; width: 100%; transform: translateY(-50%); }
+  h3 { margin-top: 0; margin-bottom: 0; }
+</style>

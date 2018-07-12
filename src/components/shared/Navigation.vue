@@ -1,11 +1,11 @@
 <template>
-  <nav class="primary-header__nav">
-    <ul class="primary-header__links list-inline text-uppercase text-center margin-0">
-      <router-link :to="'/categories/' + taxon.name + '/' + taxon.id" class="primary-header__link with-sub-menu" v-for="taxon in allTaxons" :key="taxon.id" @click.native="showTaxonProducts(taxon.id)" tag="li">
-        <a class="link">{{ taxon.name }}</a>
+  <el-menu class="el-menu-demo" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+    <el-menu-item v-for="(taxon, index) in allTaxons" :key="taxon.id" @click.native="showTaxonProducts(taxon.id)" :index="String(index + 1)">
+      <router-link :to="'/categories/' + taxon.name + '/' + taxon.id" tag="a" class="nav-link">
+        {{ taxon.name }}
       </router-link>
-    </ul>
-  </nav>
+    </el-menu-item>
+  </el-menu>
 </template>
 
 <script>
@@ -39,8 +39,10 @@
   }
 </script>
 
-<style scoped>
-  .router-link-exact-active.router-link-active {
-    background: #fff;
+<style>
+  .nav-link {
+    display: block;
+    height: 60px;
+    line-height: 60px;
   }
 </style>

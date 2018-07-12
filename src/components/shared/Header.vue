@@ -1,13 +1,15 @@
 <template>
-  <header class="primary-header">
-    <div class="container relative">
+  <header>
+    <!-- <div class="container relative">
       <app-logo></app-logo>
-      <app-navigation></app-navigation>
+      
       <app-cart></app-cart>
       <app-user></app-user>
       <app-search></app-search>
-    </div>
-  </header>
+    </div> -->
+
+  <app-navigation></app-navigation>
+</header>
 </template>
 
 <script>

@@ -5,19 +5,21 @@
       <div class="container" v-if="shopProducts.length > 0">
         <div class="container__inner">
           <h2 class="h2 text-uppercase text-center">Online Shop</h2>
-          <div class="row narrow three-column-layout__row">
-            <div class="col-md-4 col-sm-4 col-xs-12 three-column-layout__item border-l border-t text-center" v-for="product in shopProducts" :key="product.id">
-              <router-link :to="'products/' + product.slug" tag="a" class="three-column-layout__link no-underline">
-                <figure class="three-column-layout__figure">
-                  <img :src="images[product.image_ids[0]].large_url" alt="" class="three-column-layout__image">
-                </figure>
-                <div class="three-column-layout__content">
-                  <h3 class="three-column-layout__heading margin-0">{{ product.name }}</h3>
-                  <p class="three-column-layout__text margin-0">{{ product.display_price }}</p>
-                </div>
-              </router-link>
-            </div>
-          </div>
+          <el-row :gutter="30" type="flex" class="row-bg" justify="center">
+            <el-col :span="8" v-for="product in shopProducts" :key="product.id">
+              <el-card>
+                <router-link :to="'products/' + product.slug" tag="a" class="three-column-layout__link no-underline">
+                  <figure class="three-column-layout__figure">
+                    <img :src="images[product.image_ids[0]].large_url" alt="" class="three-column-layout__image">
+                  </figure>
+                  <div style="padding: 14px;">
+                    <h3 class="three-column-layout__heading margin-0">{{ product.name }}</h3>
+                    <p class="three-column-layout__text margin-0">{{ product.display_price }}</p>
+                  </div>
+                </router-link>
+              </el-card>
+            </el-col>
+          </el-row>
         </div>
         <div class="three-column-layout__all border-t text-center bg-white">
           <router-link to="/shop" tag="a" class="btn btn-action">
@@ -25,22 +27,8 @@
           </router-link>
         </div>
       </div>
-      <div v-else class="loader">
-        <div class="lds-roller">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
     </section>
-    <section class="section-divider"></section>
-    <!-- <app-newsletter></app-newsletter> -->
-    <section class="section-divider"></section>
+    
   </section>
   <!-- Online Shop -->
 </template>
@@ -82,3 +70,6 @@
   }
 </script>
 
+<style>
+  img { max-width: 100%; }
+</style>

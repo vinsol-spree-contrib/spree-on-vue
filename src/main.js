@@ -2,11 +2,14 @@ import Vue from 'vue'
 import App from './App.vue'
 import axios from 'axios';
 import Toasted from 'vue-toasted';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 import router from './router.js';
 import store from './store/store';
 
 Vue.use(Toasted);
+Vue.use(ElementUI);
 
 const options = {
   type: 'success',
