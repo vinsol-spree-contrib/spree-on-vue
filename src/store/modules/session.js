@@ -1,6 +1,7 @@
-import Vue from 'vue';
 import axios from 'axios';
 import routes from '../../router.js';
+// import { Notification } from 'element-ui';
+import { Message } from 'element-ui';
 
 const state = {
   activeSessionTime: 3600,
@@ -83,13 +84,18 @@ const actions = {
       }
     }).then(function () {
       context.dispatch('login', authData);
+      Message({
+        showClose: true,
+        message: 'Account created.',
+        type: 'success'
+      });
     }).catch(function (error) {
       context.commit('setErrors', error.response.data.errors);
     });
   },
 
   login(context, authData) {
-    axios.post('api/ams/users/token', {
+    return axios.post('api/ams/users/token', {
       user: {
         email: authData.email,
         password: authData.password
@@ -109,10 +115,10 @@ const actions = {
       context.commit('clearAuthErrors');
       context.dispatch('fetchUserCurrentOrders', { root: true });
       routes.replace('/');
-      Vue.toasted.show('Logged in', {
-        position: 'bottom-right',
-        type: 'success',
-        duration: 3000
+      Message({
+        showClose: true,
+        message: 'Logged in successfully.',
+        type: 'success'
       });
     }).catch(function (error) {
       context.commit('setLoginErrors', error.response.data.errors);
@@ -145,6 +151,11 @@ const actions = {
     localStorage.removeItem('expirationTime');
     context.dispatch('fetchUserCurrentOrders');
     routes.replace('/entry');
+    Message({
+      showClose: true,
+      message: 'Logged out successfully.',
+      type: 'success'
+    });
   }
 };
 

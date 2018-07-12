@@ -1,7 +1,7 @@
 <template>
   <main id="app">
     <app-header></app-header>
-    <el-col :span="18" :offset="3">
+    <el-col :span="20" :offset="2">
       <router-view class="router-view"></router-view>
     </el-col>
   </main>

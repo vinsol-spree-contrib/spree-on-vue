@@ -1,38 +1,33 @@
 <template>
-  <section class="orders-page">
-    <div class="container" v-if="orders.length > 0">
+  <section class="my-orders">
+    <div class="ordes-listing" v-if="orders.length > 0">
       <h2 class="h2 page-heading text-uppercase">My Orders</h2>
-      <div class="container__inner">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Order Number</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Payment State</th>
-              <th>Shipment State</th>
-              <th class="text-right">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="order in orders" :key="order.id">
-              <td>
-                <router-link :to="'orders/' + order.id">
-                  {{ order.id }}
-                </router-link>
-              </td>
-              <td>{{order.completed_at.split('T')[0]}}</td>
-              <td class="text-uppercase">{{order.state}}</td>
-              <td>{{order.payment_state}}</td>
-              <td>{{order.shipment_state}}</td>
-              <td class="text-right">${{order.total}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <el-table border :data="orders" style="width: 100%">
+        <el-table-column prop="id" label="Order Number" align="center"></el-table-column>
+        <el-table-column label="Date" width="200" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.completed_at.split('T')[0] }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="state" label="Status" width="175" align="center"></el-table-column>
+        <el-table-column prop="payment_state" label="Payment" width="175" align="center"></el-table-column>
+        <el-table-column prop="shipment_state" label="Shipment State" width="175" align="center"></el-table-column>
+        <el-table-column label="Total" width="125" align="right">
+          <template slot-scope="scope">
+            <strong>${{ scope.row.total }}</strong>
+          </template>
+        </el-table-column>
+        <el-table-column label="Actions" width="140" align="right">
+          <template slot-scope="scope">
+            <router-link :to="'orders/'+ scope.row.id">
+              <el-button size="medium" type="primary" plain>Details <i class="el-icon-circle-plus"></i> </el-button>
+            </router-link>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
-    <div class="container" v-else>
-      <h2 class="h2 text-center text-uppercase">No orders found!</h2>
+    <div v-else>
+      <h1>No orders found!</h1>
     </div>
   </section>
 </template>
@@ -57,7 +52,10 @@
           return order.state === "complete";
         });
       }
-    }
+    },
   }
 </script>
 
+<style>
+  th, td { text-transform: capitalize; }
+</style>
