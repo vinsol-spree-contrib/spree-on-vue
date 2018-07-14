@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
+import { Loading } from 'element-ui';
 
 const state = {
   loggedInUser: null || {},
@@ -93,8 +94,10 @@ const actions = {
 
   /* Fetches the completed orders */
   fetchUserOrders(context) {
+    var loading = Loading.service({ fullscreen: true });
     axios.get('/api/ams/orders/mine', { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setAllOrders', response.data);
+      loading.close();
     }).catch(function (error) {
     });
   },

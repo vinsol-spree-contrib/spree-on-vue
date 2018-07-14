@@ -11,7 +11,7 @@
     "axios": "^0.18.0",
     "babel-preset-stage-2": "^6.24.1",
     "bootstrap": "^3.3.7",
-    "element-ui": "^2.4.3",
+    "element-ui": "^2.4.4",
     "vue": "^2.5.16",
     "vue-router": "^3.0.1",
     "vue-toasted": "^1.1.24",

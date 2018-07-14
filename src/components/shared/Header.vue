@@ -8,6 +8,9 @@
       <app-cart></app-cart>
       <app-user></app-user>
     </section>
+    <section class="header-bottom" v-if="!isLoginView">
+      <app-navigation></app-navigation>
+    </section>
   </header>
 </template>
 
@@ -31,13 +34,18 @@
     mounted() {
       this.$store.dispatch('fetchUserCurrentOrders');
     },
+
+    computed: {
+      isLoginView() {
+        return this.$route.path == "/entry";
+      },
+    }
   }
 </script>
 
 <style>
-  .primary-header { min-height: 75px; position: relative; background: #f5f5f5; }
+  .primary-header .header-top { min-height: 75px; position: relative; background: #f5f5f5; }
   .menu-btn { position: absolute; left: 50px; top: 50%; transform: translateY(-50%); font-size: 26px; }
-  .menu-btn i { color: #409eff; }
-  .header-top { height: 75px; }
-  .el-message { top: 100px !important; }
+  .menu-btn i { color: #0E4AA3; }
+  .el-message { top: 145px !important; }
 </style>

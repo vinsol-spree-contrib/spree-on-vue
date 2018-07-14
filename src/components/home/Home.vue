@@ -1,38 +1,39 @@
 <template>
-  <!-- Online Shop -->
-  <section class="home">
-    <!-- <section class="three-column-layout online-shop">
-      <div class="container" v-if="shopProducts.length > 0">
-        <div class="container__inner">
-          <h2 class="h2 text-uppercase text-center">Online Shop</h2>
-          <el-row :gutter="30" type="flex" class="row-bg" justify="center">
-            <el-col :span="6" v-for="product in shopProducts" :key="product.id">
-              <el-card>
-                <router-link :to="'products/' + product.slug" tag="a" class="three-column-layout__link no-underline">
-                  <figure class="three-column-layout__figure">
-                    <img :src="images[product.image_ids[0]].large_url" alt="" class="three-column-layout__image">
-                  </figure>
-                  <div style="padding: 14px;">
-                    <h3 class="three-column-layout__heading margin-0">{{ product.name }}</h3>
-                    <p class="three-column-layout__text margin-0">{{ product.display_price }}</p>
+  <section class="home-products">
+    <el-row>
+      <el-col :span="20" :offset="2" class="offset-vertical">
+        <el-row class="page-heading-row">
+          <el-col :span="12">
+            <h2 class="h2">
+              Online Shop
+            </h2>
+          </el-col>
+          <el-col :span="12" class="text-right view-all-btn">
+            <router-link to="/shop" tag="a">
+              <el-button class="text-upppercase" type="primary" plain>Shop all Products</el-button>
+            </router-link>
+          </el-col>
+        </el-row>
+        
+        <el-row :gutter="20" v-if="shopProducts.length > 0">
+          <el-col :span="6" v-for="product in shopProducts" :key="product.id">
+            <el-card class="product-card">
+              <router-link :to="'products/' + product.slug" tag="a" class="product-link">
+                <img :src="images[product.image_ids[0]].large_url" alt="">
+                <div class="product-card-body">
+                  <div class="bottom clearfix">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.display_price }}</p>
                   </div>
-                </router-link>
-              </el-card>
-            </el-col>
-          </el-row>
-        </div>
-        <div class="three-column-layout__all border-t text-center bg-white">
-          <router-link to="/shop" tag="a" class="btn btn-action">
-            Shop All Products
-          </router-link>
-        </div>
-      </div>
-    </section> -->
-    
+                </div>
+              </router-link>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
   </section>
-  <!-- Online Shop -->
 </template>
-
 
 <script>
   import { mapGetters } from 'vuex';
@@ -71,4 +72,14 @@
 
 <style>
   img { max-width: 100%; }
+  .product-card .el-card__body { padding: 0; }
+  .product-link { display: block; }
+  .product-card-body { padding: 15px; }
+  .product-card .el-card__body a { text-decoration: none; color: #2b2b2b; font-size: 14px; line-height: 24px; }
+  .text-right { text-align: right; }
+  .view-all-btn { padding-top: 12px; }
+  .product-card { margin-bottom: 20px; }
+  .text-uppercase { text-transform: uppercase; }
+  .page-heading-row { padding-bottom: 10px; }
+  .offset-vertical { padding: 50px 0; }
 </style>

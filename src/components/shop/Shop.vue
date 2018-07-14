@@ -1,36 +1,43 @@
 <template>
-  <section class="shop">
-    <section class="three-column-layout online-shop">
-      <div class="container">
-        <div class="container__inner">
-          <h2 class="h2 text-uppercase text-center">All Products</h2>
-          <div class="row narrow three-column-layout__row">
-            <div class="col-md-3 col-sm-4 col-xs-12 three-column-layout__item border-l border-t text-center" v-for="product in shopProducts" :key="product.id">
-              <router-link :to="'products/' + product.slug" tag="a" class="three-column-layout__link no-underline">
-                <figure class="three-column-layout__figure">
-                  <img :src="images[product.image_ids[0]].large_url" alt="" class="three-column-layout__image">
-                </figure>
-                <div class="three-column-layout__content">
-                  <h3 class="three-column-layout__heading margin-0">{{ product.name }}</h3>
-                  <p class="three-column-layout__text margin-0">{{ product.display_price }}</p>
+  <section class="home-products">
+    <el-row>
+      <el-col :span="20" :offset="2">
+        <el-row class="page-heading-row">
+          <el-col :span="24" class="text-center">
+            <h2 class="h2">
+              Online Shop
+            </h2>
+          </el-col>
+        </el-row>
+        
+        <el-row :gutter="20" v-if="shopProducts.length > 0" class="products">
+          <el-col :span="6" v-for="product in shopProducts" :key="product.id">
+            <el-card  shadow="hover" class="product-card">
+              <router-link :to="'products/' + product.slug" tag="a" class="product-link">
+                <img :src="images[product.image_ids[0]].large_url" alt="" class="three-column-layout__image">
+                <div class="product-card-body">
+                  <div class="bottom clearfix">
+                    <h3 class="three-column-layout__heading margin-0">{{ product.name }}</h3>
+                    <p class="three-column-layout__text margin-0">{{ product.display_price }}</p>
+                  </div>
                 </div>
               </router-link>
-            </div>
-          </div>
+            </el-card>
+          </el-col>
+        </el-row>
+
+        <div class="block" v-if="pages">
+          <el-pagination
+            background
+            :page-size="1"
+            @current-change= "handleCurrentChange"
+            layout="prev, pager, next"
+            :total="pages">
+          </el-pagination>
         </div>
-      </div>
-    </section>
-    <section class="pagination">
-      <div class="container">
-        <div class="container__inner">
-          <ul class="list-inline text-center" v-if="pages">
-            <router-link :to="{ path: '/shop', query: { page: page } }" v-for="page in pages.total_pages" :key="page" @click="setCurrentPage(page)" tag="li">
-              <a class="link" >{{ page }}</a>
-            </router-link>
-          </ul>
-        </div>
-      </div>
-    </section>
+
+      </el-col>
+    </el-row>
   </section>
 </template>
 
@@ -71,7 +78,7 @@
       },
 
       pages() {
-        return this.products.meta || 0;
+        return this.products.meta ? this.products.meta.total_pages : 0;
       }
     },
 
@@ -80,10 +87,18 @@
         this.$route.query.page = page;
       },
 
+      handleCurrentChange(val) {
+        this.$store.dispatch(types.FETCH_PRODUCTS, {
+          'page': `${val}`,
+          'per_page': '4'
+        });
+        this.$route.query.page = `${val}`;
+      },
+
       fetchProducts: function (event) {
         this.$store.dispatch(types.FETCH_PRODUCTS, {
-          'page': this.$route.query.page,
-          'per_page': 4
+          'page': this.$route.query.page || 1,
+          'per_page': '4'
         });
       }
     }

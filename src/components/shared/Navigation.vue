@@ -1,11 +1,11 @@
 <template>
-  <el-menu class="el-menu-demo" mode="horizontal" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-    <el-menu-item v-for="(taxon, index) in allTaxons" :key="taxon.id" @click.native="showTaxonProducts(taxon.id)" :index="String(index + 1)">
-      <router-link :to="'/categories/' + taxon.name + '/' + taxon.id" tag="a" class="nav-link">
+  <nav class="main-navigation">
+    <ul class="main-navigation-list">
+      <router-link :to="'/categories/' + taxon.name + '/' + taxon.id" v-for="taxon in allTaxons" :key="taxon.id" @click.native="showTaxonProducts(taxon.id)" tag="li" class="menu-item">
         {{ taxon.name }}
       </router-link>
-    </el-menu-item>
-  </el-menu>
+    </ul>
+  </nav>
 </template>
 
 <script>
@@ -40,9 +40,9 @@
 </script>
 
 <style>
-  .nav-link {
-    display: block;
-    height: 60px;
-    line-height: 60px;
-  }
+  .main-navigation-list { padding: 0; margin: 0; text-align: center; height: 60px; background:rgb(231, 237, 246); }
+  .menu-item { display: inline-block; margin: 0 5px; padding: 0 7px; font-size: 14px; line-height: 60px; cursor: pointer; color: #2b2b2b; transition: color .3s; overflow: hidden; position: relative; }
+  .menu-item:after { content: ''; position: absolute; left: 0; bottom: -5px; width: 100%; height: 3px; background: #0E4AA3; transition: .3s; }
+  .menu-item.router-link-exact-active.router-link-active { color: #0E4AA3; }
+  .menu-item.router-link-exact-active.router-link-active:after { bottom: 0; }
 </style>

@@ -72,7 +72,8 @@
 </script>
 
 <style>
-  .basket { position: absolute; right: 100px; top: 50%; transform: translateY(-50%); font-size: 26px; }
-  .basket i { color: #409eff; }
+  .basket { position: absolute; right: 105px; top: 50%; transform: translateY(-50%); font-size: 26px; }
+  .basket a { vertical-align: sub; }
+  .basket i { color: #0E4AA3; }
 </style>
 

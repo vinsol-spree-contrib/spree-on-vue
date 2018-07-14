@@ -35,7 +35,7 @@
           </el-table>
         </div>
         <div v-else>
-          <h1>No orders found!</h1>
+          <h1 class="text-center">No orders found!</h1>
         </div>
       </el-col>
     </el-row>
@@ -77,11 +77,12 @@
 
 <style>
   th, td { text-transform: capitalize; }
-  .user-tag { font-size: 16px; margin-bottom: 25px; margin-left: 10px; }
+  .user-tag { font-size: 16px; margin-bottom: 25px; }
   .user-profile { padding-top: 50px; }
   .page-heading { font-size: 24px; text-transform: capitalize; color: #2b2b2b; }
   .shadow { box-shadow: 0 2px 12px 0 rgba(0,0,0,.1); }
   .user-email { text-align: center; padding-top: 15px; font-size: 17px; }
   .welcome { font-family: 'AvenirLTStd-Heavy'; display: block; padding-bottom: 10px; }
   .orders-listing { margin-top: 30px; }
+  .text-center { text-align: center; }
 </style>

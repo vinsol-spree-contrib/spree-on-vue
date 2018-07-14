@@ -1,7 +1,7 @@
 <template>
   <main id="app">
     <app-header></app-header>
-    <el-col :span="24">
+    <el-col :span="24" class="top-container">
       <transition name="el-fade-in-linear" mode="out-in">
         <router-view class="router-view"></router-view>
       </transition>
