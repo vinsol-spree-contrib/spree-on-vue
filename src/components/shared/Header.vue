@@ -2,15 +2,20 @@
   <header class="primary-header">
     <section class="header-top">
       <app-logo></app-logo>
-      <section class="menu-btn">
-        <i class="el-icon-menu"></i>
+      <transition name="el-fade-in-linear" mode="out-in">
+        <div v-if="!isLoginView">
+          <app-search ></app-search>
+          <app-cart></app-cart>
+          <app-user></app-user>
+        </div>
+      </transition>
+    </section>
+
+    <el-collapse-transition>
+      <section class="header-bottom" v-if="!isLoginView">
+        <app-navigation></app-navigation>
       </section>
-      <app-cart></app-cart>
-      <app-user></app-user>
-    </section>
-    <section class="header-bottom" v-if="!isLoginView">
-      <app-navigation></app-navigation>
-    </section>
+    </el-collapse-transition>
   </header>
 </template>
 
@@ -45,7 +50,6 @@
 
 <style>
   .primary-header .header-top { min-height: 75px; position: relative; background: #f5f5f5; }
-  .menu-btn { position: absolute; left: 50px; top: 50%; transform: translateY(-50%); font-size: 26px; }
   .menu-btn i { color: #0E4AA3; }
   .el-message { top: 145px !important; }
 </style>

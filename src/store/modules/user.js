@@ -103,9 +103,11 @@ const actions = {
   },
 
   fetchSingleOrder(context, id) {
+    var loading = Loading.service({ fullscreen: true });
     context.commit('setSingleOrder', null);
     axios.get('api/ams/orders/' + id, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setSingleOrder', response.data);
+      loading.close();
     });
   },
 

@@ -2,9 +2,9 @@
   <div class="basket">
     <router-link to="/cart">
       <i class="el-icon-goods"></i>
-      <!-- <span class="absolute basket-quantity text-center" v-if="cartItems.order">{{ lineItemCount }}</span> -->
+      <span class="basket-quantity" v-if="cartItems.order">{{ lineItemCount || 0}}</span>
     </router-link>
-    <aside class="mini-cart">
+    <!-- <aside class="mini-cart">
       <div v-if="cartItems.order && cartItems.order.item_count > 0">
         <div class="sub-total text-center border-t">Subtotal: <strong>${{ order.total }}</strong></div>
         <div class="mini-cart-item-list">
@@ -25,10 +25,7 @@
         </router-link>
       </div>
 
-      <!-- <div v-else>
-        <p class="empty-cart-message">Your Cart is empty</p>
-      </div> -->
-    </aside>
+    </aside> -->
   </div>
 </template>
 
@@ -73,7 +70,8 @@
 
 <style>
   .basket { position: absolute; right: 105px; top: 50%; transform: translateY(-50%); font-size: 26px; }
-  .basket a { vertical-align: sub; }
+  .basket a { vertical-align: sub; text-decoration: none !important; }
   .basket i { color: #0E4AA3; }
+  .basket-quantity { font-size: 11px; position: absolute; background: #0E4AA3; width: 20px; height: 20px; border-radius: 50%; color: #fff; text-align: center; line-height: 23px; bottom: -1px; transform: scale(.9); right: -7px; }
 </style>
 

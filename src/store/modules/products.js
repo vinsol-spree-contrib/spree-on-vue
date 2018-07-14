@@ -72,8 +72,10 @@ const actions = {
 
   /* Search API*/
   [types.SEARCH]: function (context, payload) {
+    var loader = Loading.service({ fullscreen: true });
     axios.get(apis.SEARCH_PRODUCTS + payload).then(function (response) {
       context.commit(types.MUTATE_SEARCH_RESULTS, response.data);
+      loader.close();
     }).catch(function (error) {
       console.log(error);
     });

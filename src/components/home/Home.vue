@@ -10,7 +10,7 @@
           </el-col>
           <el-col :span="12" class="text-right view-all-btn">
             <router-link to="/shop" tag="a">
-              <el-button class="text-upppercase" type="primary" plain>Shop all Products</el-button>
+              <el-button class="text-upppercase" type="primary">Shop all Products</el-button>
             </router-link>
           </el-col>
         </el-row>
@@ -82,4 +82,5 @@
   .text-uppercase { text-transform: uppercase; }
   .page-heading-row { padding-bottom: 10px; }
   .offset-vertical { padding: 50px 0; }
+  .product-card-body h3 { min-height: 48px; }
 </style>

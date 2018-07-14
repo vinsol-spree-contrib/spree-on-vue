@@ -10,7 +10,7 @@
           </el-col>
         </el-row>
         
-        <el-row :gutter="20" v-if="products.length > 0">
+        <el-row :gutter="20" v-if="products.length > 0" type="flex" justify="center" class="flex-wrap">
           <el-col :span="6" v-for="product in products" :key="product.id">
             <el-card class="product-card">
               <router-link :to="'/products/' + product.slug" tag="a" class="product-link">
@@ -56,4 +56,5 @@
 <style>
  .taxon-image { width: 100%; }
  img { vertical-align: top; }
+ .flex-wrap { flex-wrap: wrap; }
 </style>

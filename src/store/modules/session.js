@@ -4,7 +4,7 @@ import routes from '../../router.js';
 import { Message } from 'element-ui';
 
 const state = {
-  activeSessionTime: 3600,
+  activeSessionTime: 360000,
   user: null,
   userId: null,
   userToken: null,

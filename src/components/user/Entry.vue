@@ -13,7 +13,7 @@
           <el-form-item>
             <el-input placeholder="Enter your password" v-model="password" type="password" clearable></el-input>
           </el-form-item>
-          <el-button type="primary" @click="onLogin" plain>
+          <el-button type="primary" @click="onLogin">
             Login
           </el-button>
         </el-form>
@@ -40,7 +40,7 @@
             <el-input placeholder="Password Confirmation" v-model="signupPassword_confirmation" type="password" clearable></el-input>
             <el-alert v-if="getErrors.password_confirmation" :title="'It ' + getErrors.password_confirmation[0]" type="error"></el-alert>
           </el-form-item>
-          <el-button type="primary" @click="onSignup" plain>Sign Up</el-button>
+          <el-button type="primary" @click="onSignup">Sign Up</el-button>
         </el-form>
       </el-card>
     </el-col>

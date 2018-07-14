@@ -1,7 +1,7 @@
 <template>
   <section class="home-products">
     <el-row>
-      <el-col :span="20" :offset="2">
+      <el-col :span="20" :offset="2" class="offset-vertical">
         <el-row class="page-heading-row">
           <el-col :span="24" class="text-center">
             <h2 class="h2">

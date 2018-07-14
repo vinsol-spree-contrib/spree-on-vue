@@ -1,23 +1,51 @@
 <template>
-  <section class="absolute search-section" v-if="!isLoginView">
-    <input type="text" v-model="searchTerm" @input="onSearch" class="form-input search-input" placeholder="Search">
-    <img src="../../assets/images/search.svg" alt="" class="absolute search-icon">
-    <ul class="absolute search-results" v-if="isVisible">
-      <li v-for="product in products" :key="product.id" class="search-item" v-if="products" @click="hideSearchBox">
-        <router-link :to="'/products/' + product.slug">
-          <figure>
-            <img :src="images[product.image_ids[0]].mini_url" alt="">
-          </figure>
-          <div class="search-name">
-            {{ product.name }}
-          </div>
-        </router-link>
-      </li>
+  <section class="search-section">
+    <section class="search" @click="showSearch">
+      <i class="el-icon-search"></i>
+    </section>
+    <transition name="el-fade-in-linear" mode="out-in">
+      <aside class="search-results-container" v-if="searchVisible">
+        <div class="close-search" @click="hideSearch">
+          <i class="el-icon-close"></i>
+        </div>
+        <el-row>
+          <el-col :span="20" :offset="2">
+            <el-input placeholder="Search here..." v-model="searchTerm" class="search-input" @input="onSearch"></el-input>
 
-      <li v-else>
-        <p>No Result found. Try Again.</p>
-      </li>
-    </ul>
+            <el-row class="page-heading-row" v-if="products.length > 0">
+              <el-col :span="24">
+                <h2 class="h2">
+                   {{ products.length }} product<span v-if="products.length > 1">s</span> found.
+                </h2>
+              </el-col>
+            </el-row>
+            
+            <el-row :gutter="20" v-if="products.length > 0" class="search-row">
+              <el-col :span="6" v-for="product in products" :key="product.id">
+                <el-card class="product-card">
+                  <router-link :to="'/products/' + product.slug" tag="a" class="product-link" @click.native="hideSearch">
+                    <img :src="images[product.image_ids[0]].large_url" alt="">
+                    <div class="product-card-body">
+                      <div class="bottom clearfix">
+                        <h3>{{ product.name }}</h3>
+                        <p>{{ product.display_price }}</p>
+                      </div>
+                    </div>
+                  </router-link>
+                </el-card>
+              </el-col>
+            </el-row>
+
+            <el-row v-if="products.length === 0 && searchTerm !== '' && searchTerm.length > 2">
+              <el-col>
+                <h4 class="text-center">We can’t find anything related to your search. <br> Try a different search.</h4>
+              </el-col>
+            </el-row>
+
+          </el-col>
+        </el-row>
+      </aside>
+    </transition>
   </section>
 </template>
 
@@ -32,7 +60,8 @@
     data() {
       return {
         searchTerm: '',
-        isVisible: false
+        isVisible: false,
+        searchVisible: false
       }
     },
 
@@ -79,21 +108,43 @@
       hideSearchBox: function () {
         this.products = [];
         this.isVisible = false;
+      },
+
+      showSearch: function () {
+        this.searchVisible = true;
+      },
+
+      hideSearch: function () {
+        this.searchVisible = false;
+        this.searchTerm = "";
+        this.products = [];
       }
     },
   }
 </script>
 
-<style scoped>
-  .search-section { right: 105px; z-index: 1; top: 29px; }
-  .search-section .search-icon { right: 10px; top: 50%; transform: translateY(-50%); }
-  .search-section .form-input { height: 37px; transition: .25s; width: 225px; min-width: initial; padding-right: 30px; background: #fff; }
-  .search-results { width: 100%; background: #fff; top: 38px; border: 1px solid #4D3636; max-height: 200px; overflow-y: auto; overflow-x: hidden; padding-left: 0; margin: 0; }
-  .search-results:empty { display: none; }
-  .search-results a { display: block; width: 100%; display: flex; padding: 10px; align-items: center; }
-  .search-results li + li { border-top: solid 1px #E8EBE8; }
-  .search-item figure { width: 40px; text-align: center; }
-  .search-item img { width: 40px; }
-  .search-name { font-size: 15px; color: #4D3636; padding-left: 10px; }
+<style>
+  .search { position: absolute; left: 50px; top: 50%; transform: translateY(-50%); cursor: pointer; }
+  .search i { color: #0E4AA3; font-size: 23px; font-weight: 600; }
+  .search-results-container { position: fixed; left: 0; top: 0; width: 100%; height: 100vh; background: rgba(255,255,255,.96); z-index: 10; overflow-y: auto; }
+  .close-search { position: absolute; right: 25px; top: 25px; z-index: 5; cursor: pointer; }
+  .close-search i { color: #0E4AA3; font-size: 32px; }
+  .search-input input { height: 68px; padding-top: 0; padding-bottom: 0; border: 1px solid #ccc; border-radius: 0; font-size: 25px; color: #2b2b2b; box-shadow: 0 2px 12px 0 rgba(0,0,0,.1); }
+  .search-row { padding-top: 20px; }
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
 </style>
 
