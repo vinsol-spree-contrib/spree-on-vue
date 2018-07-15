@@ -5,15 +5,15 @@
     </a>
     <el-dropdown-menu slot="dropdown" v-if="isAuthenticated">
       <el-dropdown-item>
-        <router-link to="/profile" tag="li">Profile</router-link>
+        <router-link to="/profile" tag="div" class="drop-menu-item">Profile</router-link>
       </el-dropdown-item>
       <el-dropdown-item>
-        <a @click="onLogout">Logout</a>
+        <div class="drop-menu-item" @click="onLogout">Logout</div>
       </el-dropdown-item>
     </el-dropdown-menu>
     <el-dropdown-menu slot="dropdown" v-else>
       <el-dropdown-item>
-        <router-link to="/entry" tag="li">Login/Sign up</router-link>
+        <router-link to="/entry" tag="div" class="drop-menu-item">Login/Sign up</router-link>
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
@@ -43,4 +43,6 @@
 
 <style>
   .user-options { position: absolute !important; right: 50px; top: 50%; transform: translateY(-50%); z-index: 2; }
+  .el-dropdown-menu__item { padding: 0 !important; }
+  .el-dropdown-menu__item .drop-menu-item { padding: 0 20px; }
 </style>
