@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import { Loading } from 'element-ui';
+import { Message } from 'element-ui';
 
 const state = {
   loggedInUser: null || {},
@@ -137,19 +138,21 @@ const actions = {
     }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit("setCartErrors", "");
       context.dispatch('fetchUserCurrentOrders');
-      Vue.toasted.show('Added to basket', {
-        position: 'bottom-right',
-        type: 'success',
+      Message({
         duration: 3000,
-        theme: 'outline'
+        message: 'Product added to basket.',
+        showClose: true,
+        type: 'success'
       });
       
     }).catch(function(error) {
       context.commit('setCartErrors', error.response.data.exception);
-      context.dispatch('showMessage', {
+      Message({
+        duration: 3000,
         message: error.response.data.exception,
+        showClose: true,
         type: 'error'
-      })
+      });
     })
   },
 
@@ -164,10 +167,10 @@ const actions = {
   emptyCurrentOrder(context, orderId) {
       axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
         context.dispatch('fetchUserCurrentOrders');
-        Vue.toasted.show('Cart is empty', {
-          position: 'bottom-right',
-          type: 'success',
-          duration: 3000
+        Message({
+          duration: 3000,
+          message: 'All items removed from the cart.',
+          showClose: true
         });
     });
   },

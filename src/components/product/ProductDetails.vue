@@ -1,49 +1,43 @@
 <template>
-  <section class="product">
-    <div class="container">
-      <div class="container__inner" v-if="!!currentVariant">
-        <div class="row narrow">
-          <div class="col-md-6 product__image-container text-center">
-            <div class="product-image">
-              <img :src="productImage" alt="">
-            </div>
+  <section class="products">
+    <el-row class="offset-vertical">
+      <el-col :span="20" :offset="2" v-if="!!currentVariant">
+        <el-row :gutter="30">
+          <el-col :span="10">
+            <el-carousel height="532px" indicator-position="none" v-if="productImages.length > 1">
+              <el-carousel-item v-for="image in productImages" :key="image.id">
+                <img :src="images[image].large_url" alt="">
+              </el-carousel-item>
+            </el-carousel>
+            <img :src="images[productImages].large_url" alt="" v-else>
+          </el-col>
+          <el-col :span="11" :offset="1">
+            <h2 class="h2 product-name">{{ currentVariant.name }}</h2>
+            <strong class="product-price">{{ currentVariant.display_price }}</strong>
+            <el-tabs v-model="activeName">
+              <el-tab-pane label="Description" name="first">
+                <p class="product-description">{{ currentVariant.description }}</p>
+              </el-tab-pane>
+              <el-tab-pane label="Properties" name="second">
+                <ul class="properties-list">
+                  <li v-for="property in properties" :key="property.id">
+                    <el-tag>
+                      <strong class="text-uppercase">{{ property.presentation }}:</strong> {{ property.value }}
+                    </el-tag>
+                  </li>
+                </ul>
+              </el-tab-pane>
+            </el-tabs>
             <div class="variants-list">
               <div class="variants" v-if="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)" :title="variant.options_text">
                 <img :src="images[variant.image_ids[0]].mini_url" alt="">
               </div>
             </div>
-          </div>
-          <div class="col-md-6 text-center">
-            <aside class="product__details">
-              <h2 class="h2 product__name text-uppercase">{{ currentVariant.name }}</h2>
-              <p class="product__price">{{ currentVariant.display_price }}</p>
-              <p class="product__description">{{ currentVariant.description }}</p>
-              <ul style="padding: 0;" class="row">
-                <li v-for="property in properties" :key="property.id" class="col-md-6">
-                  <div>
-                    <strong class="font-heavy">{{ property.presentation }}:</strong> {{ property.value }}
-                  </div>
-                </li>
-              </ul>
-              <div class="product__quantity">
-                <button class="quantity-btn quantity-btn-minus" :disabled="quantity < 2" @click="quantity--"></button>
-                <input type="quantity" class="quantity-input text-center" v-model="quantity">
-                <a href="javascript:void(0);" class="quantity-btn quantity-btn-plus" @click="quantity++"></a>
-              </div>
-              <div class="product__add text-center">
-                <a href="javascript:void(0);" class="btn btn-red" @click="onAddToCart">Add to basket</a>
-              </div>
-              <div class="alert" v-if="!cartErrors" :class= "{ 'alert-success' : alertMessage.type === 'success' }" >
-                {{alertMessage.message}}
-              </div>
-              <div class="alert" v-if="cartErrors && alertMessage.type === 'error'" :class= "{ 'alert-danger' : alertMessage.type === 'error' }">
-                <strong>{{cartErrors}}</strong>
-              </div>
-            </aside>
-          </div>
-        </div>  
-      </div>
-    </div>
+            <el-button type="primary" class="btn-add" @click="onAddToCart">Add to basket</el-button>
+          </el-col>
+        </el-row>  
+      </el-col>
+    </el-row>
   </section>
 </template>
 
@@ -58,7 +52,8 @@
     data() {
       return {
         quantity: "1",
-        selectedVariant: null
+        selectedVariant: null,
+        activeName: 'first'
       }
     },
 
@@ -79,9 +74,9 @@
         alertMessage: 'getAlertMessage'
       }),
 
-      productImage() {
-        if(this.currentVariant.image_ids && this.currentVariant.image_ids[0]) {
-          return this.images[this.currentVariant.image_ids[0]] && this.images[this.currentVariant.image_ids[0]].product_url;
+      productImages() {
+        if(this.currentVariant.image_ids && this.currentVariant.image_ids) {
+          return this.currentVariant.image_ids && this.currentVariant.image_ids;
         } else {
           return ''
         }
@@ -126,13 +121,21 @@
         this.$store.dispatch('addToCart', formData);
       }
     },
-
-    beforeRouteLeave (to, from, next) {
-      this.$store.dispatch('showMessage', {
-        message: '',
-        type: ''
-      });
-      next();
-    }
   }
 </script>
+
+<style>
+  .product-image { border: 1px solid #ddd; }
+  .products .offset-vertical { padding-top: 55px; }
+  .product-name { font-size: 24px; line-height: 36px; margin: 0; }
+  .product-price { font-size: 19px; margin-top: 20px; margin-bottom: 20px; display: block; color: #0E4AA3; }
+  .product-description { font-size: 14px; line-height: 22px; }
+  .el-tabs__item { font-size: 16px; font-family: 'AvenirLTStd-Heavy'; }
+  .el-tabs__header { margin-bottom: 5px; }
+  .properties-list { padding: 0; margin: 10px -5px 10px -5px; font-size: 0; }
+  .properties-list li { display: inline-block; margin: 5px; width: calc(50% - 10px); }
+  .properties-list .el-tag { font-size: 13px; width: 100%; }
+  .btn-add { width: 60%; height: 55px; margin-top: 12px; text-transform: uppercase; }
+  .el-carousel__arrow { background: #0E4AA3; opacity: .9; }
+  .el-carousel__arrow:hover { opacity: 1; background: #0E4AA3; }
+</style>

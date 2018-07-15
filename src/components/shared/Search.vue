@@ -139,7 +139,7 @@
   .search-text { color: #0E4AA3; font-size: 20px; font-family: 'AvenirLTStd-Heavy'; position: relative; left: 7px; top: -1px; }
   .search-results-container .page-heading-row { padding: 0; }
   .search-results-container .page-heading-row .h2 { padding-top: 30px; padding-bottom: 0; }
-  .no-result { font-size: 24px; line-height: 38px; font-family:'AvenirLTStd-Roman'; font-weight: 400; margin-top: 100px; }
-  .no-result .el-icon-error { font-size: 125px; color: #f56c6c; margin-bottom: 25px; }
+  .no-result { font-size: 20px; line-height: 36px; font-family:'AvenirLTStd-Roman'; font-weight: 400; margin-top: 100px; }
+  .no-result .el-icon-error { font-size: 110px; color: #f56c6c; margin-bottom: 25px; }
 </style>
 

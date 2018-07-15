@@ -1,0 +1,46 @@
+<section class="product">
+    <div class="container">
+      <div class="container__inner" v-if="!!currentVariant">
+        <div class="row narrow">
+          <div class="col-md-6 product__image-container text-center">
+            <div class="product-image">
+              <img :src="productImage" alt="">
+            </div>
+            <div class="variants-list">
+              <div class="variants" v-if="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)" :title="variant.options_text">
+                <img :src="images[variant.image_ids[0]].mini_url" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 text-center">
+            <aside class="product__details">
+              <h2 class="h2 product__name text-uppercase">{{ currentVariant.name }}</h2>
+              <p class="product__price">{{ currentVariant.display_price }}</p>
+              <p class="product__description">{{ currentVariant.description }}</p>
+              <ul style="padding: 0;" class="row">
+                <li v-for="property in properties" :key="property.id" class="col-md-6">
+                  <div>
+                    <strong class="font-heavy">{{ property.presentation }}:</strong> {{ property.value }}
+                  </div>
+                </li>
+              </ul>
+              <div class="product__quantity">
+                <button class="quantity-btn quantity-btn-minus" :disabled="quantity < 2" @click="quantity--"></button>
+                <input type="quantity" class="quantity-input text-center" v-model="quantity">
+                <a href="javascript:void(0);" class="quantity-btn quantity-btn-plus" @click="quantity++"></a>
+              </div>
+              <div class="product__add text-center">
+                <a href="javascript:void(0);" class="btn btn-red" @click="onAddToCart">Add to basket</a>
+              </div>
+              <div class="alert" v-if="!cartErrors" :class= "{ 'alert-success' : alertMessage.type === 'success' }" >
+                {{alertMessage.message}}
+              </div>
+              <div class="alert" v-if="cartErrors && alertMessage.type === 'error'" :class= "{ 'alert-danger' : alertMessage.type === 'error' }">
+                <strong>{{cartErrors}}</strong>
+              </div>
+            </aside>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </section>
