@@ -9,6 +9,7 @@ import Order from './components/user/Order.vue';
 import Cart from './components/cart/Cart.vue';
 import Address from './components/order/Address.vue';
 import TaxonProducts from './components/product/TaxonProducts.vue';
+import PageNotFound from './components/shared/PageNotFound.vue';
 
 Vue.use(VueRouter);
 
@@ -65,6 +66,11 @@ const routes = [
   {
     path: '/categories/:name/:id',
     component: TaxonProducts
+  },
+
+  {
+    path: '*',
+    component: PageNotFound
   }
 
 ];

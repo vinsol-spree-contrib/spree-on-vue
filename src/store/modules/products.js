@@ -51,10 +51,10 @@ const actions = {
 
   /* Fetch All Products API */
   [types.FETCH_PRODUCTS]: function (context, { 'page': page, 'per_page': perPage }) {
-    var loader = Loading.service({ fullscreen: true });
+    var loading = Loading.service({ fullscreen: true });
     axios.get('api/ams/products?page=' + page + '&per_page=' + perPage).then(function (response) {
       context.commit(types.MUTATE_SET_PRODUCTS, response.data);
-      loader.close();
+      loading.close();
     }).catch(function (errro) {
       console.log(error);
     });
@@ -63,8 +63,10 @@ const actions = {
   /* Fetch Single Products API */
   [types.FETCH_PRODUCT]: function (context, payload) {
     context.commit(types.MUTATE_SET_PRODUCT, null);
+    var loading = Loading.service({ fullscreen: true });
     axios.get(apis.FETCH_PRODUCT + payload).then(function (response) {
       context.commit(types.MUTATE_SET_PRODUCT, response.data);
+      loading.close();
     }).catch(function (error) {
       console.log(error);
     });
@@ -83,11 +85,11 @@ const actions = {
 
   /* Taxon Products API */
   [types.TAXON_PRODUCTS]: function (context, payload) {
-    var loader = Loading.service({ fullscreen: true });
+    var loading = Loading.service({ fullscreen: true });
     context.commit(types.MUTATE_TAXON_PRODUCTS, []);
     axios.get(apis.TAXON_PRODUCTS + payload).then(function (response) {
       context.commit(types.MUTATE_TAXON_PRODUCTS, response.data);
-      loader.close();
+      loading.close();
     }).catch(function (error) {
       console.log(error);
     });

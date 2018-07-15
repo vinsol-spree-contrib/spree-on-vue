@@ -15,10 +15,17 @@
             <h2 class="h2 product-name">{{ currentVariant.name }}</h2>
             <strong class="product-price">{{ currentVariant.display_price }}</strong>
             <el-tabs v-model="activeName">
-              <el-tab-pane label="Description" name="first">
+              <el-tab-pane label="Variants" name="first" v-if="variants.length > 1">
+                <el-row :gutter="10" class="variants-row">
+                  <el-col :class="{'active': !!selectedVariant && (variant.id === selectedVariant.id) }" :span="4" v-if="variants && !variant.is_master" v-for="variant in variants" :key="variant.id" @click.native="changeVariant(variant)" style="cursor: pointer;">
+                    <img :src="images[variant.image_ids[0]].small_url" alt="">
+                  </el-col>
+                </el-row>
+              </el-tab-pane>
+              <el-tab-pane label="Description" :name="variants[1] ? 'second' : 'first'">
                 <p class="product-description">{{ currentVariant.description }}</p>
               </el-tab-pane>
-              <el-tab-pane label="Properties" name="second">
+              <el-tab-pane label="Properties" v-if="properties.length > 1">
                 <ul class="properties-list">
                   <li v-for="property in properties" :key="property.id">
                     <el-tag>
@@ -28,12 +35,12 @@
                 </ul>
               </el-tab-pane>
             </el-tabs>
-            <div class="variants-list">
-              <div class="variants" v-if="variants" v-for="variant in variants" :key="variant.id" @click="changeVariant(variant)" :title="variant.options_text">
-                <img :src="images[variant.image_ids[0]].mini_url" alt="">
-              </div>
-            </div>
-            <el-button type="primary" class="btn-add" @click="onAddToCart">Add to basket</el-button>
+            <el-button type="primary" class="btn-add" v-if="loggedIn" @click="onAddToCart">Add to basket</el-button>
+            <router-link to="/entry" v-else>
+              <el-button type="primary" class="btn-add">
+                Login to add
+              </el-button>
+            </router-link>            
           </el-col>
         </el-row>  
       </el-col>
@@ -53,7 +60,7 @@
       return {
         quantity: "1",
         selectedVariant: null,
-        activeName: 'first'
+        activeName: 'first',
       }
     },
 
@@ -71,7 +78,8 @@
       ...mapGetters({
         productInformation: types.GET_PRODUCT,
         cartErrors: 'getCartErrors',
-        alertMessage: 'getAlertMessage'
+        alertMessage: 'getAlertMessage',
+        loggedIn: 'isAuthenticated'
       }),
 
       productImages() {
@@ -132,10 +140,12 @@
   .product-description { font-size: 14px; line-height: 22px; }
   .el-tabs__item { font-size: 16px; font-family: 'AvenirLTStd-Heavy'; }
   .el-tabs__header { margin-bottom: 5px; }
-  .properties-list { padding: 0; margin: 10px -5px 10px -5px; font-size: 0; }
+  .properties-list { padding: 0; margin: 15px -5px 15px -5px; font-size: 0; }
   .properties-list li { display: inline-block; margin: 5px; width: calc(50% - 10px); }
   .properties-list .el-tag { font-size: 13px; width: 100%; }
-  .btn-add { width: 60%; height: 55px; margin-top: 12px; text-transform: uppercase; }
+  .btn-add { width: 60%; height: 50px; margin-top: 12px; text-transform: uppercase; font-size: 16px; }
   .el-carousel__arrow { background: #0E4AA3; opacity: .9; }
   .el-carousel__arrow:hover { opacity: 1; background: #0E4AA3; }
+  .variants-row { padding: 20px 0; }
+  .variants-row .active img { box-sizing: border-box; padding: 5px; border: 2px solid #0E4AA3; }
 </style>

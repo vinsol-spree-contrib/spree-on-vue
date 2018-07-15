@@ -165,13 +165,13 @@ const actions = {
   },
 
   emptyCurrentOrder(context, orderId) {
-      axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
-        context.dispatch('fetchUserCurrentOrders');
-        Message({
-          duration: 3000,
-          message: 'All items removed from the cart.',
-          showClose: true
-        });
+    axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+      context.dispatch('fetchUserCurrentOrders');
+      Message({
+        duration: 3000,
+        message: 'All items removed from the cart.',
+        showClose: true
+      });
     });
   },
 
