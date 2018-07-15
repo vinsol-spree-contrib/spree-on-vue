@@ -83,4 +83,5 @@
   .page-heading-row { padding-bottom: 10px; }
   .offset-vertical { padding: 50px 0; }
   .product-card-body h3 { min-height: 48px; }
+  .el-card { border: 1px solid #ddd !important; }
 </style>

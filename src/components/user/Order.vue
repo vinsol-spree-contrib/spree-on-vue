@@ -10,8 +10,8 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="50">
-          <el-col span="12">
+        <el-row :gutter="50" v-if="Object.values(addresses).length > 0">
+          <el-col :span="12">
             <el-card class="box-card">
               <h2 class="h2"><i class="el-icon-location"></i> Billing Address</h2>
               <p>{{ addresses[order.bill_address_id].firstname }} {{ addresses[order.bill_address_id].lastname }}</p>
@@ -25,7 +25,7 @@
             </el-card>
           </el-col>
 
-          <el-col span="12">
+          <el-col :span="12">
             <el-card class="box-card">
               <h2 class="h2"><i class="el-icon-location"></i> Shipping Address</h2>
               <p>{{ addresses[order.ship_address_id].firstname }} {{ addresses[order.ship_address_id].lastname }}</p>
