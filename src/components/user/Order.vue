@@ -40,6 +40,21 @@
           </el-col>
         </el-row>
 
+        <el-row :gutter="30" class="offset-vertical-small" v-if="Object.values(paymentMethods).length > 0">
+          <el-col :span="10" :offset="2">
+            <el-card class="box-card">
+              <h2 class="h2"><i class="el-icon-info"></i> Payment Information</h2>
+              <p>{{paymentMethods[payments[0].payment_method_id].name}} <strong>(${{ order.payment_total }}</strong>)</p>
+            </el-card>
+          </el-col>
+          <el-col :span="10">
+            <el-card class="box-card">
+              <h2 class="h2"><i class="el-icon-info"></i> Shipment Information</h2>
+              <p>From default via UPS Ground (USD)</p>
+            </el-card>
+          </el-col>
+        </el-row>
+
         <el-row class="cart-page offset-vertical">
           <el-col :span="20" :offset="2">
             <el-table border :data="cartItems.line_items" style="width: 100%;">
@@ -52,7 +67,9 @@
 
               <el-table-column label="Name" align="left" width="559px">
                 <template slot-scope="scope">
-                  <h3>{{ variants[scope.row.variant_id].name }}</h3>
+                  <router-link :to="'/products/' + variants[scope.row.variant_id].slug" tag="h3" class="product-link">
+                    {{ variants[scope.row.variant_id].name }}
+                  </router-link>
                 </template>
               </el-table-column>
               
@@ -136,6 +153,10 @@
 
       shipments() {
         return this.getSingleOrder && this.getSingleOrder.shipments ? helpers.arrayToObject(this.getSingleOrder.shipments || [], "id") : {};
+      },
+
+      shippingCategories() {
+        return this.getSingleOrder && this.getSingleOrder.shipping_categories ? helpers.arrayToObject(this.getSingleOrder.shipping_categories || [], "id") : {};
       },
 
       payments() {

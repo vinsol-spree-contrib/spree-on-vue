@@ -11,9 +11,11 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="Name" align="left" width="475px">
+          <el-table-column label="Name" align="left" width="475px" class="name-cell">
             <template slot-scope="scope">
-              <h3>{{ variants[scope.row.variant_id].name }}</h3>
+              <router-link :to="'/products/' + variants[scope.row.variant_id].slug" tag="h3" class="product-link">
+                {{ variants[scope.row.variant_id].name }}
+              </router-link>
             </template>
           </el-table-column>
           
@@ -149,4 +151,6 @@
   .empty-basket-icon { margin-bottom: 50px; }
   .empty-basket-icon-holder { position: relative; display: inline-block; }
   .zero { font-size: 110px; left: 50%; transform: translateX(-50%); color: #0E4AA3; position: absolute; bottom: 22px; }
+  .product-link { cursor: pointer; color: #0E4AA3; }
+  .el-table .cell { word-break: break-word !important; }
 </style>
