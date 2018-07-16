@@ -114,10 +114,11 @@ const actions = {
 
   /* Fetches the current orders in cart */
   fetchUserCurrentOrders(context) {
+    var loading = Loading.service({ fullscreen: true });
     axios.get('/api/ams/orders/current', { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
+      loading.close();
     }).catch(function (error) {
-
     });
   },
 
@@ -140,7 +141,7 @@ const actions = {
       context.dispatch('fetchUserCurrentOrders');
       Message({
         duration: 3000,
-        message: 'Product added to basket.',
+        message: formData.message,
         showClose: true,
         type: 'success'
       });

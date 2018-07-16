@@ -39,6 +39,45 @@
             </el-card>
           </el-col>
         </el-row>
+
+        <el-table border :data="cartItems.line_items" style="width: 100%;">
+
+          <el-table-column label="Product Image" align="left" width="200">
+            <template slot-scope="scope">
+              <img :src="images[variants[scope.row.variant_id].image_ids[0]].product_url" alt="" class="border-image">
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Name" align="left" width="475px">
+            <template slot-scope="scope">
+              <h3>{{ variants[scope.row.variant_id].name }}</h3>
+            </template>
+          </el-table-column>
+          
+          <el-table-column label="Quantity" align="center" width="180px">
+            <template slot-scope="scope">
+              <div class="product-quantity">
+                <div class="el-input-number el-input-number--small">
+                  <span role="button" :class="{ 'is-disabled' : scope.row.quantity < 2  }" class="el-input-number__decrease" @click="changeQuantity(-1, variants[scope.row.variant_id].id)">
+                    <i class="el-icon-minus"></i>
+                  </span>
+                  <span role="button" class="el-input-number__increase" @click="changeQuantity(1, variants[scope.row.variant_id].id)">
+                    <i class="el-icon-plus"></i>
+                  </span>
+                  <div class="el-input el-input--small">
+                    <input type="text" autocomplete="off" max="10" min="1" class="el-input__inner" :value="scope.row.quantity" @blur="changeQuantity(($event.target.value - scope.row.quantity), variants[scope.row.variant_id].id)">
+                  </div>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Price" align="center" width="135px">
+            <template slot-scope="scope">
+              {{ scope.row.display_amount }}
+            </template>
+          </el-table-column>
+        </el-table>
       </el-col>
     </el-row>  
   </section>

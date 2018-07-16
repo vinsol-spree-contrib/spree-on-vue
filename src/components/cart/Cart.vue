@@ -1,76 +1,60 @@
 <template>
-  <section class="ccart-page">
-    <!-- <h1 class="text-center text-uppercase font-black">Order State - [{{order.state}}] [{{order.id}}]</h1> -->
-    <!-- Page heading -->
-      <div v-if="cartItems.order && cartItems.order.item_count > 0">
-        <section class="page-heading">
-          <div class="container">
-            <div class="container__inner text-center">
-              <h2 class="h2 page-heading__text text-uppercase">Your basket</h2>
-            </div>
-          </div>
-        </section>
-        <!-- Page heading -->
+  <section class="cart-page offset-vertical">
+    <el-row>
+      <el-col :span="18" :offset="3" v-if="cartItems.order && cartItems.order.item_count > 0">
+        <h2 class="h2">Your basket</h2>
+        <el-table border :data="cartItems.line_items" style="width: 100%;">
 
-        <section class="basket">
-          <div class="container">
-            <ul class="basket__items">
-              <li class="basket-item clearfix" v-for="item in cartItems.line_items" :key="item.id">
-                <div class="basket-item__image text-center">
-                  <a href="#">
-                    <img :src="images[variants[item.variant_id].image_ids[0]].product_url" class="full">
-                  </a>
-                </div>
-                <div class="basket-item__name">
-                  <h2 class="h2">
-                    <router-link :to="{ path: '/products/' + variants[item.variant_id].slug, query: { sku: variants[item.variant_id].sku } }" class="h2 variant-link">
-                      {{ variants[item.variant_id].name }}
-                    </router-link>
-                  </h2>
-                  <p>{{ variants[item.variant_id].description }}</p>
-                  <a class="btn btn-plain" @click="deleteItem(order.id, item.id)">Remove item</a>
-                </div>
-                <div class="basket-item__quantity">
-                  <h4 class="h4">Quantity</h4>
-                  <div class="product-quantity">
-                    <button class="quantity-btn quantity-btn-minus" :disabled="item.quantity < 2" @click="changeQuantity(-1, variants[item.variant_id].id)"></button>
-                    <input type="quantity" class="quantity-input text-center" :value="item.quantity" @blur="changeQuantity(($event.target.value - item.quantity), variants[item.variant_id].id)">
-                    <a href="javascript:void(0);" class="quantity-btn quantity-btn-plus" @click="changeQuantity(1, variants[item.variant_id].id)"></a>
-                  </div>
-                </div>
-                <div class="basket-item__price">
-                  <h4 class="h4">Price</h4>
-                  <p class="price">{{ item.display_amount }}</p>
-                </div>
-              </li>
-            </ul>
-            <div class="basket__details">
-              <div class="basket__details__inner">
-                <div class="basket__total clearfix">
-                  <div class="basket__subtotal">
-                    <p>Total</p>
-                    <button class="btn btn-red" @click="emptyBasket">Empty Basket</button>
-                  </div>
-                  <div class="basket__checkout">
-                    <p>${{ order.total }}</p>
-                    <router-link :to="{ path: '/address' }" @click.native="goToAddress(order.id)" tag="li">
-                      <a class="btn btn-light">Proceed to checkout</a>
-                    </router-link>
+          <el-table-column label="Product Image" align="left" width="200">
+            <template slot-scope="scope">
+              <img :src="images[variants[scope.row.variant_id].image_ids[0]].product_url" alt="" class="border-image">
+            </template>
+          </el-table-column>
+
+          <el-table-column label="Name" align="left" width="475px">
+            <template slot-scope="scope">
+              <h3>{{ variants[scope.row.variant_id].name }}</h3>
+            </template>
+          </el-table-column>
+          
+          <el-table-column label="Quantity" align="center" width="180px">
+            <template slot-scope="scope">
+              <div class="product-quantity">
+                <div class="el-input-number el-input-number--small">
+                  <span role="button" :class="{ 'is-disabled' : scope.row.quantity < 2  }" class="el-input-number__decrease" @click="changeQuantity(-1, variants[scope.row.variant_id].id)">
+                    <i class="el-icon-minus"></i>
+                  </span>
+                  <span role="button" class="el-input-number__increase" @click="changeQuantity(1, variants[scope.row.variant_id].id)">
+                    <i class="el-icon-plus"></i>
+                  </span>
+                  <div class="el-input el-input--small">
+                    <input type="text" autocomplete="off" max="10" min="1" class="el-input__inner" :value="scope.row.quantity" @blur="changeQuantity(($event.target.value - scope.row.quantity), variants[scope.row.variant_id].id)">
                   </div>
                 </div>
               </div>
-            </div>
-          </div> 
-        </section>
-      </div>
+            </template>
+          </el-table-column>
 
-      <section v-else>
-        <div class="container text-center empty-basket">
-          <h2 class="h2 text-uppercase">Your Basket is empty.</h2>
-          <router-link to="/shop" tag="a" class="btn btn-action">Continue Shopping</router-link>
-        </div>
-      </section>
+          <el-table-column label="Price" align="center" width="135px">
+            <template slot-scope="scope">
+              {{ scope.row.display_amount }}
+            </template>
+          </el-table-column>
 
+          <el-table-column label="Actions" align="center" width="90px">
+            <template slot-scope="scope">
+               <el-button type="danger" @click="deleteItem(order.id, scope.row.id)" icon="el-icon-delete" circle></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+
+      <el-col v-else class="empty-basket" :span="18" :offset="3">
+        <h2 class="h2 text-uppercase">Your Basket is empty.</h2>
+        <router-link to="/shop" tag="a" class="btn btn-action">Continue Shopping</router-link>
+      </el-col>
+
+    </el-row>
   </section>
 </template>
 
@@ -115,7 +99,8 @@
       changeQuantity(itemQuantity, itemId) {
         const formData = {
           quantity: itemQuantity,
-          variant_id: itemId
+          variant_id: itemId,
+          message: 'Quantity Updated'
         };
         this.$store.dispatch('addToCart', formData);
       },
@@ -127,21 +112,16 @@
       deleteItem(orderNumber, lineItemId) {
         var _this = this;
         this.$store.dispatch('deleteLineItem', { 'number': orderNumber, 'lineItemId': lineItemId }).then(function () {
-          _this.$toasted.global.app_success({
-            message: 'Item deleted from cart.'
-          });            
+          _this.$message('Item removed from the basket');
         });
       }
     }
   }
 </script>
 
-<style scoped>
-  .page-heading {
-    margin-bottom: 1px !important;
-  }
-
-  .page-heading .container__inner {
-    padding: 20px;
-  }
+<style>
+  .border-image { border: 1px solid #ddd; }
+  .cart-page .el-table td { vertical-align: top !important; padding: 20px 15px; }
+  .item-remove { width: 100%; }
+  .cart-page .is-disabled { pointer-events: none; }
 </style>

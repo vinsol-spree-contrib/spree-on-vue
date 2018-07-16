@@ -136,7 +136,8 @@
       onAddToCart() {
         const formData = {
           quantity: this.quantity,
-          variant_id: this.currentVariant.id
+          variant_id: this.currentVariant.id,
+          message: 'Product added to Basket'
         };
 
         this.$store.dispatch('addToCart', formData);
