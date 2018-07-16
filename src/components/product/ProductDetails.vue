@@ -3,6 +3,7 @@
     <el-row class="offset-vertical">
       <el-col :span="20" :offset="2" v-if="!!currentVariant">
         <el-row :gutter="30">
+
           <el-col :span="10">
             <el-carousel height="532px" indicator-position="none" v-if="productImages.length > 1">
               <el-carousel-item v-for="image in productImages" :key="image.id">
@@ -11,19 +12,25 @@
             </el-carousel>
             <img :src="images[productImages].large_url" alt="" v-else>
           </el-col>
+
           <el-col :span="11" :offset="1">
             <h2 class="h2 product-name">{{ currentVariant.name }}</h2>
-            <strong class="product-price">{{ currentVariant.display_price }}</strong>
+            
+            <div class="quantity-selector">
+              <strong class="product-price">{{ currentVariant.display_price }}</strong>
+              <el-input-number v-model="quantity" @change="handleChange" :min="1" :max="10" v-if="loggedIn" size="small"></el-input-number>
+            </div>
+
             <el-tabs v-model="activeName">
-              <el-tab-pane label="Variants" name="first" v-if="variants.length > 1">
+              <el-tab-pane label="Description" name="first">
+                <p class="product-description">{{ currentVariant.description }}</p>
+              </el-tab-pane>
+              <el-tab-pane label="Variants" :name="variants[1] ? 'second' : 'first'" v-if="variants.length > 1">
                 <el-row :gutter="10" class="variants-row">
                   <el-col :class="{'active': !!selectedVariant && (variant.id === selectedVariant.id) }" :span="4" v-if="variants && !variant.is_master" v-for="variant in variants" :key="variant.id" @click.native="changeVariant(variant)" style="cursor: pointer;">
                     <img :src="images[variant.image_ids[0]].small_url" alt="">
                   </el-col>
                 </el-row>
-              </el-tab-pane>
-              <el-tab-pane label="Description" :name="variants[1] ? 'second' : 'first'">
-                <p class="product-description">{{ currentVariant.description }}</p>
               </el-tab-pane>
               <el-tab-pane label="Properties" v-if="properties.length > 1">
                 <ul class="properties-list">
@@ -35,12 +42,16 @@
                 </ul>
               </el-tab-pane>
             </el-tabs>
-            <el-button type="primary" class="btn-add" v-if="loggedIn" @click="onAddToCart">Add to basket</el-button>
-            <router-link to="/entry" v-else>
-              <el-button type="primary" class="btn-add">
-                Login to add
-              </el-button>
-            </router-link>            
+            
+            <div class="product-show-buttons">
+              <el-button type="primary" class="btn-add" v-if="loggedIn" @click="onAddToCart">Add to basket</el-button>
+              <router-link to="/entry" v-else>
+                <el-button type="primary" class="btn-add">
+                  Login to add
+                </el-button>
+              </router-link>
+            </div>
+
           </el-col>
         </el-row>  
       </el-col>
@@ -67,6 +78,8 @@
     watch: {
       '$route.params.slug': function() {
         this.$store.dispatch(types.FETCH_PRODUCT, this.$route.params.slug);
+        this.selectedVariant = null;
+        this.activeName = 'first';
       }
     },
 
@@ -127,6 +140,10 @@
         };
 
         this.$store.dispatch('addToCart', formData);
+      },
+
+      handleChange(value) {
+        console.log(value)
       }
     },
   }
@@ -136,7 +153,7 @@
   .product-image { border: 1px solid #ddd; }
   .products .offset-vertical { padding-top: 55px; }
   .product-name { font-size: 24px; line-height: 36px; margin: 0; }
-  .product-price { font-size: 19px; margin-top: 20px; margin-bottom: 20px; display: block; color: #0E4AA3; }
+  .product-price { font-size: 19px; margin-top: 20px; margin-bottom: 20px; display: inline-block; color: #0E4AA3; margin-right: 25px; position: relative; top: 2px; }
   .product-description { font-size: 14px; line-height: 22px; }
   .el-tabs__item { font-size: 16px; font-family: 'AvenirLTStd-Heavy'; }
   .el-tabs__header { margin-bottom: 5px; }
@@ -148,4 +165,6 @@
   .el-carousel__arrow:hover { opacity: 1; background: #0E4AA3; }
   .variants-row { padding: 20px 0; }
   .variants-row .active img { box-sizing: border-box; padding: 5px; border: 2px solid #0E4AA3; }
+  .quantity-selector { margin: 10px 0 15px 0; }
+  .product-show-buttons { margin-top: 15px; }
 </style>
