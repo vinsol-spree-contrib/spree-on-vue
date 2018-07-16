@@ -47,6 +47,17 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <el-row class="offset-vertical">
+          <el-col :span="12">
+            <el-button type="danger" @click="emptyBasket">Empty Basket</el-button>
+          </el-col>
+          <el-col :span="12" class="text-right subtotal-col">
+            <h3>
+              Subtotal: <el-tag class="price-tag">${{ order.total }}</el-tag>
+            </h3>
+          </el-col>
+        </el-row>
       </el-col>
 
       <el-col v-else class="empty-basket" :span="18" :offset="3">
@@ -124,4 +135,6 @@
   .cart-page .el-table td { vertical-align: top !important; padding: 20px 15px; }
   .item-remove { width: 100%; }
   .cart-page .is-disabled { pointer-events: none; }
+  .price-tag { font-size: 16px; line-height: 34px !important; margin-left: 10px; }
+  .subtotal-col { padding-top: 7px; }
 </style>

@@ -26,15 +26,13 @@
           </el-col>
         </el-row>
 
-        <div class="block" v-if="pages">
-          <el-pagination
-            background
-            :page-size="1"
-            @current-change= "handleCurrentChange"
-            layout="prev, pager, next"
-            :total="pages">
-          </el-pagination>
-        </div>
+        <section class="pagination">
+          <ul class="el-pager" v-if="pages">
+            <router-link :to="{ path: '/shop', query: { page: page } }" v-for="page in pages" :key="page" @click="setCurrentPage(page)" tag="li" class="number">
+              <a href="javascript:void(0);" class="link" >{{ page }}</a>
+            </router-link>
+          </ul>
+        </section>
 
       </el-col>
     </el-row>
@@ -92,6 +90,7 @@
           'page': `${val}`,
           'per_page': '4'
         });
+        debugger
         this.$route.query.page = `${val}`;
       },
 
@@ -104,3 +103,12 @@
     }
   }
 </script>
+
+<style>
+  .pagination .router-link-active { background: #ddd; color: #2b2b2b; margin: 0 3px; border-radius: 2px; }
+  .pagination .router-link-active a { text-decoration: none; color: #2b2b2b; display: block; }
+  .pagination .router-link-exact-active { background: #0E4AA3; color: #fff; }
+  .pagination .router-link-exact-active a { color: #fff !important; }
+  .pagination .el-pager li { width: 30px!important; height: 30px; min-width: 30px; line-height: 31px; }
+  .pagination .el-pager { width: 100%; text-align: center; margin-top: 20px; }
+</style>

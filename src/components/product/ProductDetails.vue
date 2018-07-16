@@ -108,8 +108,7 @@
       },
 
       images() {
-        return this.productInformation && this.productInformation.images ? 
-        helpers.arrayToObject( (this.productInformation.images || []), "id") : {};
+        return this.productInformation && this.productInformation.images ? helpers.arrayToObject( (this.productInformation.images || []), "id") : {};
       },
 
       properties() {
