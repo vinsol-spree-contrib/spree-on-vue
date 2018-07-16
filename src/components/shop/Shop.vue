@@ -10,7 +10,7 @@
           </el-col>
         </el-row>
         
-        <el-row :gutter="20" v-if="shopProducts.length > 0" class="products">
+        <el-row :gutter="20" v-if="shopProducts.length > 0" class="products shop-products">
           <el-col :span="6" v-for="product in shopProducts" :key="product.id">
             <el-card  shadow="hover" class="product-card">
               <router-link :to="'products/' + product.slug" tag="a" class="product-link">
@@ -111,4 +111,5 @@
   .pagination .router-link-exact-active a { color: #fff !important; }
   .pagination .el-pager li { width: 30px!important; height: 30px; min-width: 30px; line-height: 31px; }
   .pagination .el-pager { width: 100%; text-align: center; margin-top: 20px; }
+  .shop-products { min-height: 464px; }
 </style>

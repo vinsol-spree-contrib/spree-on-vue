@@ -60,9 +60,17 @@
         </el-row>
       </el-col>
 
-      <el-col v-else class="empty-basket" :span="18" :offset="3">
-        <h2 class="h2 text-uppercase">Your Basket is empty.</h2>
-        <router-link to="/shop" tag="a" class="btn btn-action">Continue Shopping</router-link>
+      <el-col v-else class="empty-basket text-center" :span="18" :offset="3">
+        <div class="empty-basket-icon">
+          <span class="empty-basket-icon-holder">
+            <i class="el-icon-goods"></i>
+            <span class="zero">0</span>
+          </span>
+        </div>
+        <h2 class="h2">Your Basket is empty.</h2>
+        <router-link to="/shop" tag="a" class="btn btn-action">
+          <el-button type="primary">Continue Shopping</el-button>
+        </router-link>
       </el-col>
 
     </el-row>
@@ -137,4 +145,8 @@
   .cart-page .is-disabled { pointer-events: none; }
   .price-tag { font-size: 16px; line-height: 34px !important; margin-left: 10px; }
   .subtotal-col { padding-top: 7px; }
+  .empty-basket-icon i { font-size: 275px; color: #0E4AA3; }
+  .empty-basket-icon { margin-bottom: 50px; }
+  .empty-basket-icon-holder { position: relative; display: inline-block; }
+  .zero { font-size: 110px; left: 50%; transform: translateX(-50%); color: #0E4AA3; position: absolute; bottom: 22px; }
 </style>
