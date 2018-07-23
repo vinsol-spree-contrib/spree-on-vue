@@ -56,7 +56,6 @@ const actions = {
       context.commit(types.MUTATE_SET_PRODUCTS, response.data);
       loading.close();
     }).catch(function (errro) {
-      console.log(error);
     });
   },
 
@@ -68,7 +67,6 @@ const actions = {
       context.commit(types.MUTATE_SET_PRODUCT, response.data);
       loading.close();
     }).catch(function (error) {
-      console.log(error);
     });
   },
 
@@ -79,7 +77,6 @@ const actions = {
       context.commit(types.MUTATE_SEARCH_RESULTS, response.data);
       loader.close();
     }).catch(function (error) {
-      console.log(error);
     });
   },
 
@@ -91,7 +88,6 @@ const actions = {
       context.commit(types.MUTATE_TAXON_PRODUCTS, response.data);
       loading.close();
     }).catch(function (error) {
-      console.log(error);
     });
   }
 

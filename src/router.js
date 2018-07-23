@@ -7,7 +7,7 @@ import Entry from './components/user/Entry.vue';
 import Profile from './components/user/Profile.vue';
 import Order from './components/user/Order.vue';
 import Cart from './components/cart/Cart.vue';
-import Address from './components/order/Address.vue';
+import Checkout from './components/order/Checkout.vue';
 import TaxonProducts from './components/product/TaxonProducts.vue';
 import PageNotFound from './components/shared/PageNotFound.vue';
 
@@ -59,8 +59,8 @@ const routes = [
   },
 
   {
-    path: '/address',
-    component: Address
+    path: '/checkout',
+    component: Checkout
   },
 
   {

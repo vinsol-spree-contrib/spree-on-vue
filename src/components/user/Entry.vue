@@ -18,10 +18,12 @@
           </el-button>
         </el-form>
       </el-card>
+    
     </el-col>
     <el-col :span="1" class="text-center or-text">
       <h2>or</h2>
     </el-col>
+
     <el-col :span="6">
       <el-card class="box-card">
         <div slot="header" class="clearfix">

@@ -59,6 +59,12 @@
               Subtotal: <el-tag class="price-tag">${{ order.total }}</el-tag>
             </h3>
           </el-col>
+
+          <el-col :span="24" class="text-right">
+            <router-link to="/checkout" @click.native="goToAddress(order.id || order.number)">
+              <el-button type="primary" class="checkout-step-btn">Checkout</el-button>
+            </router-link>
+          </el-col>
         </el-row>
       </el-col>
 
@@ -153,4 +159,5 @@
   .zero { font-size: 110px; left: 50%; transform: translateX(-50%); color: #0E4AA3; position: absolute; bottom: 22px; }
   .product-link { cursor: pointer; color: #0E4AA3; }
   .el-table .cell { word-break: break-word !important; }
+  .checkout-step-btn { margin-top: 55px; width: 250px; }
 </style>

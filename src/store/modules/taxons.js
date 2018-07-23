@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as types from '../types';
+import * as apis from '../apis';
 
 const state = {
   taxons: []
@@ -19,7 +20,7 @@ const mutations = {
 
 const actions = {
   [types.FETCH_TAXONS]: function (context) {
-    axios.get('api/ams/taxons').then(function (response) {
+    axios.get(apis.FETCH_TAXONS).then(function (response) {
       context.commit(types.MUTATE_SET_TAXONS, response.data.taxons);
     });
   }

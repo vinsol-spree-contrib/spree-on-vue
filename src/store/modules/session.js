@@ -1,6 +1,5 @@
 import axios from 'axios';
 import routes from '../../router.js';
-// import { Notification } from 'element-ui';
 import { Message } from 'element-ui';
 
 const state = {
@@ -80,15 +79,12 @@ const actions = {
       user: {
         email: authData.email,
         password: authData.password,
-        password_confirmation: authData.password_confirmation
+        password_confirmation: authData.password_confirmation,
       }
     }).then(function () {
-      context.dispatch('login', authData);
-      Message({
-        showClose: true,
-        message: 'Account created.',
-        type: 'success'
-      });
+      context.dispatch('login', Object.assign(authData, {
+        message: 'Account created successfully.'
+      }));
     }).catch(function (error) {
       context.commit('setErrors', error.response.data.errors);
     });
@@ -117,8 +113,9 @@ const actions = {
       routes.replace('/');
       Message({
         duration: 3000,
-        message: 'Logged in successfully.',
+        message: authData.message,
         showClose: true,
+        message: !!authData.message ? authData.message : 'Logged in successfully.',
         type: 'success'
       });
     }).catch(function (error) {

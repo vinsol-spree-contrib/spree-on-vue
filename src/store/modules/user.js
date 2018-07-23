@@ -170,7 +170,7 @@ const actions = {
       context.dispatch('fetchUserCurrentOrders');
       Message({
         duration: 3000,
-        message: 'All items removed from the cart.',
+        message: 'All items removed from the basket.',
         showClose: true
       });
     });
@@ -180,7 +180,7 @@ const actions = {
     axios.put('/api/ams/checkouts/' + orderId + '/next', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
       console.log(response.data);
       context.dispatch('fetchUserCurrentOrders');
-    })
+    });
   },
 
   proceedToDeliveryState(context, { 'number': orderNumber, 'addressData': addressData}) {
