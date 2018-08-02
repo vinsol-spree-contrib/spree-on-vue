@@ -14,6 +14,10 @@ const state = {
   addressErrors: "",
   countries: "",
   states: "",
+  userDetails: {},
+  deliveryStateData: {},
+  paymentStateData: {},
+  confirmStateData: {}
 };
 
 const getters = {
@@ -47,6 +51,22 @@ const getters = {
 
   getStates(state) {
     return state.states;
+  },
+
+  getUserDetails(state) {
+    return state.userDetails;
+  },
+
+  getDelivertStateData (state) {
+    return state.deliveryStateData;
+  },
+
+  getPaymentStateData(state) {
+    return state.paymentStateData;
+  },
+
+  getConfirmStateData(state) {
+    return state.confirmStateData;
   }
 };
 
@@ -81,6 +101,22 @@ const mutations = {
 
   setStates(state, states) {
     state.states = states;
+  },
+
+  setUserDetails(state, details) {
+    return state.userDetails = details;
+  },
+
+  setDelivertStateData(state, deliveryData) {
+    return state.deliveryStateData = deliveryData;
+  },
+
+  setPaymentStateData(state, paymentData) {
+    return state.paymentStateData = paymentData;
+  },
+
+  setConfirmStateData(state, confirmData) {
+    return state.confirmStateData = confirmData;
   }
 };
 
@@ -178,17 +214,32 @@ const actions = {
 
   proceedToAddressState(context, orderId) {
     axios.put('/api/ams/checkouts/' + orderId + '/next', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
-      console.log(response.data);
       context.dispatch('fetchUserCurrentOrders');
     });
   },
 
   proceedToDeliveryState(context, { 'number': orderNumber, 'addressData': addressData}) {
     axios.put('/api/ams/checkouts/' + orderNumber, addressData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken')  } }).then(function(response) {
-      console.log(response);
+      context.commit('setDelivertStateData', response.data);
+      context.dispatch('fetchUserCurrentOrders');
     }).catch(function(error) {
       context.commit('setAddressErrors', error.response.data.errors);
-      console.log(error.response.data.errors);
+    });
+  },
+
+  proceedToPaymentState(context, { 'number': orderNumber, 'deliveryData': deliveryData }) {
+    axios.put('/api/ams/checkouts/' + orderNumber, deliveryData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+      context.commit('setPaymentStateData', response.data);
+      context.dispatch('fetchUserCurrentOrders');
+    }).catch(function (error) {
+    });
+  },
+
+  proceedToConfirmState(context, { 'number': orderNumber, 'paymentData': paymentData }) {
+    axios.put('/api/ams/checkouts/' + orderNumber, paymentData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+      context.commit('setConfirmStateData', response.data);
+      context.dispatch('fetchUserCurrentOrders');
+    }).catch(function (error) {
     });
   },
 
@@ -211,6 +262,12 @@ const actions = {
   fetchStates(context, countryId) {
     axios.get('/api/v1/countries/' + countryId + '/states').then(function(response) {
       context.commit('setStates', response.data);
+    });
+  },
+
+  fetchUserDetails(context) {
+    axios.get('/api/v1/users/' + localStorage.getItem('userTokenId'), { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+      context.commit('setUserDetails', response.data);
     });
   }
 };

@@ -44,7 +44,9 @@
           <el-col :span="10" :offset="2">
             <el-card class="box-card">
               <h2 class="h2"><i class="el-icon-info"></i> Payment Information</h2>
-              <p>{{paymentMethods[payments[0].payment_method_id].name}} <strong>(${{ order.payment_total }}</strong>)</p>
+              <p v-for="payment in payments" :key="payment.id">
+                {{payment}}
+              </p>
             </el-card>
           </el-col>
           <el-col :span="10">
@@ -93,7 +95,8 @@
             <el-row class="offset-vertical-small">
               <el-col :span="24" class="text-right subtotal-col">
                 <h3 class="price-tag-row">
-                  Shipment cost: <el-tag class="price-tag" v-if="Object.values(shipments).length > 0">${{ shipments[order.shipment_ids].cost }}</el-tag>
+                  <!-- Shipment cost: <el-tag class="price-tag" v-if="Object.values(shipments).length > 0">${{ shipments[order.shipment_ids].cost }}</el-tag> -->
+                  <!-- Loop For different Shipments -->
                 </h3>
                 <h3 class="price-tag-row">
                   Subtotal: <el-tag class="price-tag">${{ order.item_total }}</el-tag>

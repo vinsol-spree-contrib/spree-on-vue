@@ -9,6 +9,7 @@ import Order from './components/user/Order.vue';
 import Cart from './components/cart/Cart.vue';
 import Checkout from './components/order/Checkout.vue';
 import TaxonProducts from './components/product/TaxonProducts.vue';
+import Address from './components/user/Address.vue';
 import PageNotFound from './components/shared/PageNotFound.vue';
 
 Vue.use(VueRouter);
@@ -71,6 +72,11 @@ const routes = [
   {
     path: '*',
     component: PageNotFound
+  },
+
+  {
+    path: '/addresses',
+    component: Address
   }
 
 ];

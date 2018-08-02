@@ -7,6 +7,7 @@ const state = {
   user: null,
   userId: null,
   userToken: null,
+  userTokenId: null,
   sessionTime: null,
   errors: {},
   loginErrors: {}
@@ -55,10 +56,15 @@ const mutations = {
     state.sessionTime = time;
   },
 
+  setUserTokenId(state, id) {
+    state.userTokenId = id;
+  },
+
   clearAuthData(state) {
     state.userId = null;
     state.userToken = null;
     state.sessionTime = null;
+    state.userTokenId = null;
   },
 
   clearAuthErrors(state) {
@@ -97,12 +103,14 @@ const actions = {
         password: authData.password
       }
     }).then(function (response) {
+      console.log(response.data);
       context.commit('setUser', response.data);
       context.commit('authUserId', response.data.email);
       context.commit('authUserToken', response.data.token);
       axios.defaults.headers.common['Authorization'] = state.user.token;
       const now = new Date();
       const expirationTime = new Date(now.getTime() + state.activeSessionTime * 1000);
+      localStorage.setItem('userTokenId', response.data.id);
       localStorage.setItem('userToken', response.data.token);
       localStorage.setItem('userId', response.data.email);
       localStorage.setItem('expirationTime', expirationTime);
@@ -126,6 +134,7 @@ const actions = {
   tryAutoLogin(context) {
     const userId = localStorage.getItem('userId');
     const userToken = localStorage.getItem('userToken');
+    const userTokenId = localStorage.getItem('userTokenId');
     
     if (!userToken) {
       return;
@@ -139,13 +148,15 @@ const actions = {
       context.commit('authUserId', userId);
       context.commit('authUserToken', userToken);
       context.commit('setSessionTime', expirationTime);
+      context.commit('setUserTokenId', userTokenId);
     }
   },
 
   logout(context) {
     context.commit('clearAuthData');
-    localStorage.removeItem('userToken');
     localStorage.removeItem('userId');
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userTokenId');
     localStorage.removeItem('expirationTime');
     context.dispatch('fetchUserCurrentOrders');
     routes.replace('/entry');

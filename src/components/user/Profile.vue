@@ -49,10 +49,10 @@
     name: 'profile',
 
     computed: {
-      ...mapGetters(['getLogedInUser', 'getUserProfileId', 'getAllOrders']),
+      ...mapGetters(['getUserDetails', 'getUserProfileId', 'getAllOrders']),
 
       user() {
-        return this.getLogedInUser || {};
+        return this.getUserDetails || {};
       },
 
       orders() {
@@ -69,8 +69,8 @@
     },
 
     mounted () {
-      this.$store.dispatch('fetchUser');
       this.$store.dispatch('fetchUserOrders');
+      this.$store.dispatch('fetchUserDetails');
     }
   }
 </script>

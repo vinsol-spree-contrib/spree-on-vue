@@ -8,6 +8,9 @@
         <router-link to="/profile" tag="div" class="drop-menu-item">Profile</router-link>
       </el-dropdown-item>
       <el-dropdown-item>
+        <router-link to="/addresses" tag="div" class="drop-menu-item">Address</router-link>
+      </el-dropdown-item>
+      <el-dropdown-item>
         <div class="drop-menu-item" @click="onLogout">Logout</div>
       </el-dropdown-item>
     </el-dropdown-menu>
