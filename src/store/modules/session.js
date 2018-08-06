@@ -3,7 +3,7 @@ import routes from '../../router.js';
 import { Message } from 'element-ui';
 
 const state = {
-  activeSessionTime: 7200,
+  activeSessionTime: 3600,
   user: null,
   userId: null,
   userToken: null,
@@ -74,12 +74,6 @@ const mutations = {
 };
 
 const actions = {
-  setLogoutTimer(context, expirationTime) {
-    setTimeout(function () {
-      context.dispatch('logout');
-    }, expirationTime * 1000);
-  },
-
   signup(context, authData) {
     axios.post('api/ams/users/', {
       user: {
@@ -115,10 +109,10 @@ const actions = {
       localStorage.setItem('userId', response.data.email);
       localStorage.setItem('expirationTime', expirationTime);
       context.commit('setSessionTime', expirationTime);
-      context.dispatch('setLogoutTimer', state.activeSessionTime);
       context.commit('clearAuthErrors');
       context.dispatch('fetchUserCurrentOrders', { root: true });
       routes.replace('/');
+
       Message({
         duration: 3000,
         message: authData.message,
@@ -126,6 +120,7 @@ const actions = {
         message: !!authData.message ? authData.message : 'Logged in successfully.',
         type: 'success'
       });
+
     }).catch(function (error) {
       context.commit('setLoginErrors', error.response.data.errors);
     });
@@ -135,15 +130,12 @@ const actions = {
     const userId = localStorage.getItem('userId');
     const userToken = localStorage.getItem('userToken');
     const userTokenId = localStorage.getItem('userTokenId');
-    
-    if (!userToken) {
-      return;
-    }
 
-    const expirationTime = localStorage.getItem('expirationTime');
+    const expirationTime = new Date(localStorage.getItem('expirationTime'));
     const now = new Date();
+
     if (now >= expirationTime) {
-      return;
+      context.dispatch('logout');
     } else {
       context.commit('authUserId', userId);
       context.commit('authUserToken', userToken);

@@ -1,8 +1,8 @@
 <template>
   <div class="basket">
-    <router-link to="/cart">
+    <router-link to="/cart" @click.native="changeCheckoutState(order.id, 'cart')" :class="{ 'no-pointer': isPathCart }">
       <i class="el-icon-goods"></i>
-      <span class="basket-quantity" v-if="cartItems.order">{{ lineItemCount || 0}}</span>
+      <span class="basket-quantity" v-if="cartItems.order && cartItems.order.completed_at == null">{{ lineItemCount || 0}}</span>
     </router-link>
     <!-- <aside class="mini-cart">
       <div v-if="cartItems.order && cartItems.order.item_count > 0">
@@ -58,11 +58,23 @@
       variants() {
         return helpers.arrayToObject(this.getCartItems.variants || [], "id");
       },
+
+      isPathCart() {
+        return this.$route.path == '/cart';
+      }
     },
 
     methods: {
       emptyCart: function() {
         this.$store.dispatch('emptyCurrentOrder', this.order.id);
+      },
+
+      changeCheckoutState(orderNumber, state) {
+        const formData = {
+          'state': state
+        }
+
+        this.$store.dispatch('setCheckoutState', {'number': orderNumber, 'stateData': formData});
       }
     }
   }
@@ -73,5 +85,6 @@
   .basket a { vertical-align: sub; text-decoration: none !important; }
   .basket i { color: #0E4AA3; }
   .basket-quantity { font-size: 11px; position: absolute; background: #0E4AA3; width: 20px; height: 20px; border-radius: 50%; color: #fff; text-align: center; line-height: 23px; bottom: -1px; transform: scale(.9); right: -7px; }
+  .no-pointer { pointer-events: none; }
 </style>
 

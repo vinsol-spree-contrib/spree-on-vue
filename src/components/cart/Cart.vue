@@ -159,5 +159,5 @@
   .zero { font-size: 110px; left: 50%; transform: translateX(-50%); color: #0E4AA3; position: absolute; bottom: 22px; }
   .product-link { cursor: pointer; color: #0E4AA3; }
   .el-table .cell { word-break: break-word !important; }
-  .checkout-step-btn { margin-top: 55px; width: 250px; }
+  .checkout-step-btn { margin-top: 55px; width: 200px; }
 </style>
