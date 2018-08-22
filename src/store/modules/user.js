@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import axios from 'axios';
 import { Loading } from 'element-ui';
 import { Message } from 'element-ui';
@@ -17,7 +16,8 @@ const state = {
   userDetails: {},
   deliveryStateData: {},
   paymentStateData: {},
-  confirmStateData: {}
+  confirmStateData: {},
+  defaultPaymentMethodId: ''
 };
 
 const getters = {
@@ -57,16 +57,8 @@ const getters = {
     return state.userDetails;
   },
 
-  getDelivertStateData (state) {
-    return state.deliveryStateData;
-  },
-
-  getPaymentStateData(state) {
-    return state.paymentStateData;
-  },
-
-  getConfirmStateData(state) {
-    return state.confirmStateData;
+  getDefaultPaymentMethodId(state) {
+    return state.defaultPaymentMethodId;
   }
 };
 
@@ -107,16 +99,8 @@ const mutations = {
     state.userDetails = details;
   },
 
-  setDelivertStateData(state, deliveryData) {
-    state.cartItems = deliveryData || {};
-  },
-
-  setPaymentStateData(state, paymentData) {
-    state.paymentStateData = paymentData;
-  },
-
-  setConfirmStateData(state, confirmData) {
-    state.confirmStateData = confirmData;
+  setDefaultPaymentMethodId(state, id) {
+    state.defaultPaymentMethodId = id;
   }
 };
 
@@ -124,8 +108,6 @@ const actions = {
   fetchUser(context) {
     axios.get('/api/ams/users/', { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setLogedInUser', response.data.users[0]);
-    }).catch(function (error) {
-
     });
   },
 
@@ -135,7 +117,6 @@ const actions = {
     axios.get('/api/ams/orders/mine', { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setAllOrders', response.data);
       loading.close();
-    }).catch(function (error) {
     });
   },
 
@@ -154,7 +135,6 @@ const actions = {
     axios.get('/api/ams/orders/current', { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
       loading.close();
-    }).catch(function (error) {
     });
   },
 
@@ -213,8 +193,11 @@ const actions = {
   },
 
   proceedToAddressState(context, orderId) {
-    axios.put('/api/ams/checkouts/' + orderId + '/next', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
-      context.dispatch('fetchUserCurrentOrders');
+    var loading = Loading.service({ fullscreen: true });
+    return axios.put('/api/ams/checkouts/' + orderId + '/next', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+      context.commit('setCartItems', response.data);
+      console.log(response.data.payment_methods[0].id);
+      loading.close();
     });
   },
 
@@ -225,16 +208,16 @@ const actions = {
       loading.close();
     }).catch(function(error) {
       context.commit('setAddressErrors', error.response.data.errors);
+      loading.close();
     });
   },
 
   proceedToPaymentState(context, { 'number': orderNumber, 'deliveryData': deliveryData }) {
     var loading = Loading.service({ fullscreen: true });
-    axios.put('/api/ams/checkouts/' + orderNumber, deliveryData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
-      context.commit('setCartItems', response.data);
+    return axios.put('/api/ams/checkouts/' + orderNumber, deliveryData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+      context.commit('setCartItems', response.data)
       loading.close();
-    }).catch(function (error) {
-    });
+    })
   },
 
   proceedToConfirmState(context, { 'number': orderNumber, 'paymentData': paymentData }) {
@@ -242,13 +225,30 @@ const actions = {
     axios.put('/api/ams/checkouts/' + orderNumber, paymentData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
       loading.close();
-    }).catch(function (error) {
     });
   },
 
   proceedToCompleteState(context, orderNumber) {
-    axios.put('/api/ams/checkouts/' + orderNumber, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+    var loading = Loading.service({ fullscreen: true });
+    axios.put('/api/ams/checkouts/' + orderNumber, {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
       context.commit('setCartItems', response.data);
+      loading.close();
+    });
+  },
+
+  completeOrder(context, orderNumber) {
+    var loading = Loading.service({ fullscreen: true });
+    axios.put('/api/ams/checkouts/' + orderNumber, {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+      context.commit('setCartItems', response.data);
+      loading.close();
+    }).catch(function(error) {
+      loading.close();
+      Message({
+        duration: 3000,
+        message: error.response.data.errors.base[0],
+        showClose: true,
+        type: 'error'
+      });
     });
   },
 

@@ -3,7 +3,7 @@ import routes from '../../router.js';
 import { Message } from 'element-ui';
 
 const state = {
-  activeSessionTime: 3600,
+  activeSessionTime: 36000,
   user: null,
   userId: null,
   userToken: null,
@@ -97,7 +97,6 @@ const actions = {
         password: authData.password
       }
     }).then(function (response) {
-      console.log(response.data);
       context.commit('setUser', response.data);
       context.commit('authUserId', response.data.email);
       context.commit('authUserToken', response.data.token);

@@ -1,8 +1,9 @@
 <template>
   <div class="basket">
-    <router-link to="/cart" @click.native="changeCheckoutState(order.id, 'cart')" :class="{ 'no-pointer': isPathCart }">
+    <router-link to="/cart" :class="{ 'no-pointer': isPathCart }">
       <i class="el-icon-goods"></i>
-      <span class="basket-quantity" v-if="cartItems.order && cartItems.order.completed_at == null">{{ lineItemCount || 0}}</span>
+      <span class="basket-quantity" v-if="cartItems.order && cartItems.order.completed_at == null">{{ lineItemCount}}</span>
+      <span class="basket-quantity" v-else>0</span>
     </router-link>
     <!-- <aside class="mini-cart">
       <div v-if="cartItems.order && cartItems.order.item_count > 0">
@@ -61,21 +62,7 @@
 
       isPathCart() {
         return this.$route.path == '/cart';
-      }
-    },
-
-    methods: {
-      emptyCart: function() {
-        this.$store.dispatch('emptyCurrentOrder', this.order.id);
       },
-
-      changeCheckoutState(orderNumber, state) {
-        const formData = {
-          'state': state
-        }
-
-        this.$store.dispatch('setCheckoutState', {'number': orderNumber, 'stateData': formData});
-      }
     }
   }
 </script>

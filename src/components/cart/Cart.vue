@@ -1,7 +1,7 @@
 <template>
   <section class="cart-page offset-vertical">
     <el-row>
-      <el-col :span="18" :offset="3" v-if="cartItems.order && cartItems.order.item_count > 0">
+      <el-col :span="18" :offset="3" v-if="order.state != 'complete' && lineItemCount > 0">
         <h2 class="h2">Your basket</h2>
         <el-table border :data="cartItems.line_items" style="width: 100%;">
 
@@ -67,7 +67,7 @@
           </el-col>
         </el-row>
       </el-col>
-
+      
       <el-col v-else class="empty-basket text-center" :span="18" :offset="3">
         <div class="empty-basket-icon">
           <span class="empty-basket-icon-holder">
@@ -80,7 +80,6 @@
           <el-button type="primary">Continue Shopping</el-button>
         </router-link>
       </el-col>
-
     </el-row>
   </section>
 </template>
@@ -116,6 +115,10 @@
       },
     },
 
+    mounted() {
+      this.changeCheckoutState(this.order.id, 'cart');
+    },
+
     methods: {
       emptyBasket: function() {
         if(confirm('You are about to remove all the items from you basket.')) {
@@ -133,6 +136,7 @@
       },
 
       goToAddress(orderId) {
+        var _this = this;
         this.$store.dispatch('proceedToAddressState', orderId);
       },
       
@@ -141,8 +145,16 @@
         this.$store.dispatch('deleteLineItem', { 'number': orderNumber, 'lineItemId': lineItemId }).then(function () {
           _this.$message('Item removed from the basket');
         });
+      },
+
+      changeCheckoutState(orderNumber, state) {
+        const formData = {
+          'state': state
+        }
+
+        this.$store.dispatch('setCheckoutState', {'number': orderNumber, 'stateData': formData});
       }
-    }
+    },
   }
 </script>
 
