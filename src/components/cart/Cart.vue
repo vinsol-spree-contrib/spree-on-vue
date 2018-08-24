@@ -132,11 +132,11 @@
           variant_id: itemId,
           message: 'Quantity Updated'
         };
+
         this.$store.dispatch('addToCart', formData);
       },
 
       goToAddress(orderId) {
-        var _this = this;
         this.$store.dispatch('proceedToAddressState', orderId);
       },
       

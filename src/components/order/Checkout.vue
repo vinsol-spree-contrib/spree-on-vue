@@ -1,5 +1,6 @@
 <template>
   <section class="checkout offset-vertical">
+
     <div v-if="order.completed_at == null">
 
       <el-row>
@@ -24,6 +25,9 @@
 
           <el-collapse-transition>
             <div class="step__body" v-if="order.state == 'address'">
+              <span style="display: none">
+                {{ billAddress }} {{ shipAddress }}
+              </span>
               <el-row :gutter="0" class="step-row">
                 <el-col :span="12">
                   <el-card class="box-card billing">
@@ -285,7 +289,7 @@
                   </el-row>
 
                   <el-collapse-transition>
-                    <el-row v-if="this.paymentMethodName == 'Credit Card'">
+                    <el-row v-if="this.paymentMethodName == 'Credit Card'" :gutter="50">
                       <el-col :span="12">
                         <div class="card-form">
                           <h4>Enter Card details</h4>
@@ -298,7 +302,7 @@
                               </el-col>
                               <el-col :span="24">
                                 <el-form-item>
-                                  <el-input placeholder="Card Number" v-model="number" clearable></el-input>
+                                  <el-input placeholder="XXXX XXXX XXXX XXXX" v-model="number" maxlength="19" clearable @input="formatCardNumber()"></el-input>
                                 </el-form-item>
                               </el-col>
                             </el-row>
@@ -337,7 +341,14 @@
                         </div>
                       </el-col>
                       <el-col :span="12">
-                        
+                        <div class="credit-card">
+                          <span class="chip"></span>
+                          <h2 class="card-type">{{ cardType || 'XXXX' }}</h2>
+                          <h4 class="name">{{ name || 'xxxxxx xxxxxx' }}</h4>
+                          <p class="number">{{ number || 'xxxx xxxx xxxx xxxx' }}</p>
+                          <p class="valid-through">Valid Thru</p>
+                          <p class="expiry">  <span v-if="month < 10 && month > 0">0</span>{{ month || 'xx' }} / {{ year.slice(-2) || 'xx' }}</p>
+                        </div>
                       </el-col>
                     </el-row>
                   </el-collapse-transition>
@@ -442,7 +453,6 @@
               </el-row>
             </div>
           </el-collapse-transition>
-          
         </el-col>
       </section>
     </div>
@@ -473,6 +483,14 @@
         return this.getCartItems && this.getCartItems.order ? this.getCartItems.order : {};
       },
 
+      billAddress() {
+        return this.order && this.order.bill_address_id ? Object.assign(this.bill_address_attributes, this.addresses[this.order.bill_address_id]) : {};
+      },
+
+      shipAddress() {
+        return this.order && this.order.ship_address_id ? Object.assign(this.ship_address_attributes, this.addresses[this.order.ship_address_id]) : {};
+      },
+
       countries() {
         return this.getCountries && this.getCountries.countries ? helpers.arrayToObject( (this.getCountries.countries || []), "id") : {};
       },
@@ -486,11 +504,11 @@
       },
 
       isStateRequired() {
-        return this.getCountries && this.getCountries.countries ? this.countries[this.bill_address_attributes.country_id].states_required : false;
+        return this.bill_address_attributes.country_id ? this.countries[this.bill_address_attributes.country_id].states_required : false;
       },
 
       isShipStateRequired() {
-        return this.getCountries && this.getCountries.countries ? this.countries[this.ship_address_attributes.country_id].states_required : false;
+        return this.ship_address_attributes.country_id ? this.countries[this.ship_address_attributes.country_id].states_required : false;
       },
 
       paymentMethods() {
@@ -561,10 +579,12 @@
         paymentMethodName: 'Credit Card',
         saveUserAddress: true,
         number: '',
+        modifiedNumber: '',
         month: '',
         year: '',
         verification_value: '',
         name: '',
+        cardType: '',
         months: [
           { id: 1, name: 'January', value: '1' },
           { id: 2, name: 'February', value: '2' },
@@ -603,7 +623,6 @@
     },
 
     created() {
-      
     },
 
     methods: {
@@ -657,6 +676,7 @@
 
       nextForConfirm (orderNumber) {
         var formData = {};
+        this.modifiedNumber = this.number.replace(/ +/g, "");
 
         if(this.paymentMethodName == "Check") {
           formData = {
@@ -680,7 +700,7 @@
 
             "payment_source" : {
               [this.paymentMethodId] : {
-                "number": this.number,
+                "number": this.modifiedNumber,
                 "month": this.month,
                 "year": this.year,
                 "verification_value": this.verification_value,
@@ -720,11 +740,24 @@
 
       checkUserAddressData() {
         var _this = this;
-        if(Object.values(this.addresses).length > 0) {        
-          Object.assign(this.bill_address_attributes, this.addresses[this.order.bill_address_id]);
-          Object.assign(this.ship_address_attributes, this.addresses[this.order.ship_address_id]);
+        if(Object.keys(this.addresses).length > 0) {
+          Object.assign(_this.bill_address_attributes, _this.addresses[_this.order.bill_address_id]);
+          Object.assign(_this.ship_address_attributes, _this.addresses[_this.order.ship_address_id]);
         }
-      }
+      },
+
+      formatCardNumber() {
+        this.number = this.number.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ');
+        if(this.number.replace(/ +/g, "").match(/(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}/)) {
+          this.cardType = "Master Card";
+        } else if(this.number.replace(/ +/g, "").match(/^4/)) {
+          this.cardType = "Visa";
+        } else if(this.number.replace(/ +/g, "").match(/^3[4|7]/)) {
+          this.cardType = "American Express";
+        } else {
+          this.cardType = "XXXX";
+        }
+      },
     },
   }
 </script>
@@ -779,4 +812,10 @@
   .confirm-step .btns-row { border: 0; border-top: 1px solid #ddd; }
   .shipping-cost { margin-top: 20px; }
   .shipping-cost .el-tag { margin-left: 10px; position: relative; top: -2px; }
+  .credit-card { width: calc(100% - 45px); height: 230px; border-radius: 10px; background: #111; margin-top: 76px; color: #fff; }
+  .credit-card .name { color: rgba(255, 255, 255, .7); position: absolute; z-index: 2; text-transform: uppercase; left: 25px; bottom: 20px; font-weight: bold; }
+  .credit-card .number { color: rgba(255, 255, 255, .9); position: absolute; z-index: 2; left: 23px; bottom: 85px; margin: 0; font-size: 30px; }
+  .credit-card .expiry, .credit-card .valid-through, .credit-card .card-type { color: rgba(255, 255, 255, .7); position: absolute; z-index: 2; right: 25px; bottom: 32px; font-size: 14px; margin: 0; }
+  .credit-card .valid-through { bottom: 50px; font-size: 9px; }
+  .credit-card .card-type { bottom: auto; top: 25px; right: 25px; left: auto; font-size: 22px; color: #fff; text-transform: uppercase; transition: .3s; }
 </style>

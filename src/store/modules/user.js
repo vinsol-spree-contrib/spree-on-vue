@@ -183,7 +183,8 @@ const actions = {
 
   emptyCurrentOrder(context, orderId) {
     axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
-      context.dispatch('fetchUserCurrentOrders');
+      //context.dispatch('fetchUserCurrentOrders');
+      context.commit('setCartItems', response.data);
       Message({
         duration: 3000,
         message: 'All items removed from the basket.',
@@ -196,7 +197,6 @@ const actions = {
     var loading = Loading.service({ fullscreen: true });
     return axios.put('/api/ams/checkouts/' + orderId + '/next', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
       context.commit('setCartItems', response.data);
-      console.log(response.data.payment_methods[0].id);
       loading.close();
     });
   },

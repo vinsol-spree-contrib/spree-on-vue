@@ -14,7 +14,7 @@
           <el-col :span="6" v-for="product in products" :key="product.id">
             <el-card class="product-card">
               <router-link :to="'/products/' + product.slug" tag="a" class="product-link">
-                <img :src="'http://localhost:3000/' + product.master.images[0].product_url" alt="" class="taxon-image">
+                <!-- <img :src="'http://localhost:3000/' + product.master.images[0].product_url" alt="" class="taxon-image"> -->
                 <div class="product-card-body">
                   <div class="bottom clearfix">
                     <h3>{{ product.name }}</h3>

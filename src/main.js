@@ -31,7 +31,8 @@ Vue.toasted.register('app_success', function (payload) {
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = 'http://localhost:3000/';
+// axios.defaults.baseURL = 'https://enigmatic-inlet-91726.herokuapp.com/';
+axios.defaults.baseURL = 'http://localhost:3000';
 
 new Vue({
   render: h => h(App),
