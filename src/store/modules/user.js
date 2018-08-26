@@ -183,7 +183,6 @@ const actions = {
 
   emptyCurrentOrder(context, orderId) {
     axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
-      //context.dispatch('fetchUserCurrentOrders');
       context.commit('setCartItems', response.data);
       Message({
         duration: 3000,

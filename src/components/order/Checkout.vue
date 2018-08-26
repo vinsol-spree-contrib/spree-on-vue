@@ -812,9 +812,9 @@
   .confirm-step .btns-row { border: 0; border-top: 1px solid #ddd; }
   .shipping-cost { margin-top: 20px; }
   .shipping-cost .el-tag { margin-left: 10px; position: relative; top: -2px; }
-  .credit-card { width: calc(100% - 45px); height: 230px; border-radius: 10px; background: #111; margin-top: 76px; color: #fff; }
+  .credit-card { width: calc(100% - 45px); height: 230px; border-radius: 15px; background: #111; margin-top: 76px; color: #fff; }
   .credit-card .name { color: rgba(255, 255, 255, .7); position: absolute; z-index: 2; text-transform: uppercase; left: 25px; bottom: 20px; font-weight: bold; }
-  .credit-card .number { color: rgba(255, 255, 255, .9); position: absolute; z-index: 2; left: 23px; bottom: 85px; margin: 0; font-size: 30px; }
+  .credit-card .number { color: rgba(255, 255, 255, .9); position: absolute; z-index: 2; left: 23px; bottom: 75px; margin: 0; font-size: 30px; }
   .credit-card .expiry, .credit-card .valid-through, .credit-card .card-type { color: rgba(255, 255, 255, .7); position: absolute; z-index: 2; right: 25px; bottom: 32px; font-size: 14px; margin: 0; }
   .credit-card .valid-through { bottom: 50px; font-size: 9px; }
   .credit-card .card-type { bottom: auto; top: 25px; right: 25px; left: auto; font-size: 22px; color: #fff; text-transform: uppercase; transition: .3s; }
