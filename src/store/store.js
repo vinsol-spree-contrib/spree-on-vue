@@ -15,6 +15,6 @@ const store = new Vuex.Store({
     session,
     user
   }
-});
+})
 
 export default store;

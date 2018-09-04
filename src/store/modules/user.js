@@ -132,7 +132,7 @@ const actions = {
   /* Fetches the current orders in cart */
   fetchUserCurrentOrders(context) {
     var loading = Loading.service({ fullscreen: true });
-    axios.get('/api/ams/orders/current', { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+    return axios.get('/api/ams/orders/current', { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
       loading.close();
     });
@@ -202,12 +202,13 @@ const actions = {
 
   proceedToDeliveryState(context, { 'number': orderNumber, 'addressData': addressData}) {
     var loading = Loading.service({ fullscreen: true });
-    axios.put('/api/ams/checkouts/' + orderNumber, addressData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken')  } }).then(function(response) {
+    return axios.put('/api/ams/checkouts/' + orderNumber, addressData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken')  } }).then(function(response) {
       context.commit('setCartItems', response.data);
       loading.close();
     }).catch(function(error) {
       context.commit('setAddressErrors', error.response.data.errors);
       loading.close();
+      console.log(error.response.data.errors);
     });
   },
 
@@ -215,6 +216,8 @@ const actions = {
     var loading = Loading.service({ fullscreen: true });
     return axios.put('/api/ams/checkouts/' + orderNumber, deliveryData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data)
+      loading.close();
+    }).catch(function (response) {
       loading.close();
     })
   },

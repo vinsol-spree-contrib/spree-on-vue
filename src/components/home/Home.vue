@@ -43,10 +43,6 @@
   export default {
     name: 'home',
 
-    components: {
-    
-    },
-
     mounted() {
       this.$store.dispatch(types.FETCH_PRODUCTS, {
         'page': 1,

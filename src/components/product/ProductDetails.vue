@@ -18,7 +18,7 @@
             
             <div class="quantity-selector">
               <strong class="product-price">{{ currentVariant.display_price }}</strong>
-              <el-input-number v-model="quantity" @change="handleChange" :min="1" :max="10" v-if="loggedIn" size="small"></el-input-number>
+              <el-input-number v-model="quantity" :min="1" :max="10" v-if="loggedIn" size="small"></el-input-number>
             </div>
 
             <el-tabs v-model="activeName">
@@ -140,10 +140,6 @@
         };
 
         this.$store.dispatch('addToCart', formData);
-      },
-
-      handleChange(value) {
-        console.log(value)
       }
     },
   }

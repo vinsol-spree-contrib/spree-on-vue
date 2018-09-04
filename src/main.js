@@ -23,13 +23,7 @@ const options = {
   },
 }
 
-/* Register Success Toast */
-Vue.toasted.register('app_success', function (payload) {
-  return !payload.message ? 'Success' : payload.message;
-}, options);
-
-
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 // axios.defaults.baseURL = 'https://enigmatic-inlet-91726.herokuapp.com/';
 axios.defaults.baseURL = 'http://localhost:3000';

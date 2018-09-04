@@ -37,13 +37,17 @@
     },
 
     mounted() {
-      this.$store.dispatch('fetchUserCurrentOrders');
+      !this.isCheckoutView ? this.$store.dispatch('fetchUserCurrentOrders') : false;
     },
 
     computed: {
       isLoginView() {
         return this.$route.path == "/entry";
       },
+
+      isCheckoutView() {
+        return this.$route.path == "/checkout";
+      }
     }
   }
 </script>
