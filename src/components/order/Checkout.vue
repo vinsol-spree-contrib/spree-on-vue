@@ -317,7 +317,7 @@
       <!-- Delivery Details Step -->
 
       <!-- Payment Details Step -->
-      <aside class="checkout-step" :class="{ 'active' : computedOrder.state == 'confirm' }">
+      <aside class="checkout-step payment" :class="{ 'active' : computedOrder.state == 'confirm' }">
         <el-row>
           <el-col :span="16" :offset="4" class="step-container">
             <div class="step-header">
@@ -351,16 +351,21 @@
                         <el-col :span="12">
                           <div class="card-form">
                             <h4>Enter Card details</h4>
+                            <div v-if="cardErrorsData" class="errors-div">
+                              
+                            </div>
                             <el-form ref="form">
                               <el-row :gutter="10">
                                 <el-col :span="24">
                                   <el-form-item>
                                     <el-input placeholder="Name On Card" v-model="name" clearable></el-input>
+                                    <el-tag type="danger" v-if="error.split(' ')[0] == 'Name'" v-for="error in cardErrorsData['payments.Credit Card']" :key="error.id" class="error-div">{{ error }}</el-tag>
                                   </el-form-item>
                                 </el-col>
                                 <el-col :span="24">
                                   <el-form-item>
                                     <el-input placeholder="XXXX XXXX XXXX XXXX" v-model="number" maxlength="19" clearable @input="formatCardNumber()"></el-input>
+                                    <el-tag type="danger" v-if="error.split(' ')[0] == 'Number'" v-for="error in cardErrorsData['payments.Credit Card']" :key="error.id" class="error-div">{{ error }}</el-tag>
                                   </el-form-item>
                                 </el-col>
                               </el-row>
@@ -375,6 +380,7 @@
                                         :value="month.value">
                                       </el-option>
                                     </el-select>
+                                    <el-tag type="danger" v-if="error.split(' ')[0] == 'Month'" v-for="error in cardErrorsData['payments.Credit Card']" :key="error.id" class="error-div">{{ error }}</el-tag>
                                   </el-form-item>
                                 </el-col>
                                 <el-col :span="24">
@@ -387,11 +393,13 @@
                                         :value="year.value">
                                       </el-option>
                                     </el-select>
+                                    <el-tag type="danger" v-if="error.split(' ')[0] == 'Year'" v-for="error in cardErrorsData['payments.Credit Card']" :key="error.id" class="error-div">{{ error }}</el-tag>
                                   </el-form-item>
                                 </el-col>
                                 <el-col :span="24">
                                   <el-form-item>
                                     <el-input placeholder="Card Code" v-model="verification_value" clearable></el-input>
+                                    <el-tag type="danger" v-if="error.split(' ')[0] == 'Verification'" v-for="error in cardErrorsData['payments.Credit Card']" :key="error.id" class="error-div">{{ error }}</el-tag>
                                   </el-form-item>
                                 </el-col>
                               </el-row>
@@ -538,7 +546,7 @@
           <i class="el-icon-circle-check"></i>
         </span>
         <h2>
-          Your order has been processed successfully.
+          Your order has been placed successfully.
         </h2>
       </aside>
     </transition>
@@ -586,12 +594,12 @@
         response: '',
         shippingRateIds: [],
         paymentMethodName: '',
-        name: 'Saiyam',
-        number: '4111111111111111',
+        name: '',
+        number: '',
         modifiedNumber: '',
-        month: '5',
-        year: '2022',
-        verification_value: '123',
+        month: '',
+        year: '',
+        verification_value: '',
         cardType: '',
         months: [
           { id: 1, name: 'January', value: '1' },
@@ -648,7 +656,8 @@
       ...mapGetters({
         orderDetails: 'getCartItems',
         locationDetails: 'getCountries',
-        addressErrors: 'getAddressErrors'
+        addressErrors: 'getAddressErrors',
+        cardErrorsData: 'getCardErrors'
       }),
   
       computedResponse() {
@@ -879,5 +888,7 @@
   .order-placed i { font-size: 350px; color: #67c23a; margin-top: 25px; }
   .scale-enter-active, .scale-leave-active { transform: scale(1); transition: .5s; }
   .scale-enter, .scale-leave-to { transform: scale(0); opacity: 0; }
-  .checkout .el-form .el-alert {  }
+  .errors-div { padding-bottom: 15px; margin: 0 -5px; }
+  .errors-div .el-tag { margin: 5px; }
+  .payment .el-tag { width: 100%; }
 </style>

@@ -11,6 +11,7 @@ const state = {
   },
   cartErrors: "",
   addressErrors: "",
+  cardErrors: "",
   countries: "",
   states: "",
   userDetails: {},
@@ -59,6 +60,10 @@ const getters = {
 
   getDefaultPaymentMethodId(state) {
     return state.defaultPaymentMethodId;
+  },
+
+  getCardErrors(state) {
+    return state.cardErrors;
   }
 };
 
@@ -85,6 +90,10 @@ const mutations = {
 
   setAddressErrors(state, error) {
     state.addressErrors = error;
+  },
+
+  setCardErrors(state, error) {
+    state.cardErrors = error;
   },
 
   setCountries(state, countries) {
@@ -205,6 +214,7 @@ const actions = {
     return axios.put('/api/ams/checkouts/' + orderNumber, addressData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken')  } }).then(function(response) {
       context.commit('setCartItems', response.data);
       context.commit('setAddressErrors', {});
+      context.commit('setCardErrors', {});
       loading.close();
     }).catch(function(error) {
       context.commit('setAddressErrors', error.response.data.errors);
@@ -216,6 +226,7 @@ const actions = {
     var loading = Loading.service({ fullscreen: true });
     return axios.put('/api/ams/checkouts/' + orderNumber, deliveryData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data)
+      context.commit('setCardErrors', {});
       loading.close();
     }).catch(function (response) {
       loading.close();
@@ -226,6 +237,16 @@ const actions = {
     var loading = Loading.service({ fullscreen: true });
     axios.put('/api/ams/checkouts/' + orderNumber, paymentData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
+      context.commit('setCardErrors', {});
+    }).catch(function() {
+      context.commit('setCardErrors', arguments[0].response.data.errors);
+      Message({
+        duration: 3000,
+        message: arguments[0].response.data.error,
+        showClose: true,
+        type: 'error'
+      });
+    }).then(function () {
       loading.close();
     });
   },
