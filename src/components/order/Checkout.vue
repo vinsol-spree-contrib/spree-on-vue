@@ -518,7 +518,7 @@
       <!-- Confirm Details Step -->
     </div>
 
-    <!-- <div v-if="!computedOrder.hasOwnProperty('id')" class="text-center empty-checkout">
+    <div v-if="computedOrder && !computedOrder.hasOwnProperty('id')" class="text-center empty-checkout">
       <div class="empty-basket-icon">
         <span class="empty-basket-icon-holder">
           <i class="el-icon-goods"></i>
@@ -529,7 +529,7 @@
       <router-link to="/shop" tag="a" class="btn btn-action">
         <el-button type="primary">Continue Shopping</el-button>
       </router-link>
-    </div> -->
+    </div>
 
     <!-- Order Complete Step -->
     <transition name="scale">
@@ -631,16 +631,16 @@
       this.$store.dispatch('fetchCountries');
       this.$store.dispatch('fetchUserCurrentOrders').then(function() {
         if(_this.computedOrder.hasOwnProperty('id')) {
-        _this.response = _this.orderDetails;
-        _this.order = _this.orderDetails.order;
-        _this.paymentMethodId = _this.response.payment_methods[0].id;
-        _this.paymentMethodName = _this.response.payment_methods[0].name;
-        _this.bill_address_attributes = Object.assign(_this.bill_address_attributes, _this.addressDetails[_this.order.bill_address_id]);
-        _this.ship_address_attributes = Object.assign(_this.ship_address_attributes, _this.addressDetails[_this.order.ship_address_id]);
-          if(_this.order.state == "confirm" && _this.modifiedNumber == '') {
-            _this.changeCheckoutState(_this.order.id, "payment");
+          _this.response = _this.orderDetails;
+          _this.order = _this.orderDetails.order;
+          _this.paymentMethodId = _this.response.payment_methods[0].id;
+          _this.paymentMethodName = _this.response.payment_methods[0].name;
+          _this.bill_address_attributes = Object.assign(_this.bill_address_attributes, _this.addressDetails[_this.order.bill_address_id]);
+          _this.ship_address_attributes = Object.assign(_this.ship_address_attributes, _this.addressDetails[_this.order.ship_address_id]);
+            if(_this.computedOrder.state == "confirm" && _this.modifiedNumber == '') {
+              _this.changeCheckoutState(_this.order.id, "payment");
+            }
           }
-        }
       });
     },
   
