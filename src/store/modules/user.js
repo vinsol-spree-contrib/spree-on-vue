@@ -204,11 +204,11 @@ const actions = {
     var loading = Loading.service({ fullscreen: true });
     return axios.put('/api/ams/checkouts/' + orderNumber, addressData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken')  } }).then(function(response) {
       context.commit('setCartItems', response.data);
+      context.commit('setAddressErrors', {});
       loading.close();
     }).catch(function(error) {
       context.commit('setAddressErrors', error.response.data.errors);
       loading.close();
-      console.log(error.response.data.errors);
     });
   },
 

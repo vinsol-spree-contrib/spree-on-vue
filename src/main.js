@@ -8,20 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import router from './router.js';
 import store from './store/store';
 
-Vue.use(Toasted);
 Vue.use(ElementUI);
-
-const options = {
-  type: 'success',
-  position: 'bottom-right',
-  duration: 10000,
-  action: {
-    text: 'X',
-    onClick: (e, toastObject) => {
-      toastObject.goAway(0);
-    }
-  },
-}
 
 Vue.config.productionTip = false;
 

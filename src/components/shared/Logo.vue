@@ -1,7 +1,7 @@
 <template>
   <div class="brand absolute">
     <router-link to="/" tag="a">
-      Spree-On-Vue
+      Spree On Vue
     </router-link>
   </div>
 </template>
