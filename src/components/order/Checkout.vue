@@ -1,5 +1,14 @@
 <template>
   <section class="checkout">
+    <aside class="text-center" :class="{ 'activeProgress': computedProgress == 100 }" v-if="computedOrder.item_count > 0 && computedOrder.state != 'complete'">
+      <el-progress type="circle" :color="computedColor" :percentage="computedProgress" :status="computedStatus" :stroke-width="5" :width="125"></el-progress>
+    </aside>
+
+    <aside class="text-center" :class="{ 'activeProgress': computedProgress == 100 }" v-if="computedOrder.state == 'complete' && computedOrder.completed_at != null">
+      <el-progress type="circle" :color="computedColor" :percentage="computedProgress" :status="computedStatus" :stroke-width="5" :width="125"></el-progress>
+      <h2>Yay!! Your Order has been placed successfully.</h2>
+    </aside>
+
     <div v-if="computedOrder.item_count > 0 && computedOrder.state != 'complete'">
       <!-- Login Step -->
       <aside class="checkout-step active">
@@ -16,7 +25,7 @@
       <!-- Login Step -->
     
       <!-- Address Details Step -->
-      <aside class="checkout-step" :class="{ 'active' : computedOrder.state != 'address' && computedOrder.state != 'cart' }">
+      <aside class="checkout-step" :class="{ 'active': computedOrder.state != 'address' && computedOrder.state != 'cart' }">
         <el-row>
           <el-col :span="16" :offset="4" class="step-container">
             <div class="step-header">
@@ -42,14 +51,14 @@
                       <el-row :gutter="14">
                         <el-col :span="12">
                           <el-form-item>
-                            <el-input placeholder="First Name*" v-model="bill_address_attributes.firstname" clearable></el-input>
-                            <el-alert v-if="addressErrors['bill_address.firstname']" :title="'First name ' + addressErrors['bill_address.firstname'][0]" type="error"></el-alert>
+                            <el-input :class="{ 'error-input': addressErrors['bill_address.firstname'] }" placeholder="First Name*" v-model="bill_address_attributes.firstname" clearable></el-input>
+                            <el-alert v-if="addressErrors['bill_address.firstname']" :title="addressErrors['bill_address.firstname'][0]" type="error"></el-alert>
                           </el-form-item>
                         </el-col>
                         <el-col :span="12">
                           <el-form-item>
-                            <el-input placeholder="Last Name*" v-model="bill_address_attributes.lastname" clearable></el-input>
-                            <el-alert v-if="addressErrors['bill_address.lastname']" :title="'Last name ' + addressErrors['bill_address.lastname'][0]" type="error"></el-alert>
+                            <el-input :class="{ 'error-input': addressErrors['bill_address.lastname'] }" placeholder="Last Name*" v-model="bill_address_attributes.lastname" clearable></el-input>
+                            <el-alert v-if="addressErrors['bill_address.lastname']" :title="addressErrors['bill_address.lastname'][0]" type="error"></el-alert>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -57,8 +66,8 @@
                       <el-row>
                         <el-col :span="24">
                           <el-form-item>
-                            <el-input placeholder="Street Address*" v-model="bill_address_attributes.address1" clearable></el-input>
-                            <el-alert v-if="addressErrors['bill_address.address1']" :title="'Address 1 ' + addressErrors['bill_address.address1'][0]" type="error"></el-alert>
+                            <el-input :class="{ 'error-input': addressErrors['bill_address.address1'] }" placeholder="Street Address*" v-model="bill_address_attributes.address1" clearable></el-input>
+                            <el-alert v-if="addressErrors['bill_address.address1']" :title="addressErrors['bill_address.address1'][0]" type="error"></el-alert>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -74,8 +83,8 @@
                       <el-row>
                         <el-col :span="24">
                           <el-form-item>
-                            <el-input placeholder="City" v-model="bill_address_attributes.city" clearable></el-input>
-                            <el-alert v-if="addressErrors['bill_address.city']" :title="'City name ' + addressErrors['bill_address.city'][0]" type="error"></el-alert>
+                            <el-input :class="{ 'error-input': addressErrors['bill_address.city'] }" placeholder="City" v-model="bill_address_attributes.city" clearable></el-input>
+                            <el-alert v-if="addressErrors['bill_address.city']" :title="addressErrors['bill_address.city'][0]" type="error"></el-alert>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -83,10 +92,10 @@
                       <el-row>
                         <el-col :span="24">
                           <el-form-item>
-                            <el-select v-model="bill_address_attributes.country_id" placeholder="Select Country" @change="resetBillAddressState">
+                            <el-select :class="{ 'error-input': addressErrors['bill_address.country'] }" v-model="bill_address_attributes.country_id" placeholder="Select Country" @change="resetBillAddressState">
                               <el-option v-for="country in computedCountries" :key="country.id" :label="country.name + ' (' + country.iso3 + ')' " :value="country.id"></el-option>
                             </el-select>
-                            <el-alert v-if="addressErrors['bill_address.country']" :title="'Country name ' + addressErrors['bill_address.country'][0]" type="error"></el-alert>
+                            <el-alert v-if="addressErrors['bill_address.country']" :title="addressErrors['bill_address.country'][0]" type="error"></el-alert>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -94,11 +103,11 @@
                       <el-row>
                         <el-col :span="24">
                           <el-form-item v-if="billingStateRequired">
-                            <el-select v-model="bill_address_attributes.state_id" placeholder="Select State">
+                            <el-select :class="{ 'error-input': addressErrors['bill_address.state'] }" v-model="bill_address_attributes.state_id" placeholder="Select State">
                               <el-option v-for="state in computedStates" :key="state.id" :label="state.name" :value="state.id" v-if="state.country_id === bill_address_attributes.country_id">
                               </el-option>
                             </el-select>
-                            <el-alert v-if="addressErrors['bill_address.state']" :title="'State name ' + addressErrors['bill_address.state'][0]" type="error"></el-alert>
+                            <el-alert v-if="addressErrors['bill_address.state']" :title="addressErrors['bill_address.state'][0]" type="error"></el-alert>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -106,8 +115,8 @@
                       <el-row>
                         <el-col :span="24">
                           <el-form-item>
-                            <el-input placeholder="Zipcode" v-model="bill_address_attributes.zipcode" clearable></el-input>
-                            <el-alert v-if="addressErrors['bill_address.zipcode']" :title="'Zipcode ' + addressErrors['bill_address.zipcode'][0]" type="error"></el-alert>  
+                            <el-input :class="{ 'error-input': addressErrors['bill_address.zipcode'] }" placeholder="Zipcode" v-model="bill_address_attributes.zipcode" clearable></el-input>
+                            <el-alert v-if="addressErrors['bill_address.zipcode']" :title="addressErrors['bill_address.zipcode'][0]" type="error"></el-alert>  
                           </el-form-item>                          
                         </el-col>
                       </el-row>
@@ -115,8 +124,8 @@
                       <el-row>
                         <el-col :span="24">
                           <el-form-item>
-                            <el-input placeholder="Phone" v-model="bill_address_attributes.phone" clearable></el-input>
-                            <el-alert v-if="addressErrors['bill_address.phone']" :title="'Phone number ' + addressErrors['bill_address.phone'][0]" type="error"></el-alert>
+                            <el-input :class="{ 'error-input': addressErrors['bill_address.phone'] }" placeholder="Phone" v-model="bill_address_attributes.phone" clearable></el-input>
+                            <el-alert v-if="addressErrors['bill_address.phone']" :title="addressErrors['bill_address.phone'][0]" type="error"></el-alert>
                           </el-form-item>
                         </el-col>
                       </el-row>
@@ -137,14 +146,14 @@
                         <el-row :gutter="14">
                           <el-col :span="12">
                             <el-form-item>
-                              <el-input placeholder="First Name*" v-model="ship_address_attributes.firstname" clearable></el-input>
-                              <el-alert v-if="addressErrors['ship_address.firstname']" :title="'First name ' + addressErrors['ship_address.firstname'][0]" type="error"></el-alert>
+                              <el-input :class="{ 'error-input': addressErrors['ship_address.firstname'] }" placeholder="First Name*" v-model="ship_address_attributes.firstname" clearable></el-input>
+                              <el-alert v-if="addressErrors['ship_address.firstname']" :title="addressErrors['ship_address.firstname'][0]" type="error"></el-alert>
                             </el-form-item>
                           </el-col>
                           <el-col :span="12">
                             <el-form-item>
-                              <el-input placeholder="Last Name*" v-model="ship_address_attributes.lastname" clearable></el-input>
-                              <el-alert v-if="addressErrors['ship_address.lastname']" :title="'Last name ' + addressErrors['ship_address.lastname'][0]" type="error"></el-alert>
+                              <el-input :class="{ 'error-input': addressErrors['ship_address.lastname'] }" placeholder="Last Name*" v-model="ship_address_attributes.lastname" clearable></el-input>
+                              <el-alert v-if="addressErrors['ship_address.lastname']" :title="addressErrors['ship_address.lastname'][0]" type="error"></el-alert>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -152,8 +161,8 @@
                         <el-row>
                           <el-col :span="24">
                             <el-form-item>
-                              <el-input placeholder="Street Address*" v-model="ship_address_attributes.address1" clearable></el-input>
-                              <el-alert v-if="addressErrors['ship_address.address1']" :title="'Address 1 ' + addressErrors['ship_address.address1'][0]" type="error"></el-alert>
+                              <el-input :class="{ 'error-input': addressErrors['ship_address.address1'] }" placeholder="Street Address*" v-model="ship_address_attributes.address1" clearable></el-input>
+                              <el-alert v-if="addressErrors['ship_address.address1']" :title="addressErrors['ship_address.address1'][0]" type="error"></el-alert>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -169,8 +178,8 @@
                         <el-row>
                           <el-col :span="24">
                             <el-form-item>
-                              <el-input placeholder="City" v-model="ship_address_attributes.city" clearable></el-input>
-                              <el-alert v-if="addressErrors['ship_address.city']" :title="'City name ' + addressErrors['ship_address.city'][0]" type="error"></el-alert>
+                              <el-input :class="{ 'error-input': addressErrors['ship_address.city'] }" placeholder="City" v-model="ship_address_attributes.city" clearable></el-input>
+                              <el-alert v-if="addressErrors['ship_address.city']" :title="addressErrors['ship_address.city'][0]" type="error"></el-alert>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -178,10 +187,10 @@
                         <el-row>
                           <el-col :span="24">
                             <el-form-item>
-                              <el-select v-model="ship_address_attributes.country_id" placeholder="Select Country" @change="resetShipAddressState">
+                              <el-select :class="{ 'error-input': addressErrors['ship_address.country'] }" v-model="ship_address_attributes.country_id" placeholder="Select Country" @change="resetShipAddressState">
                                 <el-option v-for="country in computedCountries" :key="country.id" :label="country.name + ' (' + country.iso3 + ')' " :value="country.id"></el-option>
                               </el-select>
-                              <el-alert v-if="addressErrors['ship_address.country']" :title="'Country name ' + addressErrors['ship_address.country'][0]" type="error"></el-alert>
+                              <el-alert v-if="addressErrors['ship_address.country']" :title="addressErrors['ship_address.country'][0]" type="error"></el-alert>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -189,11 +198,11 @@
                         <el-row>
                           <el-col :span="24">
                             <el-form-item v-if="shippingStateRequired">
-                              <el-select v-model="ship_address_attributes.state_id" placeholder="Select State">
+                              <el-select :class="{ 'error-input': addressErrors['ship_address.state'] }" v-model="ship_address_attributes.state_id" placeholder="Select State">
                                 <el-option v-for="state in computedStates" :key="state.id" :label="state.name" :value="state.id" v-if="state.country_id === ship_address_attributes.country_id">
                                 </el-option>
                               </el-select>
-                              <el-alert v-if="addressErrors['ship_address.state']" :title="'State name ' + addressErrors['ship_address.state'][0]" type="error"></el-alert>
+                              <el-alert v-if="addressErrors['ship_address.state']" :title="addressErrors['ship_address.state'][0]" type="error"></el-alert>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -201,8 +210,8 @@
                         <el-row>
                           <el-col :span="24">
                             <el-form-item>
-                              <el-input placeholder="Zipcode" v-model="ship_address_attributes.zipcode" clearable></el-input>
-                              <el-alert v-if="addressErrors['ship_address.zipcode']" :title="'Zipcode ' + addressErrors['ship_address.zipcode'][0]" type="error"></el-alert>
+                              <el-input :class="{ 'error-input': addressErrors['ship_address.zipcode'] }" placeholder="Zipcode" v-model="ship_address_attributes.zipcode" clearable></el-input>
+                              <el-alert v-if="addressErrors['ship_address.zipcode']" :title="addressErrors['ship_address.zipcode'][0]" type="error"></el-alert>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -210,8 +219,8 @@
                         <el-row>
                           <el-col :span="24">
                             <el-form-item>
-                              <el-input placeholder="Phone" v-model="ship_address_attributes.phone" clearable></el-input>
-                              <el-alert v-if="addressErrors['ship_address.phone']" :title="'Phone number ' + addressErrors['ship_address.phone'][0]" type="error"></el-alert>
+                              <el-input placeholder="Phone" :class="{ 'error-input': addressErrors['ship_address.phone'] }" v-model="ship_address_attributes.phone" clearable></el-input>
+                              <el-alert v-if="addressErrors['ship_address.phone']" :title="addressErrors['ship_address.phone'][0]" type="error"></el-alert>
                             </el-form-item>
                           </el-col>
                         </el-row>
@@ -526,7 +535,7 @@
       <!-- Confirm Details Step -->
     </div>
 
-    <div v-if="computedOrder && !computedOrder.hasOwnProperty('id')" class="text-center empty-checkout">
+    <!-- <div v-if="computedOrder || !computedOrder.hasOwnProperty('id') || !computedOrder.item_total > 0" class="text-center empty-checkout">
       <div class="empty-basket-icon">
         <span class="empty-basket-icon-holder">
           <i class="el-icon-goods"></i>
@@ -537,20 +546,7 @@
       <router-link to="/shop" tag="a" class="btn btn-action">
         <el-button type="primary">Continue Shopping</el-button>
       </router-link>
-    </div>
-
-    <!-- Order Complete Step -->
-    <transition name="scale">
-      <aside class="checkout-step text-center"  v-if="computedOrder.state == 'complete' && computedOrder.completed_at != null">
-        <span class="order-placed">
-          <i class="el-icon-circle-check"></i>
-        </span>
-        <h2>
-          Your order has been placed successfully.
-        </h2>
-      </aside>
-    </transition>
-    <!-- Order Complete Step -->
+    </div> -->
 
   </section>
 </template>
@@ -558,6 +554,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import { helpers } from '../../store/helpers/helpers';
+  import routes from '../../router.js';
   
   export default {
     name: 'app-checkout',
@@ -588,6 +585,9 @@
           state_id: '',
           country_id: ''
         },
+        percentage: 0,
+        status: '',
+        color: '',
         useBilling: true,
         saveUserAddress: true,
         shipmentAttributes: {},
@@ -635,7 +635,6 @@
   
     mounted() {
       var _this = this;
-      
       this.$store.dispatch('fetchCountries');
       this.$store.dispatch('fetchUserCurrentOrders').then(function() {
         if(_this.computedOrder.hasOwnProperty('id')) {
@@ -645,10 +644,14 @@
           _this.paymentMethodName = _this.response.payment_methods[0].name;
           _this.bill_address_attributes = Object.assign(_this.bill_address_attributes, _this.addressDetails[_this.order.bill_address_id]);
           _this.ship_address_attributes = Object.assign(_this.ship_address_attributes, _this.addressDetails[_this.order.ship_address_id]);
-            if(_this.computedOrder.state == "confirm" && _this.modifiedNumber == '') {
-              _this.changeCheckoutState(_this.order.id, "payment");
-            }
+          if(_this.computedOrder.state == "confirm" && _this.modifiedNumber == '') {
+            _this.changeCheckoutState(_this.order.id, "payment");
           }
+        }
+
+        if((_this.computedOrder && _this.computedOrder.item_total == 0) || Object.keys(_this.computedOrder).length === 0) {
+          routes.replace('/');
+        }
       });
     },
   
@@ -659,6 +662,10 @@
         addressErrors: 'getAddressErrors',
         cardErrorsData: 'getCardErrors'
       }),
+
+      checkoutSteps() {
+        return this.order.checkout_steps;
+      },
   
       computedResponse() {
         return this.orderDetails || {};
@@ -710,6 +717,38 @@
 
       stockLocations() {
         return helpers.arrayToObject(this.computedResponse.stock_locations || [], "id") || {};
+      },
+
+      computedProgress() {
+        switch (this.computedOrder.state) {
+          case 'address':
+            this.percentage = 20;
+            break;
+          case 'delivery':
+            this.percentage = 40;
+            break;
+          case 'payment':
+            this.percentage = 60;
+            break;
+          case 'confirm':
+            this.percentage = 80;
+            break;
+          case 'complete':
+            this.percentage = 100;
+            break;
+        }
+        return this.percentage;
+      },
+
+      computedStatus() {
+        if(this.percentage == 100) {
+          this.status = 'success';
+        }
+        return this.status;
+      },
+
+      computedColor() {
+        return this.computedProgress == 100 ? this.color = '#13CE66' : this.color = "#0E4AA3";
       }
     },
   
@@ -891,4 +930,9 @@
   .errors-div { padding-bottom: 15px; margin: 0 -5px; }
   .errors-div .el-tag { margin: 5px; }
   .payment .el-tag { width: 100%; }
+  .error-input .el-input__inner { border-color: #f56c6c; border-bottom: 0; }
+  .checkout .el-form-item .el-alert { margin-top: -2px; border-radius: 0; border: 1px solid #f56c6c; border-top: 0; }
+  .activeProgress { transition: .5s; padding-top: 60px; }
+  .activeProgress .el-progress-circle { width: 400px !important; height: 400px !important; transition: .5s; }
+  .activeProgress .el-icon-check { font-size: 200px; transition: .5s; color: #13CE66; }
 </style>
