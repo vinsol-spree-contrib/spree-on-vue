@@ -1,15 +1,13 @@
 <template>
   <section class="checkout">
-    <aside class="text-center" :class="{ 'activeProgress': computedProgress == 100 }" v-if="computedOrder.item_count > 0 && computedOrder.state != 'complete'">
-      <el-progress type="circle" :color="computedColor" :percentage="computedProgress" :status="computedStatus" :stroke-width="5" :width="125"></el-progress>
-    </aside>
+    <transition name="el-zoom-in-center">
+      <aside class="text-center activeProgress" v-if="computedOrder.state == 'complete' && computedOrder.completed_at != null">
+        <el-progress type="circle" :color="computedColor" :percentage="computedProgress" :status="computedStatus" :stroke-width="5" :width="125"></el-progress>
+        <h2>Yay!! Your Order has been placed successfully.</h2>
+      </aside>
+    </transition>
 
-    <aside class="text-center" :class="{ 'activeProgress': computedProgress == 100 }" v-if="computedOrder.state == 'complete' && computedOrder.completed_at != null">
-      <el-progress type="circle" :color="computedColor" :percentage="computedProgress" :status="computedStatus" :stroke-width="5" :width="125"></el-progress>
-      <h2>Yay!! Your Order has been placed successfully.</h2>
-    </aside>
-
-    <div v-if="computedOrder.item_count > 0 && computedOrder.state != 'complete'">
+    <div v-if="computedOrder.item_count > 0 && computedOrder.state != 'complete'" class="step-start">
       <!-- Login Step -->
       <aside class="checkout-step active">
         <el-row>
@@ -535,19 +533,6 @@
       <!-- Confirm Details Step -->
     </div>
 
-    <!-- <div v-if="computedOrder || !computedOrder.hasOwnProperty('id') || !computedOrder.item_total > 0" class="text-center empty-checkout">
-      <div class="empty-basket-icon">
-        <span class="empty-basket-icon-holder">
-          <i class="el-icon-goods"></i>
-          <span class="zero">0</span>
-        </span>
-      </div>
-      <h2 class="h2">Please add items to your basket.</h2>
-      <router-link to="/shop" tag="a" class="btn btn-action">
-        <el-button type="primary">Continue Shopping</el-button>
-      </router-link>
-    </div> -->
-
   </section>
 </template>
 
@@ -790,6 +775,7 @@
       },
 
       proceedToConfirm () {
+        var _this = this;
         var formData = {};
         this.modifiedNumber = this.number.replace(/ +/g, "");
 
@@ -825,11 +811,24 @@
           };
         }
 
-        this.$store.dispatch('proceedToConfirmState', { 'number': this.computedOrder.id, 'paymentData': formData });
+        this.$store.dispatch('proceedToConfirmState', { 'number': this.computedOrder.id, 'paymentData': formData }).then(function() {
+          if(_this.computedOrder.completed_at !== null) {
+            setTimeout(function() {
+              routes.replace('/orders/' + _this.computedOrder.id);
+            }, 2000);
+          }
+        });
       },
 
       placeOrder () {
-        this.$store.dispatch('completeOrder', this.computedOrder.id);
+        var _this = this;
+        this.$store.dispatch('completeOrder', this.computedOrder.id).then(function() {
+          if(_this.computedOrder.completed_at !== null) {
+            setTimeout(function() {
+              routes.replace('/orders/' + _this.computedOrder.id);
+            }, 2000);
+          }
+        });
       },
 
       resetBillAddressState () {
@@ -870,7 +869,6 @@
 </script>
 
 <style>
-  .checkout { padding: 20px 0 0 0; }
   .checkout-step { padding-bottom: 20px; }
   .step-header { padding: 15px 25px 13px 25px; position: relative; transition: padding .3s; }
   .step-complete { position: absolute; left: 10px; font-size: 30px; color: rgb(231, 237, 246); top: 50%; margin-top: -15px; }
@@ -932,7 +930,11 @@
   .payment .el-tag { width: 100%; }
   .error-input .el-input__inner { border-color: #f56c6c; border-bottom: 0; }
   .checkout .el-form-item .el-alert { margin-top: -2px; border-radius: 0; border: 1px solid #f56c6c; border-top: 0; }
-  .activeProgress { transition: .5s; padding-top: 60px; }
-  .activeProgress .el-progress-circle { width: 400px !important; height: 400px !important; transition: .5s; }
+  .activeProgress .el-progress-circle { width: 400px !important; height: 400px !important; }
   .activeProgress .el-icon-check { font-size: 200px; transition: .5s; color: #13CE66; }
+  .step-start { padding: 25px 0 50px 0; }
+  .progress-fixed .el-progress-bar__outer { border-radius: 0; background: #fff; }
+  .progress-fixed .el-progress-bar__innerText { display: none; }
+  .progress-fixed .el-progress-bar__inner { border-radius: 0 20px 20px 0; }
+  .activeProgress { padding-top: 50px; }
 </style>

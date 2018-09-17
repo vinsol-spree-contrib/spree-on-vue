@@ -183,7 +183,7 @@ const actions = {
   },
 
   addToCart(context, formData) {
-    if (context.getters.getCartItems.order) {
+    if (context.getters.getCartItems.order && context.getters.getCartItems.order.state !== "complete") {
       context.dispatch('addItemToCart', formData);
     } else {
       context.dispatch('createNewOrderAndAddItem', formData);
@@ -235,7 +235,7 @@ const actions = {
 
   proceedToConfirmState(context, { 'number': orderNumber, 'paymentData': paymentData }) {
     var loading = Loading.service({ fullscreen: true });
-    axios.put('/api/ams/checkouts/' + orderNumber, paymentData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+    return axios.put('/api/ams/checkouts/' + orderNumber, paymentData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
       context.commit('setCardErrors', {});
     }).catch(function() {
@@ -253,7 +253,7 @@ const actions = {
 
   proceedToCompleteState(context, orderNumber) {
     var loading = Loading.service({ fullscreen: true });
-    axios.put('/api/ams/checkouts/' + orderNumber, {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+    return axios.put('/api/ams/checkouts/' + orderNumber, {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
       context.commit('setCartItems', response.data);
       loading.close();
     });
@@ -261,7 +261,7 @@ const actions = {
 
   completeOrder(context, orderNumber) {
     var loading = Loading.service({ fullscreen: true });
-    axios.put('/api/ams/checkouts/' + orderNumber, {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+    return axios.put('/api/ams/checkouts/' + orderNumber, {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
       loading.close();
     }).catch(function(error) {
