@@ -161,11 +161,11 @@ const actions = {
         quantity: formData.quantity,
         variant_id: formData.variant_id
       }
-    }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+    }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function () {
       context.commit("setCartErrors", "");
       context.dispatch('fetchUserCurrentOrders');
       Message({
-        duration: 3000,
+        duration: 2000,
         message: formData.message,
         showClose: true,
         type: 'success'
@@ -174,7 +174,7 @@ const actions = {
     }).catch(function(error) {
       context.commit('setCartErrors', error.response.data.exception);
       Message({
-        duration: 3000,
+        duration: 2000,
         message: error.response.data.exception,
         showClose: true,
         type: 'error'
@@ -193,11 +193,6 @@ const actions = {
   emptyCurrentOrder(context, orderId) {
     axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
       context.commit('setCartItems', response.data);
-      Message({
-        duration: 3000,
-        message: 'All items removed from the basket.',
-        showClose: true
-      });
     });
   },
 
@@ -216,6 +211,12 @@ const actions = {
       context.commit('setAddressErrors', {});
       context.commit('setCardErrors', {});
       loading.close();
+      Message({
+        duration: 1250,
+        message: 'Address details updated successfully.',
+        showClose: true,
+        type: 'success'
+      });
     }).catch(function(error) {
       context.commit('setAddressErrors', error.response.data.errors);
       loading.close();
@@ -227,8 +228,14 @@ const actions = {
     return axios.put('/api/ams/checkouts/' + orderNumber, deliveryData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data)
       context.commit('setCardErrors', {});
+      Message({
+        duration: 1250,
+        message: 'Shipment details updated successfully.',
+        showClose: true,
+        type: 'success'
+      });
       loading.close();
-    }).catch(function (response) {
+    }).catch(function () {
       loading.close();
     })
   },
@@ -238,10 +245,16 @@ const actions = {
     return axios.put('/api/ams/checkouts/' + orderNumber, paymentData, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
       context.commit('setCardErrors', {});
+      Message({
+        duration: 1250,
+        message: 'Payment details updated successfully.',
+        showClose: true,
+        type: 'success'
+      });
     }).catch(function() {
       context.commit('setCardErrors', arguments[0].response.data.errors);
       Message({
-        duration: 3000,
+        duration: 1250,
         message: arguments[0].response.data.error,
         showClose: true,
         type: 'error'
@@ -267,7 +280,7 @@ const actions = {
     }).catch(function(error) {
       loading.close();
       Message({
-        duration: 3000,
+        duration: 1250,
         message: error.response.data.errors.base[0],
         showClose: true,
         type: 'error'
@@ -283,7 +296,7 @@ const actions = {
 
   deleteLineItem(context, { 'number': number, 'lineItemId': lineItemId }) {
     return new Promise(function (resolve, reject) {
-      axios.delete('/api/v1/orders/' + number + '/line_items/' + lineItemId, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+      axios.delete('/api/v1/orders/' + number + '/line_items/' + lineItemId, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function () {
         context.dispatch('fetchUserCurrentOrders').then(function () {
           resolve();
         });

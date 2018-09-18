@@ -8,7 +8,6 @@ const state = {
   products: {},
   searchResults: {},
   taxonProducts: [],
-  loading: false
 };
 
 const getters = {
@@ -55,7 +54,6 @@ const actions = {
     axios.get('api/ams/products?page=' + page + '&per_page=' + perPage).then(function (response) {
       context.commit(types.MUTATE_SET_PRODUCTS, response.data);
       loading.close();
-    }).catch(function (errro) {
     });
   },
 
@@ -66,7 +64,6 @@ const actions = {
     axios.get(apis.FETCH_PRODUCT + payload).then(function (response) {
       context.commit(types.MUTATE_SET_PRODUCT, response.data);
       loading.close();
-    }).catch(function (error) {
     });
   },
 
@@ -76,7 +73,6 @@ const actions = {
     axios.get(apis.SEARCH_PRODUCTS + payload).then(function (response) {
       context.commit(types.MUTATE_SEARCH_RESULTS, response.data);
       loader.close();
-    }).catch(function (error) {
     });
   },
 
@@ -87,7 +83,6 @@ const actions = {
     axios.get(apis.TAXON_PRODUCTS + payload).then(function (response) {
       context.commit(types.MUTATE_TAXON_PRODUCTS, response.data);
       loading.close();
-    }).catch(function (error) {
     });
   }
 

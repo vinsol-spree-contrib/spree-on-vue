@@ -8,6 +8,15 @@
     </transition>
 
     <div v-if="computedOrder.item_count > 0 && computedOrder.state != 'complete'" class="step-start">
+
+      <aside class="page-heading-section">
+        <el-row>
+          <el-col :span="16" :offset="4">
+            <h1>Checkout</h1>
+          </el-col>
+        </el-row>
+      </aside>
+
       <!-- Login Step -->
       <aside class="checkout-step active">
         <el-row>
@@ -33,10 +42,10 @@
               </p>
               <i class="el-icon-circle-check step-complete" v-if="computedOrder.state != 'address' && computedOrder.state != 'cart'"></i>
               <el-button type="primary" class="step-edit-btn" v-if="computedOrder.state != 'address' && computedOrder.state != 'cart'" @click='changeCheckoutState(order.id, "address")'>Edit Address Details</el-button>
-              <span class="switch" v-if="computedOrder.state == 'address'">
+              <!-- <span class="switch" v-if="computedOrder.state == 'address'">
                 <span>Save Addesss</span>
                 <el-switch v-model="saveUserAddress"></el-switch>
-              </span>
+              </span> -->
             </div>
     
             <el-collapse-transition>
@@ -358,9 +367,6 @@
                         <el-col :span="12">
                           <div class="card-form">
                             <h4>Enter Card details</h4>
-                            <div v-if="cardErrorsData" class="errors-div">
-                              
-                            </div>
                             <el-form ref="form">
                               <el-row :gutter="10">
                                 <el-col :span="24">
@@ -405,7 +411,7 @@
                                 </el-col>
                                 <el-col :span="24">
                                   <el-form-item>
-                                    <el-input placeholder="Card Code" v-model="verification_value" clearable></el-input>
+                                    <el-input placeholder="Card Code" v-model="verification_value" type="password" clearable></el-input>
                                     <el-tag type="danger" v-if="error.split(' ')[0] == 'Verification'" v-for="error in cardErrorsData['payments.Credit Card']" :key="error.id" class="error-div">{{ error }}</el-tag>
                                   </el-form-item>
                                 </el-col>
@@ -518,6 +524,20 @@
               </div>
             </el-collapse-transition>
 
+            <el-row class="order-cost-summary">
+              <el-col :span="24" class="text-right subtotal-col">
+                <h3 class="price-tag-row">
+                  Items Cost: <el-tag class="price-tag">${{ computedOrder.item_total }}</el-tag>
+                </h3>
+                <h3 class="price-tag-row">
+                  Shipment Cost: <el-tag class="price-tag">${{ computedOrder.shipment_total }}</el-tag>
+                </h3>
+                <h3 class="price-tag-row">
+                  Total: <el-tag class="price-tag">${{ computedOrder.total }}</el-tag>
+                </h3>
+              </el-col>
+            </el-row>
+
             <el-row class="btn-row padding-25px" :gutter="50" v-if="computedOrder.state == 'confirm'">
               <el-col :span="12">
                 <el-button type="primary" class="checkout-step-btn" @click='changeCheckoutState(computedOrder.id, "payment")'>Edit Payment Details <i class="el-icon-edit"></i></el-button>
@@ -570,11 +590,11 @@
           state_id: '',
           country_id: ''
         },
+        active: 0,
         percentage: 0,
         status: '',
         color: '',
         useBilling: true,
-        saveUserAddress: true,
         shipmentAttributes: {},
         response: '',
         shippingRateIds: [],
@@ -614,7 +634,8 @@
           { id: 11, value: "2028" },
           { id: 12, value: "2029" },
           { id: 13, value: "2030" }
-        ]
+        ],
+        pagePath: []
       }
     },
   
@@ -734,6 +755,10 @@
 
       computedColor() {
         return this.computedProgress == 100 ? this.color = '#13CE66' : this.color = "#0E4AA3";
+      },
+
+      checkoutSteps() {
+        return this.computedOrder.checkout_steps || [];
       }
     },
   
@@ -744,10 +769,8 @@
             bill_address_attributes: this.bill_address_attributes,
             ship_address_attributes: this.ship_address_attributes,
             use_billing: this.useBilling
-          },
-          save_user_address: this.saveUserAddress
+          }
         }
-  
         this.$store.dispatch('proceedToDeliveryState', {
           'number': this.computedOrder.id,
           'addressData': formData
@@ -811,6 +834,18 @@
           };
         }
 
+        var date = new Date();
+        var currentMonth = date.getMonth() + 1;
+
+        if(this.year === "2018" && this.month < currentMonth) {
+          this.$message({
+            message: 'Expiry date should be greater than current date.',
+            type: 'error',
+            duration: 2000
+          });
+          return;
+        }
+
         this.$store.dispatch('proceedToConfirmState', { 'number': this.computedOrder.id, 'paymentData': formData }).then(function() {
           if(_this.computedOrder.completed_at !== null) {
             setTimeout(function() {
@@ -853,6 +888,8 @@
           this.cardType = "Visa";
         } else if(this.number.replace(/ +/g, "").match(/^3[4|7]/)) {
           this.cardType = "American Express";
+        } else if(this.number.replace(/ +/g, "").match(/^(?:6(?:011|5[0-9][0-9])[0-9]{12})$/)) {
+          this.cardType = "Discover";
         } else {
           this.cardType = "XXXX";
         }
@@ -927,7 +964,7 @@
   .scale-enter, .scale-leave-to { transform: scale(0); opacity: 0; }
   .errors-div { padding-bottom: 15px; margin: 0 -5px; }
   .errors-div .el-tag { margin: 5px; }
-  .payment .el-tag { width: 100%; }
+  .payment .el-tag { width: 100%; display: block; margin-top: -2px; border-radius: 0; }
   .error-input .el-input__inner { border-color: #f56c6c; border-bottom: 0; }
   .checkout .el-form-item .el-alert { margin-top: -2px; border-radius: 0; border: 1px solid #f56c6c; border-top: 0; }
   .activeProgress .el-progress-circle { width: 400px !important; height: 400px !important; }
@@ -937,4 +974,6 @@
   .progress-fixed .el-progress-bar__innerText { display: none; }
   .progress-fixed .el-progress-bar__inner { border-radius: 0 20px 20px 0; }
   .activeProgress { padding-top: 50px; }
+  .page-heading-section h1 { text-transform: uppercase; font-size: 24px; margin: 0; padding: 10px 0 0 0; position: relative; margin-bottom: 30px; display: inline-block; }
+  .order-cost-summary .subtotal-col { padding: 25px; }
 </style>

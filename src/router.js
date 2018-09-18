@@ -11,7 +11,6 @@ import Checkout from './components/order/Checkout.vue';
 import TaxonProducts from './components/product/TaxonProducts.vue';
 import Address from './components/user/Address.vue';
 import PageNotFound from './components/shared/PageNotFound.vue';
-import store from './store/store';
 
 Vue.use(VueRouter);
 

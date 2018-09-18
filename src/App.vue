@@ -1,5 +1,5 @@
 <template>
-  <main id="app">
+  <main id="app" :class="{ 'login': isSmallHeader }">
     <app-header></app-header>
     <el-col :span="24" class="top-container">
       <transition name="el-fade-in-linear" mode="out-in">
@@ -13,7 +13,7 @@
   import Header from './components/shared/Header.vue';
   import Home from './components/home/Home.vue';
   import Footer from './components/shared/Footer.vue';
-
+  
   export default {
     name: 'app',
     components: {
@@ -21,9 +21,15 @@
       appHome: Home,
       appFooter: Footer
     },
-
+  
     created() {
       this.$store.dispatch('tryAutoLogin');
+    },
+  
+    computed: {
+      isSmallHeader() {
+        return this.$route.path == "/entry" || this.$route.path == "/checkout";
+      },
     }
   }
 </script>
@@ -31,7 +37,30 @@
 <style>
   @import url('https://fonts.googleapis.com/css?family=Graduate');
   @import './assets/css/styles.css';
-  body { margin: 0; font-family: 'AvenirLTStd-Roman'; min-width: 1200px; }
-  h1, h2, h3, h4, h5, h6 { font-family: 'AvenirLTStd-Heavy'; }
-  body .el-main { padding: 0; }
+  body {
+    margin: 0;
+    font-family: 'AvenirLTStd-Roman';
+    min-width: 1200px;
+  }
+  
+  #app {
+    padding-top: 135px;
+  }
+  
+  #app.login {
+    padding-top: 75px;
+  }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'AvenirLTStd-Heavy';
+  }
+  
+  body .el-main {
+    padding: 0;
+  }
 </style>

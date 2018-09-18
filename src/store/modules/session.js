@@ -113,7 +113,7 @@ const actions = {
       routes.replace('/');
 
       Message({
-        duration: 3000,
+        duration: 2000,
         message: authData.message,
         showClose: true,
         message: !!authData.message ? authData.message : 'Logged in successfully.',
@@ -152,6 +152,7 @@ const actions = {
     context.dispatch('fetchUserCurrentOrders');
     routes.replace('/entry');
     Message({
+      duration: 2000,
       showClose: true,
       message: 'Logged out successfully.',
       type: 'success'

@@ -26,11 +26,11 @@
                   <span role="button" :class="{ 'is-disabled' : scope.row.quantity < 2  }" class="el-input-number__decrease" @click="changeQuantity(-1, variants[scope.row.variant_id].id)">
                     <i class="el-icon-minus"></i>
                   </span>
-                  <span role="button" class="el-input-number__increase" @click="changeQuantity(1, variants[scope.row.variant_id].id)">
+                  <span role="button" :class="{ 'is-disabled' : scope.row.quantity >= 10 }" class="el-input-number__increase" @click="scope.row.quantity < 10 ? changeQuantity(1, variants[scope.row.variant_id].id) : false">
                     <i class="el-icon-plus"></i>
                   </span>
                   <div class="el-input el-input--small">
-                    <input type="text" autocomplete="off" max="10" min="1" class="el-input__inner" :value="scope.row.quantity" @blur="changeQuantity(($event.target.value - scope.row.quantity), variants[scope.row.variant_id].id)">
+                    <input type="text" autocomplete="off" disabled="disabled" max="10" min="1" class="el-input__inner" :value="scope.row.quantity">
                   </div>
                 </div>
               </div>
@@ -121,9 +121,21 @@
 
     methods: {
       emptyBasket: function() {
-        if(confirm('You are about to remove all the items from you basket.')) {
-          this.$store.dispatch('emptyCurrentOrder', this.order.id)
-        }
+        var _this = this;
+        this.$confirm('This will remove all items from your basket. Continue?', 'Warning', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+          _this.$store.dispatch('emptyCurrentOrder', _this.order.id)
+        }).then(() => {
+          this.$message({
+            duration: 2000,
+            message: 'All items removed from the basket.',
+            showClose: true,
+            type: 'success'
+          });
+        });
       },
 
       changeQuantity(itemQuantity, itemId) {

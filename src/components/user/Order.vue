@@ -3,10 +3,15 @@
     <el-row>
       <el-col :span="20" :offset="2" class="offset-vertical">
         <el-row class="page-heading-row">
-          <el-col :span="20" :offset="2">
+          <el-col :span="10" :offset="2">
             <h2 class="h2">
-              Order #{{order.number}}
+              Order #{{ order.number }}
             </h2>
+          </el-col>
+          <el-col :span="10" class="text-right view-all-btn">
+            <router-link to="/profile" tag="a">
+              <el-button class="text-upppercase" type="primary">My Orders</el-button>
+            </router-link>
           </el-col>
         </el-row>
 
@@ -45,14 +50,19 @@
             <el-card class="box-card">
               <h2 class="h2"><i class="el-icon-info"></i> Payment Information</h2>
               <p v-for="payment in payments" :key="payment.id">
-                {{payment}}
+                Card ending in {{ sources[payment.source_id].last_digits }}
+              </p>
+              <p v-if="payments.length === 0">
+                Paid by Cheaque
               </p>
             </el-card>
           </el-col>
           <el-col :span="10">
             <el-card class="box-card">
               <h2 class="h2"><i class="el-icon-info"></i> Shipment Information</h2>
-              <p>From default via UPS Ground (USD)</p>
+              <p v-for="shipment in cartItems.shipments" :key="shipment.id">
+                From {{ stockLocations[shipment.stock_location_id].name }} via {{ shippingRates[shipment.selected_shipping_rate_id].name }} ({{ shippingRates[shipment.selected_shipping_rate_id].display_cost }})
+              </p>
             </el-card>
           </el-col>
         </el-row>
@@ -75,19 +85,21 @@
                 </template>
               </el-table-column>
               
-              <el-table-column label="Quantity" align="center" width="180px">
+              <el-table-column label="Quantity" align="center" width="115px">
                 <template slot-scope="scope">
                   <div class="product-quantity">
                     <div class="el-input-number el-input-number--small">
-                      <el-tag>{{ scope.row.quantity }}</el-tag>
+                      <el-tag class="quantity-box">{{ scope.row.quantity }}</el-tag>
                     </div>
                   </div>
                 </template>
               </el-table-column>
 
-              <el-table-column label="Price" align="center" width="135px">
+              <el-table-column label="Price" align="center" width="200px">
                 <template slot-scope="scope">
-                  {{ scope.row.display_amount }}
+                  <span class="price-box">
+                    {{ scope.row.single_display_amount }} x {{ scope.row.quantity }} = <strong> {{ scope.row.display_amount }} </strong>
+                  </span>
                 </template>
               </el-table-column>
             </el-table>
@@ -95,21 +107,21 @@
             <el-row class="offset-vertical-small">
               <el-col :span="24" class="text-right subtotal-col">
                 <h3 class="price-tag-row">
-                  <!-- Shipment cost: <el-tag class="price-tag" v-if="Object.values(shipments).length > 0">${{ shipments[order.shipment_ids].cost }}</el-tag> -->
-                  <!-- Loop For different Shipments -->
+                  Items Cost: <el-tag class="price-tag">${{ order.item_total }}</el-tag>
                 </h3>
                 <h3 class="price-tag-row">
-                  Subtotal: <el-tag class="price-tag">${{ order.item_total }}</el-tag>
+                  Shipment Cost: <el-tag class="price-tag">${{ order.shipment_total }}</el-tag>
                 </h3>
                 <h3 class="price-tag-row">
-                  Total: <el-tag class="price-tag">${{ order.payment_total }}</el-tag>
+                  Total: <el-tag class="price-tag">${{ order.total }}</el-tag>
                 </h3>
               </el-col>
             </el-row>
           </el-col>
         </el-row>
       </el-col>
-    </el-row>  
+    </el-row>
+    
   </section>
 </template>
 
@@ -126,6 +138,7 @@
 
     computed: {
       ...mapGetters(['getSingleOrder']),
+
       order() {
         return this.getSingleOrder && this.getSingleOrder.order ? this.getSingleOrder.order : {}
       },
@@ -168,7 +181,19 @@
             return payment.state === "completed";
           });
         }
-      }
+      },
+
+      sources() {
+        return helpers.arrayToObject(this.cartItems.sources || [], "id") || {};
+      },
+
+      stockLocations() {
+        return helpers.arrayToObject(this.cartItems.stock_locations || [], "id") || {};
+      },
+
+      shippingRates() {
+        return helpers.arrayToObject(this.cartItems.shipping_rates || [], "id") || {};
+      },
       
     }
   }
@@ -181,5 +206,7 @@
   .price-tag { min-width: 84px; }
   .price-tag-row { margin: 10px 0; }
   .offset-vertical-small { padding-top: 25px; }
+  .my-orders .el-input-number { width: auto; }
+  .my-orders .price-box { text-transform: none; color: #2b2b2b; }
 </style>
 

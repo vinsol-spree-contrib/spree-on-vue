@@ -12,7 +12,7 @@
           <el-col :span="20" :offset="2">
             <div class="search-input-container">
               <i class="el-icon-search"></i>
-              <el-input placeholder="Search For Products" v-model="searchTerm" class="search-input" @input="onSearch"></el-input>
+              <el-input placeholder="Search For Products" v-model="searchTerm" class="search-input" @input="onSearch" autofocus=""></el-input>
             </div>
 
             <el-row class="page-heading-row" v-if="products.length > 0">
