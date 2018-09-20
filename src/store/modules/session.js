@@ -134,7 +134,7 @@ const actions = {
     const now = new Date();
 
     if (now >= expirationTime) {
-      context.dispatch('logout');
+      context.dispatch('autoLogout');
     } else {
       context.commit('authUserId', userId);
       context.commit('authUserToken', userToken);
@@ -143,13 +143,17 @@ const actions = {
     }
   },
 
-  logout(context) {
+  autoLogout(context) {
     context.commit('clearAuthData');
     localStorage.removeItem('userId');
     localStorage.removeItem('userToken');
     localStorage.removeItem('userTokenId');
     localStorage.removeItem('expirationTime');
     context.dispatch('fetchUserCurrentOrders');
+  },
+
+  logout(context) {
+    context.dispatch('autoLogout');
     routes.replace('/entry');
     Message({
       duration: 2000,

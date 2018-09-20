@@ -1,5 +1,5 @@
 <template>
-  <section class="checkout" v-loading="loading">
+  <section class="checkout">
     <transition name="el-zoom-in-center">
       <aside class="text-center activeProgress" v-if="computedOrder.state == 'complete' && computedOrder.completed_at != null">
         <el-progress type="circle" :color="computedColor" :percentage="computedProgress" :status="computedStatus" :stroke-width="5" :width="125"></el-progress>
@@ -636,12 +636,16 @@
           { id: 13, value: "2030" }
         ],
         pagePath: [],
-        loading: true
       }
     },
   
     mounted() {
       var _this = this;
+      this.$store.dispatch('fetchUserDetails').then(function() {
+        _this.bill_address_attributes = Object.assign(_this.bill_address_attributes, _this.userDetails.bill_address);
+        _this.ship_address_attributes = Object.assign(_this.ship_address_attributes, _this.userDetails.ship_address);
+      });
+      
       this.$store.dispatch('fetchCountries');
       this.$store.dispatch('fetchUserCurrentOrders').then(function() {
         if(_this.computedOrder.hasOwnProperty('id')) {
@@ -649,14 +653,10 @@
           _this.order = _this.orderDetails.order;
           _this.paymentMethodId = _this.response.payment_methods[0].id;
           _this.paymentMethodName = _this.response.payment_methods[0].name;
-          _this.bill_address_attributes = Object.assign(_this.bill_address_attributes, _this.addressDetails[_this.order.bill_address_id]);
-          _this.ship_address_attributes = Object.assign(_this.ship_address_attributes, _this.addressDetails[_this.order.ship_address_id]);
           if(_this.computedOrder.state == "confirm" && _this.modifiedNumber == '') {
             _this.changeCheckoutState(_this.order.id, "payment");
           }
-          _this.loading = false;
         }
-
         if((_this.computedOrder && _this.computedOrder.item_total == 0) || Object.keys(_this.computedOrder).length === 0) {
           routes.replace('/');
         }
@@ -668,8 +668,13 @@
         orderDetails: 'getCartItems',
         locationDetails: 'getCountries',
         addressErrors: 'getAddressErrors',
-        cardErrorsData: 'getCardErrors'
+        cardErrorsData: 'getCardErrors',
+        userDetails: 'getUserDetails'
       }),
+
+      user() {
+        return this.userDetails || {}
+      },
 
       checkoutSteps() {
         return this.order.checkout_steps;
@@ -692,11 +697,11 @@
       },
 
       billingStateRequired() {
-        return this.bill_address_attributes.country_id ? this.computedCountries[this.bill_address_attributes.country_id].states_required : '';
+        return this.computedResponse && this.bill_address_attributes.country_id ? this.computedCountries[this.bill_address_attributes.country_id].states_required : '';
       },
 
       shippingStateRequired() {
-        return this.ship_address_attributes.country_id ? this.computedCountries[this.ship_address_attributes.country_id].states_required : '';
+        return this.computedResponse && this.ship_address_attributes.country_id ? this.computedCountries[this.ship_address_attributes.country_id].states_required : '';
       },
   
       addressDetails() {

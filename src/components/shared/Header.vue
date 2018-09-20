@@ -46,7 +46,7 @@
       },
 
       isCheckoutView() {
-        return this.$route.path == "/checkout";
+        return this.$route.path === "/checkout";
       }
     }
   }

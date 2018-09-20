@@ -283,10 +283,14 @@ const actions = {
 
   setCheckoutState(context, { 'number': orderNumber, 'stateData': state}) {
     var loading = Loading.service({ fullscreen: true });
-    axios.put('/api/ams/checkouts/' + orderNumber + '/back_to_state', state, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
-      context.commit('setCartItems', response.data);
+    if (context.getters.getCartItems.order && (context.getters.getCartItems.order.state !== "cart" && context.getters.getCartItems.order.state !== "complete")) {
+      axios.put('/api/ams/checkouts/' + orderNumber + '/back_to_state', state, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
+        context.commit('setCartItems', response.data);
+        loading.close();
+      });
+    } else {
       loading.close();
-    });
+    }
   },
 
   deleteLineItem(context, { 'number': number, 'lineItemId': lineItemId }) {
@@ -313,7 +317,7 @@ const actions = {
 
   fetchUserDetails(context) {
     var loading = Loading.service({ fullscreen: true });
-    axios.get('/api/v1/users/' + localStorage.getItem('userTokenId'), { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+    return axios.get('/api/v1/users/' + localStorage.getItem('userTokenId'), { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setUserDetails', response.data);
       loading.close();
     });
