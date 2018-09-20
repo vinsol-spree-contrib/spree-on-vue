@@ -22,8 +22,8 @@
               <p>{{ addresses[order.bill_address_id].firstname }} {{ addresses[order.bill_address_id].lastname }}</p>
               <p>{{ addresses[order.bill_address_id].address1 }}</p>
               <p v-if="Object.values(country).length > 0">
-                {{ country[addresses[order.bill_address_id].country_id].name }}
                 {{ addresses[order.bill_address_id].city }}
+                {{ country[addresses[order.bill_address_id].country_id].name }}
               </p>
               <p>{{ addresses[order.bill_address_id].zipcode }}</p>
               <p>{{ addresses[order.bill_address_id].phone }}</p>
@@ -36,8 +36,8 @@
               <p>{{ addresses[order.ship_address_id].firstname }} {{ addresses[order.ship_address_id].lastname }}</p>
               <p>{{ addresses[order.ship_address_id].address1 }}</p>
               <p v-if="Object.values(country).length > 0">
-                {{ country[addresses[order.ship_address_id].country_id].name }}
                 {{ addresses[order.ship_address_id].city }}
+                {{ country[addresses[order.ship_address_id].country_id].name }}
               </p>
               <p>{{ addresses[order.ship_address_id].zipcode }}</p>
               <p>{{ addresses[order.ship_address_id].phone }}</p>

@@ -81,7 +81,6 @@
           email: this.email,
           password: this.password
         };
-        var _this = this;
         this.$store.dispatch('login', loginFormData);
       },
 

@@ -93,7 +93,7 @@ const actions = {
   login(context, authData) {
     return axios.post('api/ams/users/token', {
       user: {
-        email: authData.email,
+        email: authData.email.toLowerCase(),
         password: authData.password
       }
     }).then(function (response) {

@@ -38,7 +38,14 @@
 
     methods: {
       onLogout() {
-        this.$store.dispatch('logout');
+        var _this = this;
+        this.$confirm('Leaving too soon?.', 'Message', {
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+          type: 'info'
+        }).then(() => {
+          _this.$store.dispatch('logout');
+        });
       }
     }
   }

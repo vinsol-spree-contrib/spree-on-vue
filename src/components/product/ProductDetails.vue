@@ -134,8 +134,8 @@
 
       onAddToCart() {
         const formData = {
-          quantity: this.quantity,
-          variant_id: this.currentVariant.id,
+          quantity: Number(this.quantity),
+          variant_id: Number(this.currentVariant.id),
           message: 'Product added to Basket'
         };
 

@@ -53,7 +53,7 @@
 </script>
 
 <style>
-  .primary-header { position: fixed; top: 0; left: 0; z-index: 10; width: 100%; }
+  .primary-header { position: fixed; top: 0; left: 0; z-index: 100; width: 100%; }
   .primary-header .header-top { min-height: 75px; position: relative; background: #f9f9f9; z-index: 10; }
   .menu-btn i { color: #0E4AA3; }
   .el-message { top: 145px !important; }

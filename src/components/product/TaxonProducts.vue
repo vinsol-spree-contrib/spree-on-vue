@@ -62,4 +62,5 @@
  .taxon-image { width: 100%; }
  img { vertical-align: top; }
  .flex-wrap { flex-wrap: wrap; }
+ .home-products .el-card__body { min-height: 441px; }
 </style>

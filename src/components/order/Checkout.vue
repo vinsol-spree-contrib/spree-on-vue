@@ -1,5 +1,5 @@
 <template>
-  <section class="checkout">
+  <section class="checkout" v-loading="loading">
     <transition name="el-zoom-in-center">
       <aside class="text-center activeProgress" v-if="computedOrder.state == 'complete' && computedOrder.completed_at != null">
         <el-progress type="circle" :color="computedColor" :percentage="computedProgress" :status="computedStatus" :stroke-width="5" :width="125"></el-progress>
@@ -635,7 +635,8 @@
           { id: 12, value: "2029" },
           { id: 13, value: "2030" }
         ],
-        pagePath: []
+        pagePath: [],
+        loading: true
       }
     },
   
@@ -653,6 +654,7 @@
           if(_this.computedOrder.state == "confirm" && _this.modifiedNumber == '') {
             _this.changeCheckoutState(_this.order.id, "payment");
           }
+          _this.loading = false;
         }
 
         if((_this.computedOrder && _this.computedOrder.item_total == 0) || Object.keys(_this.computedOrder).length === 0) {

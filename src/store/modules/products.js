@@ -80,7 +80,7 @@ const actions = {
   [types.TAXON_PRODUCTS]: function (context, payload) {
     var loading = Loading.service({ fullscreen: true });
     context.commit(types.MUTATE_TAXON_PRODUCTS, []);
-    axios.get(apis.TAXON_PRODUCTS + payload).then(function (response) {
+    return axios.get(apis.TAXON_PRODUCTS + payload).then(function (response) {
       context.commit(types.MUTATE_TAXON_PRODUCTS, response.data);
       loading.close();
     });
