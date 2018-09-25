@@ -132,7 +132,7 @@
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-          _this.$store.dispatch('emptyCurrentOrder', _this.order.id)
+          _this.$store.dispatch('emptyCurrentOrder', _this.order.id);
         }).then(() => {
           this.$message({
             duration: 2000,
@@ -140,6 +140,8 @@
             showClose: true,
             type: 'success'
           });
+        }).catch(() => {
+          
         });
       },
   

@@ -1,5 +1,5 @@
 <template>
-  <section class="checkout">
+  <section class="checkout" v-loading="loading">
     <transition name="el-zoom-in-center">
       <aside class="text-center activeProgress" v-if="computedOrder.state == 'complete' && computedOrder.completed_at != null">
         <el-progress type="circle" :color="computedColor" :percentage="computedProgress" :status="computedStatus" :stroke-width="5" :width="125"></el-progress>
@@ -53,7 +53,6 @@
                 <el-row :gutter="50">
                   <el-col :span="12" class="billing-info">
                     <h3>Billing Address</h3>
-    
                     <el-form ref="form">
                       <el-row :gutter="14">
                         <el-col :span="12">
@@ -635,13 +634,19 @@
           { id: 12, value: "2029" },
           { id: 13, value: "2030" }
         ],
-        pagePath: [],
+        loading: true
       }
     },
   
     mounted() {
       var _this = this;
       this.$store.dispatch('fetchUserDetails').then(function() {
+        delete _this.userDetails.bill_address.id;
+        delete _this.userDetails.bill_address.country;
+        delete _this.userDetails.bill_address.state;
+        delete _this.userDetails.ship_address.id;
+        delete _this.userDetails.ship_address.country;
+        delete _this.userDetails.ship_address.state;
         _this.bill_address_attributes = Object.assign(_this.bill_address_attributes, _this.userDetails.bill_address);
         _this.ship_address_attributes = Object.assign(_this.ship_address_attributes, _this.userDetails.ship_address);
       });
@@ -656,6 +661,7 @@
           if(_this.computedOrder.state == "confirm" && _this.modifiedNumber == '') {
             _this.changeCheckoutState(_this.order.id, "payment");
           }
+          _this.loading = false;
         }
         if((_this.computedOrder && _this.computedOrder.item_total == 0) || Object.keys(_this.computedOrder).length === 0) {
           routes.replace('/');
@@ -913,6 +919,8 @@
 </script>
 
 <style>
+  .checkout { min-height: 100vh - 75px!important; }
+  .el-loading-mask { height: 100%!important; position: fixed; }
   .checkout-step { padding-bottom: 20px; }
   .step-header { padding: 15px 25px 13px 25px; position: relative; transition: padding .3s; }
   .step-complete { position: absolute; left: 10px; font-size: 30px; color: rgb(231, 237, 246); top: 50%; margin-top: -15px; }

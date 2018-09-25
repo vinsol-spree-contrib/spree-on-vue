@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="40" type="flex" justify="center" align="middle" class="full-height">
     <el-col :span="6">
-      <el-card class="box-card">
+      <el-card class="box-card" id="login-box-card">
         <div slot="header" class="clearfix">
           <h3>Login</h3>
         </div>

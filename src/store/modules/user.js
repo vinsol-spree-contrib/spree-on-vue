@@ -10,7 +10,7 @@ const state = {
     line_items: []
   },
   cartErrors: "",
-  addressErrors: "",
+  addressErrors: {},
   cardErrors: "",
   countries: "",
   states: "",
@@ -194,8 +194,10 @@ const actions = {
   },
 
   emptyCurrentOrder(context, orderId) {
+    var loading = Loading.service({ fullscreen: true });
     axios.put('/api/ams/orders/' + orderId + '/empty', {}, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function(response) {
       context.commit('setCartItems', response.data);
+      loading.close();
     });
   },
 
@@ -294,10 +296,12 @@ const actions = {
   },
 
   deleteLineItem(context, { 'number': number, 'lineItemId': lineItemId }) {
+    var loading = Loading.service({ fullscreen: true });
     return new Promise(function (resolve, reject) {
       axios.delete('/api/v1/orders/' + number + '/line_items/' + lineItemId, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function () {
         context.dispatch('fetchUserCurrentOrders').then(function () {
           resolve();
+          loading.close();
         });
       });      
     })
@@ -306,12 +310,6 @@ const actions = {
   fetchCountries(context) {
     axios.get('/api/ams/countries').then(function (response) {
       context.commit('setCountries', response.data);
-    });
-  },
-
-  fetchStates(context, countryId) {
-    axios.get('/api/v1/countries/' + countryId + '/states').then(function(response) {
-      context.commit('setStates', response.data);
     });
   },
 

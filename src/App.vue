@@ -63,4 +63,8 @@
   body .el-main {
     padding: 0;
   }
+
+  .el-message-box__btns .el-button--primary {
+    background: #0e4aa3;
+  }
 </style>

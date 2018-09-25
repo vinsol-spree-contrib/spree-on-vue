@@ -1,6 +1,7 @@
 import axios from 'axios';
 import routes from '../../router.js';
 import { Message } from 'element-ui';
+import { Loading } from 'element-ui';
 
 const state = {
   activeSessionTime: 36000,
@@ -75,6 +76,7 @@ const mutations = {
 
 const actions = {
   signup(context, authData) {
+    var loading = Loading.service({ fullscreen: true });
     axios.post('api/ams/users/', {
       user: {
         email: authData.email,
@@ -82,15 +84,18 @@ const actions = {
         password_confirmation: authData.password_confirmation,
       }
     }).then(function () {
+      loading.close();
       context.dispatch('login', Object.assign(authData, {
         message: 'Account created successfully.'
       }));
     }).catch(function (error) {
       context.commit('setErrors', error.response.data.errors);
+      loading.close();
     });
   },
 
   login(context, authData) {
+    var loading = Loading.service({ fullscreen: true });
     return axios.post('api/ams/users/token', {
       user: {
         email: authData.email.toLowerCase(),
@@ -111,6 +116,7 @@ const actions = {
       context.commit('clearAuthErrors');
       context.dispatch('fetchUserCurrentOrders', { root: true });
       routes.replace('/');
+      loading.close();
 
       Message({
         duration: 2000,
@@ -122,6 +128,7 @@ const actions = {
 
     }).catch(function (error) {
       context.commit('setLoginErrors', error.response.data.errors);
+      loading.close();
     });
   },
 
