@@ -2,6 +2,8 @@ import axios from 'axios';
 import * as types from '../types';
 import * as apis from '../apis';
 import { Loading } from 'element-ui';
+import routes from '../../router.js';
+import { Message } from 'element-ui';
 
 const state = {
   product: {},
@@ -83,6 +85,11 @@ const actions = {
     return axios.get(apis.TAXON_PRODUCTS + payload).then(function (response) {
       context.commit(types.MUTATE_TAXON_PRODUCTS, response.data);
       loading.close();
+    }).catch((error) => {
+        Message({ duration: 1500, message: error.response.data.error, showClose: false, type: 'error' });
+        setTimeout(() => {
+          routes.replace('/');
+        }, 1500)        
     });
   }
 

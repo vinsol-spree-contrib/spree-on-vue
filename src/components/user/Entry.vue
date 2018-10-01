@@ -77,10 +77,13 @@
 
     methods: {
       onLogin() {
+        var _this = this;
+
         const loginFormData = {
           email: this.email,
           password: this.password
         };
+
         this.$store.dispatch('login', loginFormData);
       },
 

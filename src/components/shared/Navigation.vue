@@ -1,7 +1,7 @@
 <template>
   <nav class="main-navigation">
     <ul class="main-navigation-list">
-      <router-link :to="'/categories/' + taxon.name + '/' + taxon.id" v-for="taxon in allTaxons" :key="taxon.id" @click.native="showTaxonProducts(taxon.id)" tag="li" class="menu-item">
+      <router-link :to="'/' + taxon.permalink + '/' + taxon.id" v-for="taxon in allTaxons" :key="taxon.id" @click.native="showTaxonProducts(taxon.id)" tag="li" class="menu-item">
         {{ taxon.name }}
       </router-link>
     </ul>

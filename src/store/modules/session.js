@@ -102,25 +102,37 @@ const actions = {
         password: authData.password
       }
     }).then(function (response) {
-      context.commit('setUser', response.data);
-      context.commit('authUserId', response.data.email);
-      context.commit('authUserToken', response.data.token);
-      axios.defaults.headers.common['Authorization'] = state.user.token;
-      const now = new Date();
-      const expirationTime = new Date(now.getTime() + state.activeSessionTime * 1000);
-      localStorage.setItem('userTokenId', response.data.id);
-      localStorage.setItem('userToken', response.data.token);
-      localStorage.setItem('userId', response.data.email);
-      localStorage.setItem('expirationTime', expirationTime);
-      context.commit('setSessionTime', expirationTime);
-      context.commit('clearAuthErrors');
-      context.dispatch('fetchUserCurrentOrders', { root: true });
-      routes.replace('/');
+        var _context = context;
+        context.commit('setUser', response.data);
+        context.commit('authUserId', response.data.email);
+        context.commit('authUserToken', response.data.token);
+        axios.defaults.headers.common['Authorization'] = state.user.token;
+        const now = new Date();
+        const expirationTime = new Date(now.getTime() + state.activeSessionTime * 1000);
+        localStorage.setItem('userTokenId', response.data.id);
+        localStorage.setItem('userToken', response.data.token);
+        localStorage.setItem('userId', response.data.email);
+        localStorage.setItem('expirationTime', expirationTime);
+        context.commit('setSessionTime', expirationTime);
+        context.commit('clearAuthErrors');
+        context.dispatch('fetchUserCurrentOrders', { root: true }).then(() => {
+          const formData = {
+            quantity: Number(localStorage.getItem('quantity')),
+            variant_id: Number(localStorage.getItem('variantID')),
+            message: 'Product added to Basket'
+          };
+          if(localStorage.getItem('variantID') && localStorage.getItem('quantity') ) {
+            _context.dispatch('addToCart', formData);
+            routes.replace('/cart');
+          } else {
+            routes.replace('/');
+          }
+        });
+
       loading.close();
 
       Message({
         duration: 2000,
-        message: authData.message,
         showClose: true,
         message: !!authData.message ? authData.message : 'Logged in successfully.',
         type: 'success'
@@ -156,6 +168,8 @@ const actions = {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userTokenId');
     localStorage.removeItem('expirationTime');
+    localStorage.removeItem('quantity');
+    localStorage.removeItem('variantID');
     context.dispatch('fetchUserCurrentOrders');
   },
 

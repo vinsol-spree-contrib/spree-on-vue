@@ -65,7 +65,7 @@ const routes = [
   },
 
   {
-    path: '/categories/:name/:id',
+    path: '*/:permalink/:id',
     component: TaxonProducts
   },
 
