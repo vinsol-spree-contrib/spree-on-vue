@@ -68,6 +68,10 @@
       }
     },
 
+    created() {
+      this.$store.dispatch('clearAuthData');
+    },
+
     computed: {
       ...mapGetters(['getLoginErrors', 'getErrors']),
       isAuth() {

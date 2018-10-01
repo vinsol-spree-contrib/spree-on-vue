@@ -154,6 +154,14 @@ const actions = {
     }).catch(function(error) {
       context.commit('setAddressErrors', error.response.data.errors);
       loading.close();
+      if (error.response.data.errors.base.length > 0) {
+        Message({
+          duration: 1250,
+          message: error.response.data.errors.base[0],
+          showClose: true,
+          type: 'error'
+        });
+      }
     });
   },
 

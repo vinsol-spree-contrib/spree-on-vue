@@ -75,6 +75,10 @@ const mutations = {
 };
 
 const actions = {
+  clearAuthData(context) {
+    context.commit('clearAuthErrors');
+  },
+
   signup(context, authData) {
     var loading = Loading.service({ fullscreen: true });
     axios.post('api/ams/users/', {
@@ -117,16 +121,18 @@ const actions = {
         context.commit('clearAuthErrors');
         context.dispatch('fetchUserCurrentOrders', { root: true }).then(() => {
           const formData = {
-            quantity: Number(localStorage.getItem('quantity')),
+            quantity: 1,
             variant_id: Number(localStorage.getItem('variantID')),
             message: 'Product added to Basket'
           };
-          if(localStorage.getItem('variantID') && localStorage.getItem('quantity') ) {
+
+          if(localStorage.getItem('variantID')) {
             _context.dispatch('addToCart', formData);
             routes.replace('/cart');
           } else {
             routes.replace('/');
           }
+
         });
 
       loading.close();
@@ -168,7 +174,6 @@ const actions = {
     localStorage.removeItem('userToken');
     localStorage.removeItem('userTokenId');
     localStorage.removeItem('expirationTime');
-    localStorage.removeItem('quantity');
     localStorage.removeItem('variantID');
     context.dispatch('fetchUserCurrentOrders');
   },

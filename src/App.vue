@@ -1,5 +1,6 @@
 <template>
   <main id="app" :class="{ 'login': isSmallHeader }">
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
     <app-header></app-header>
     <el-col :span="24" class="top-container">
       <transition name="el-fade-in-linear" mode="out-in">
@@ -24,6 +25,13 @@
   
     created() {
       this.$store.dispatch('tryAutoLogin');
+    },
+
+    watch: {
+      '$route' (to, from) {
+        this.$route.path == "/entry" ? '' : localStorage.removeItem('variantID');
+        console.log(localStorage.variantID);
+      }
     },
   
     computed: {

@@ -47,7 +47,7 @@
               <el-button type="primary" class="btn-add" v-if="loggedIn" @click="onAddToCart">Add to basket</el-button>
               <router-link to="/entry" v-else>
                 <el-button type="primary" class="btn-add" @click="loginToAdd()">
-                  Login to add
+                  Login / Signup to add
                 </el-button>
               </router-link>
             </div>
@@ -143,7 +143,6 @@
       },
 
       loginToAdd() {
-        localStorage.setItem('quantity', this.quantity);
         localStorage.setItem('variantID', this.currentVariant.id);
       }
     },

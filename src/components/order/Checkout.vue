@@ -450,7 +450,7 @@
       <!-- Payment Details Step -->
 
       <!-- Confirm Details Step -->
-      <aside class="checkout-step" v-if="computedOrder.state == 'confirm'">
+      <aside class="checkout-step confirm" v-if="computedOrder.state == 'confirm'">
         <el-row>
           <el-col :span="16" :offset="4" class="step-container">
             <div class="step-header">
@@ -460,32 +460,40 @@
             <el-collapse-transition>
               <div class="step-body" v-if="computedOrder.state == 'confirm'">
                 <el-row :gutter="20">
-                  <el-col :span="6">
+                  <el-col :span="6" class="confirm-details">
                     <h4>Billing Address</h4>
-                    <p>{{ addressDetails[computedOrder.bill_address_id].firstname }} {{ addressDetails[computedOrder.bill_address_id].lastname }}</p>
-                    <p>{{ addressDetails[computedOrder.bill_address_id].address1 }}, {{ addressDetails[computedOrder.bill_address_id].address2 }}</p>
-                    <p>{{ addressDetails[computedOrder.bill_address_id].city }}, {{ computedStates[addressDetails[computedOrder.bill_address_id].state_id].name }}</p>
-                    <p>{{ computedCountries[addressDetails[computedOrder.bill_address_id].country_id].name }} - {{ addressDetails[computedOrder.bill_address_id].zipcode }}</p>
-                    <p>{{ addressDetails[computedOrder.bill_address_id].phone }}</p>
+                    <div class="details-box">
+                      <p>{{ addressDetails[computedOrder.bill_address_id].firstname }} {{ addressDetails[computedOrder.bill_address_id].lastname }}</p>
+                      <p>{{ addressDetails[computedOrder.bill_address_id].address1 }}, {{ addressDetails[computedOrder.bill_address_id].address2 }}</p>
+                      <p>{{ addressDetails[computedOrder.bill_address_id].city }}, {{ computedStates[addressDetails[computedOrder.bill_address_id].state_id].name }}</p>
+                      <p>{{ computedCountries[addressDetails[computedOrder.bill_address_id].country_id].name }} - {{ addressDetails[computedOrder.bill_address_id].zipcode }}</p>
+                      <p>{{ addressDetails[computedOrder.bill_address_id].phone }}</p>
+                    </div>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="6" class="confirm-details">
                     <h4>Shipping Address</h4>
-                    <p>{{ addressDetails[computedOrder.ship_address_id].firstname }} {{ addressDetails[computedOrder.ship_address_id].lastname }}</p>
-                    <p>{{ addressDetails[computedOrder.ship_address_id].address1 }}, {{ addressDetails[computedOrder.ship_address_id].address2 }}</p>
-                    <p>{{ addressDetails[computedOrder.ship_address_id].city }}, {{ computedStates[addressDetails[computedOrder.ship_address_id].state_id].name }}</p>
-                    <p>{{ computedCountries[addressDetails[computedOrder.ship_address_id].country_id].name }} - {{ addressDetails[computedOrder.ship_address_id].zipcode }}</p>
-                    <p>{{ addressDetails[computedOrder.ship_address_id].phone }}</p>
+                    <div class="details-box">
+                      <p>{{ addressDetails[computedOrder.ship_address_id].firstname }} {{ addressDetails[computedOrder.ship_address_id].lastname }}</p>
+                      <p>{{ addressDetails[computedOrder.ship_address_id].address1 }}, {{ addressDetails[computedOrder.ship_address_id].address2 }}</p>
+                      <p>{{ addressDetails[computedOrder.ship_address_id].city }}, {{ computedStates[addressDetails[computedOrder.ship_address_id].state_id].name }}</p>
+                      <p>{{ computedCountries[addressDetails[computedOrder.ship_address_id].country_id].name }} - {{ addressDetails[computedOrder.ship_address_id].zipcode }}</p>
+                      <p>{{ addressDetails[computedOrder.ship_address_id].phone }}</p>
+                    </div>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="6" class="confirm-details">
                     <h4>Shipment Details</h4>
-                    <p v-for="shipment in computedResponse.shipments" :key="shipment.id">
-                      From {{ stockLocations[shipment.stock_location_id].name }} via {{ shippingRates[shipment.selected_shipping_rate_id].name }} ({{ shippingRates[shipment.selected_shipping_rate_id].display_cost }})
-                    </p>
+                    <div class="details-box">
+                      <p v-for="shipment in computedResponse.shipments" :key="shipment.id">
+                        From {{ stockLocations[shipment.stock_location_id].name }} via {{ shippingRates[shipment.selected_shipping_rate_id].name }} ({{ shippingRates[shipment.selected_shipping_rate_id].display_cost }})
+                      </p>
+                    </div>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="6" class="confirm-details">
                     <h4>Payment Details</h4>
-                    <p>Card ending in <strong>{{ modifiedNumber.slice(-4) }}</strong></p>
-                    <p>Total: <strong>(${{computedOrder.total}})</strong></p>
+                    <div class="details-box">
+                      <p>Card ending in <strong>{{ modifiedNumber.slice(-4) }}</strong></p>
+                      <p>Total: <strong>(${{computedOrder.total}})</strong></p>
+                    </div>
                   </el-col>
                 </el-row>
 
@@ -991,4 +999,5 @@
   .activeProgress { padding-top: 50px; }
   .page-heading-section h1 { text-transform: uppercase; font-size: 24px; margin: 0; padding: 10px 0 0 0; position: relative; margin-bottom: 30px; display: inline-block; }
   .order-cost-summary .subtotal-col { padding: 25px; }
+  .confirm-details p { margin: 5px 0; }
 </style>

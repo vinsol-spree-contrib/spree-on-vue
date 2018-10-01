@@ -52,8 +52,8 @@
               <p v-for="payment in payments" :key="payment.id">
                 Card ending in {{ sources[payment.source_id].last_digits }}
               </p>
-              <p v-if="payments.length === 0">
-                Paid by Cheaque
+              <p v-if="cartItems.sources.length === 0">
+                Paid via cheque
               </p>
             </el-card>
           </el-col>

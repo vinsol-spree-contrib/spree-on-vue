@@ -38,6 +38,7 @@
 
     mounted() {
       !this.isCheckoutView ? this.$store.dispatch('fetchUserCurrentOrders') : false;
+      !this.isLoginView ? localStorage.removeItem('variantID') : '';
     },
 
     computed: {
