@@ -47,14 +47,13 @@ const actions = {
     }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function () {
       context.commit("setCartErrors", "");
       context.dispatch('fetchUserCurrentOrders');
-      loading.close();
       Message({
         duration: 2000,
         message: formData.message,
         showClose: true,
         type: 'success'
       });
-
+      loading.close();
     }).catch(function (error) {
       context.commit('setCartErrors', error.response.data.exception);
       loading.close();
@@ -68,13 +67,10 @@ const actions = {
   },
 
   addToCart(context, formData) {
-    var loading = Loading.service({ fullscreen: true });
     if (context.getters.getCartItemsCart.order && context.getters.getCartItemsCart.order.state !== "complete") {
       context.dispatch('addItemToCart', formData);
-      loading.close();
     } else {
       context.dispatch('createNewOrderAndAddItem', formData);
-      loading.close();
     }
   },
 

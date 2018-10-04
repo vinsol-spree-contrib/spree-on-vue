@@ -834,6 +834,19 @@
             }
           };
         } else {
+          var date = new Date();
+          var currentMonth = date.getMonth() + 1;
+          var currentyear = date.getFullYear();
+
+          if(this.year === String(currentyear) && this.month < currentMonth) {
+            this.$message({
+              message: 'Expiry date should be greater than current date.',
+              type: 'error',
+              duration: 2000
+            });
+            return;
+          }
+
           formData = {
             'order' : {
               "payments_attributes": [
@@ -853,18 +866,6 @@
               }
             }
           };
-        }
-
-        var date = new Date();
-        var currentMonth = date.getMonth() + 1;
-
-        if(this.year === "2018" && this.month < currentMonth) {
-          this.$message({
-            message: 'Expiry date should be greater than current date.',
-            type: 'error',
-            duration: 2000
-          });
-          return;
         }
 
         this.$store.dispatch('proceedToConfirmState', { 'number': this.computedOrder.id, 'paymentData': formData }).then(function() {

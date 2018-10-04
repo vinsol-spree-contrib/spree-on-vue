@@ -30,7 +30,6 @@
     watch: {
       '$route' (to, from) {
         this.$route.path == "/entry" ? '' : localStorage.removeItem('variantID');
-        console.log(localStorage.variantID);
       }
     },
   
