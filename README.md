@@ -12,12 +12,12 @@ The purpose of this repository is to continue to evolve spree, making it faster 
 
 ### Stack
 
-1. VueJs.
-2. Element (UI Library for vue).
-2. Vuex and related packages.
-3. Vue-router.
-4. axios to make API requests.
-5. Webpack for deployment.
+1. VueJs - https://vuejs.org/
+2. Element-UI Library for VueJS - http://element.eleme.io/#/en-US
+2. Vuex - https://vuex.vuejs.org/
+3. Vue-router - https://router.vuejs.org/
+4. axios to make API requests - https://github.com/axios/axios
+5. Webpack for deployment 
 
 For a comprehensive list, see `package.json`.
 
