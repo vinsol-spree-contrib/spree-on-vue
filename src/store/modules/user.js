@@ -113,10 +113,10 @@ const actions = {
 
   /* Fetches the completed orders */
   fetchUserOrders(context) {
-    var loading = Loading.service({ fullscreen: true });
-    axios.get('/api/ams/orders/mine', { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
+    //var loading = Loading.service({ fullscreen: true });
+    return axios.get('/api/ams/orders/mine', { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setAllOrders', response.data);
-      loading.close();
+      //loading.close();
     });
   },
 
@@ -241,10 +241,8 @@ const actions = {
   },
 
   fetchUserDetails(context) {
-    var loading = Loading.service({ fullscreen: true });
     return axios.get('/api/v1/users/' + localStorage.getItem('userTokenId'), { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setUserDetails', response.data);
-      loading.close();
     });
   }
 };

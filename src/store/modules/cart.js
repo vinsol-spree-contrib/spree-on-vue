@@ -33,11 +33,10 @@ const actions = {
     axios.post('/api/ams/orders', { order: { order_token: "" } }, { headers: { 'X-Spree-Token': localStorage.getItem('userToken') } }).then(function (response) {
       context.commit('setCartItems', response.data);
       context.dispatch('addItemToCart', formData);
-    })
+    });
   },
 
   addItemToCart(context, formData) {
-    var loading = Loading.service({ fullscreen: true });
     axios.post('api/ams/line_items', {
       order_number: context.getters.getCartItemsCart.order.id,
       line_item: {
@@ -53,10 +52,8 @@ const actions = {
         showClose: true,
         type: 'success'
       });
-      loading.close();
     }).catch(function (error) {
       context.commit('setCartErrors', error.response.data.exception);
-      loading.close();
       Message({
         duration: 2000,
         message: error.response.data.exception,

@@ -80,7 +80,6 @@ const actions = {
   },
 
   signup(context, authData) {
-    var loading = Loading.service({ fullscreen: true });
     axios.post('api/ams/users/', {
       user: {
         email: authData.email,
@@ -88,11 +87,11 @@ const actions = {
         password_confirmation: authData.password_confirmation,
       }
     }).then(function () {
-      loading.close();
       context.dispatch('login', Object.assign(authData, {
         message: 'Account created successfully.'
       }));
     }).catch(function (error) {
+      var loading = Loading.service({ fullscreen: true });
       context.commit('setErrors', error.response.data.errors);
       loading.close();
     });
@@ -126,23 +125,22 @@ const actions = {
             message: 'Product added to Basket'
           };
 
+          Message({
+            duration: 2000,
+            showClose: true,
+            message: !!authData.message ? authData.message : 'Logged in successfully.',
+            type: 'success'
+          });
+
+          loading.close();
+
           if(localStorage.getItem('variantID')) {
             _context.dispatch('addToCart', formData);
             routes.replace('/cart');
           } else {
             routes.replace('/');
           }
-
         });
-
-      loading.close();
-
-      Message({
-        duration: 2000,
-        showClose: true,
-        message: !!authData.message ? authData.message : 'Logged in successfully.',
-        type: 'success'
-      });
 
     }).catch(function (error) {
       context.commit('setLoginErrors', error.response.data.errors);
@@ -169,13 +167,9 @@ const actions = {
   },
 
   autoLogout(context) {
-    context.commit('clearAuthData');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('userTokenId');
-    localStorage.removeItem('expirationTime');
-    localStorage.removeItem('variantID');
     context.dispatch('fetchUserCurrentOrders');
+    localStorage.clear();
+    context.commit('clearAuthData');
   },
 
   logout(context) {
