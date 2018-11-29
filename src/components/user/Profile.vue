@@ -44,6 +44,7 @@
 
 <script>
   import { mapGetters } from 'vuex';
+  import { Loading } from 'element-ui';
 
   export default {
     name: 'profile',
@@ -69,7 +70,12 @@
     },
 
     mounted () {
-      this.$store.dispatch('fetchUserOrders');
+      let loadingInstance = Loading.service({ fullscreen: true });
+      console.log(loadingInstance);
+      this.$store.dispatch('fetchUserOrders').then(function() {
+        loadingInstance.close();
+        console.log(loadingInstance);
+      });
       this.$store.dispatch('fetchUserDetails');
     }
   }
