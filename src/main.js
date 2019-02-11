@@ -11,8 +11,7 @@ Vue.use(ElementUI);
 
 Vue.config.productionTip = false;
 
-axios.defaults.baseURL = 'https://enigmatic-inlet-91726.herokuapp.com/';
-//axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = process.env.VUE_APP_URL
 
 new Vue({
   render: h => h(App),
